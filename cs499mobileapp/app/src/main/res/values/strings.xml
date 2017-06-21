@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Cs499mobileapp</string>
     <string name="action_settings">Settings</string>
+    <string name="MUSIC_ACTION_CREATE">MUSIC_ACTION_CREATE</string>
+    <string name="MUSIC_ACTION_PLAY">MUSIC_ACTION_PLAY</string>
+    <string name="MUSIC_ACTION_STOP">MUSIC_ACTION_STOP</string>
+    <string name="MUSIC_ACTION_PAUSE">MUSIC_ACTION_PAUSE</string>
+    <string name="MUSIC_PLAY_PAUSE_TOGGLE">MUSIC_PLAY_PAUSE_TOGGLE</string>
+    <string name="BROADCAST_PIVATE">AndroidApp.IN_APP_BROADCAST</string>
 </resources>
