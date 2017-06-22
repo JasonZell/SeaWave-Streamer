@@ -1,5 +1,6 @@
 package cs499app.cs499mobileapp;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -9,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ProgressBar;
 
 import cs499app.cs499mobileapp.service.MusicService;
 import cs499app.cs499mobileapp.view.InnerFragment;
@@ -24,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
         MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager_activity);
         viewPager.setAdapter(adapter);
+
+
+
+
 
         //Start Music Service
         Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
