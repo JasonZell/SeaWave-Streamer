@@ -1,4 +1,4 @@
-package cs499app.cs499mobileapp;
+package cs499app.cs499mobileapp.service;
 
 /**
  * Created by centa on 6/21/2017.
@@ -21,6 +21,8 @@ import android.util.Log;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+
+import cs499app.cs499mobileapp.R;
 
 
 public class MusicService extends Service implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener{

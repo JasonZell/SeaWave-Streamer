@@ -1,19 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cs499app.cs499mobileapp.MainActivity">
+    tools:context="cs499app.cs499mobileapp.view.InnerFragment">
 
     <android.support.v4.view.ViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/pager_activity"
+        android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v4.view.PagerTitleStrip
-            android:id="@+id/pager_title_strip_activity"
+            android:id="@+id/pager_title_strip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
@@ -24,7 +21,4 @@
 
     </android.support.v4.view.ViewPager>
 
-    <include layout="@layout/content_main" />
-
-
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>
