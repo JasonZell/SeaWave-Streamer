@@ -3,6 +3,7 @@ package cs499app.cs499mobileapp;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
+import android.widget.TableLayout;
 
 import cs499app.cs499mobileapp.service.MusicService;
 import cs499app.cs499mobileapp.view.InnerFragment;
@@ -29,9 +31,8 @@ public class MainActivity extends AppCompatActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager_activity);
         viewPager.setAdapter(adapter);
 
-
-
-
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager); //layout will use PagerAdapter's page titles
 
         //Start Music Service
         Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
@@ -140,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return "ACTIVITY TITLE " + (position+1);
+            return "TITLE " + (position+1);
         }
     }
 

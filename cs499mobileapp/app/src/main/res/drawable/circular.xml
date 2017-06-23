@@ -5,7 +5,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <gradient android:startColor="@color/fuchsia"
-                android:endColor="@color/AliceBlue"
+              android:endColor="@color/AliceBlue"></gradient>
 
-        ></gradient>
 </shape>
