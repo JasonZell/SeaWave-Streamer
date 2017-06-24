@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,9 +28,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.customized_toolbar);
+        setSupportActionBar(toolbar);
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager_activity);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.main_pager);
         viewPager.setAdapter(adapter);
+
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager); //layout will use PagerAdapter's page titles
@@ -72,11 +78,11 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onPause();
         Log.e("MENU ACTIVITY","ACTIVITY PAUSED");
-        sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PAUSE)), getString(R.string.BROADCAST_PIVATE));
+        sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PAUSE)), getString(R.string.BROADCAST_PRIVATE));
 
 //           Log.e("MENU ACTIVITY", "TRANSITION: " + isTransition);
 //        if(!isTransition) {
-//            sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PAUSE)), getString(R.string.BROADCAST_PIVATE));
+//            sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PAUSE)), getString(R.string.BROADCAST_PRIVATE));
 //        }
     }
     //method: onResume
@@ -89,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         //updateMusicIcon();
         Log.e("MENU ACTIVITY","ACTIVITY RESUMED");
 
-        sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PLAY)), getString(R.string.BROADCAST_PIVATE));
+        sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PLAY)), getString(R.string.BROADCAST_PRIVATE));
         //isTransition = false;
 
     }
@@ -136,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
 
         @Override

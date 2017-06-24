@@ -121,10 +121,10 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         //Music receiver
-        registerReceiver(musicToggleReceiver,new IntentFilter(getString(R.string.MUSIC_PLAY_PAUSE_TOGGLE)),getString(R.string.BROADCAST_PIVATE),null);
-        registerReceiver(musicPlayReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_PLAY)),getString(R.string.BROADCAST_PIVATE),null);
-        registerReceiver(musicStopReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_STOP)),getString(R.string.BROADCAST_PIVATE),null);
-        registerReceiver(musicPauseReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_PAUSE)),getString(R.string.BROADCAST_PIVATE),null);
+        registerReceiver(musicToggleReceiver,new IntentFilter(getString(R.string.MUSIC_PLAY_PAUSE_TOGGLE)),getString(R.string.BROADCAST_PRIVATE),null);
+        registerReceiver(musicPlayReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_PLAY)),getString(R.string.BROADCAST_PRIVATE),null);
+        registerReceiver(musicStopReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_STOP)),getString(R.string.BROADCAST_PRIVATE),null);
+        registerReceiver(musicPauseReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_PAUSE)),getString(R.string.BROADCAST_PRIVATE),null);
 
         Log.d("INSISDE MUSIC SERVICE","MUSIC SERVICE");
         if (intent.getAction().equals(getString(R.string.MUSIC_ACTION_CREATE))) {

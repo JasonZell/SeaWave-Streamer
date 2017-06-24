@@ -6,25 +6,56 @@
     android:layout_height="match_parent"
     tools:context="cs499app.cs499mobileapp.MainActivity">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
+    <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        app:tabIndicatorColor="@color/colorPrimary"
-        app:tabSelectedTextColor="@color/Gold"
-        app:tabIndicatorHeight="2dp"
-        android:background="@color/colorPrimary"
-        app:tabTextColor="@color/White"
-        app:tabMode="scrollable"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <android.support.v4.view.ViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/pager_activity"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/customized_toolbar"
+            app:titleTextColor="@color/White"
+            app:contentInsetStart="0dp"
+            app:contentInsetEnd="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_gravity="top"
+            android:theme="@style/CustomToolbarTheme"
 
-        <!--<android.support.v4.view.PagerTitleStrip-->
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        </android.support.v7.widget.Toolbar>
+
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_below="@id/customized_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            app:tabGravity="center"
+            app:tabMaxWidth="0dp"
+            app:tabIndicatorColor="@color/colorPrimary"
+            app:tabSelectedTextColor="@color/Gold"
+            app:tabIndicatorHeight="2dp"
+            android:background="@color/colorPrimary"
+            app:tabTextColor="@color/White"
+            app:tabMode="fixed">
+
+
+        </android.support.design.widget.TabLayout>
+
+
+        <android.support.v4.view.ViewPager
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/main_pager"
+            android:layout_below="@id/customized_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="fill"
+
+            >
+
+            <!--<android.support.v4.view.PagerTitleStrip-->
             <!--android:id="@+id/pager_title_strip_activity"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content"-->
@@ -33,10 +64,14 @@
             <!--android:textColor="#fff"-->
             <!--android:paddingTop="4dp"-->
             <!--android:paddingBottom="4dp" />-->
-    </android.support.v4.view.ViewPager>
+        </android.support.v4.view.ViewPager>
 
 
-    <include layout="@layout/content_main" />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+
+
+    <!--<include layout="@layout/content_main" />-->
 
 
 
