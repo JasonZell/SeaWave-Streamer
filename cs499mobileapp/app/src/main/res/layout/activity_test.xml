@@ -6,15 +6,21 @@
     android:layout_height="match_parent"
     tools:context="cs499app.cs499mobileapp.TestActivity">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:max="500"
-        android:progress="0"
-        android:progressDrawable="@drawable/circular" />
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:max="500"
+            android:progress="0"
+            android:progressDrawable="@drawable/circular" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
 
 </android.support.constraint.ConstraintLayout>
