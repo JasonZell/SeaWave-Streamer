@@ -8,40 +8,68 @@
     android:orientation="vertical"
     tools:context="cs499app.cs499mobileapp.view.PlayerFragment">
 
-    <android.support.v7.widget.LinearLayoutCompat
+    <RelativeLayout
         android:id="@+id/seekbar_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="90">
 
-        <!--<com.github.lzyzsd.circleprogress.ArcProgress-->
-            <!--android:id="@+id/arc_progress"-->
-            <!--android:background="#214193"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_gravity="center"-->
-            <!--/>-->
+        <ImageView
+
+            android:id="@+id/seekbar_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+
 
         <cs499app.cs499mobileapp.helper.CircularSeekBar
 
             android:id="@+id/circular_seek_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            CircularSeekBar:circle_stroke_width="10dp"
+            CircularSeekBar:circle_color="@color/DarkSeaGreen"
+            CircularSeekBar:circle_progress_color="@color/Indigo"
             CircularSeekBar:progress="25"
             CircularSeekBar:max="100"
             CircularSeekBar:pointer_alpha_ontouch="100"
             CircularSeekBar:pointer_color="#0174DF"
-            CircularSeekBar:pointer_halo_color="#880174DF">
+            CircularSeekBar:pointer_halo_color="@color/CornflowerBlue">
 
         </cs499app.cs499mobileapp.helper.CircularSeekBar>
 
-        <ImageView
-            android:src="@drawable/radio_demo"
-            android:id="@+id/seekbar_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </android.support.v7.widget.LinearLayoutCompat>
+
+
+    </RelativeLayout>
+    <!--<android.support.v7.widget.LinearLayoutCompat-->
+        <!--android:id="@+id/seekbar_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="90">-->
+
+        <!--<cs499app.cs499mobileapp.helper.CircularSeekBar-->
+
+            <!--android:id="@+id/circular_seek_bar"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+
+            <!--CircularSeekBar:progress="25"-->
+            <!--CircularSeekBar:max="100"-->
+            <!--CircularSeekBar:pointer_alpha_ontouch="100"-->
+            <!--CircularSeekBar:pointer_color="#0174DF"-->
+            <!--CircularSeekBar:pointer_halo_color="#880174DF">-->
+
+        <!--</cs499app.cs499mobileapp.helper.CircularSeekBar>-->
+
+        <!--<ImageView-->
+            <!--android:src="@drawable/radio_demo"-->
+            <!--android:id="@+id/seekbar_image"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
+    <!--</android.support.v7.widget.LinearLayoutCompat>-->
 
     <!--CircularSeekBar:start_angle="270"-->
     <!--CircularSeekBar:end_angle="270"-->

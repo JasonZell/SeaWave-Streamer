@@ -2,12 +2,16 @@ package cs499app.cs499mobileapp.view;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.graphics.drawable.DrawableWrapper;
@@ -61,13 +65,23 @@ public class PlayerFragment extends Fragment {
         });
 
 
+        Bitmap src  = BitmapFactory.decodeResource(root.getResources(),
+                R.drawable.radio_image);
+
+        RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(seekBar.getResources(), src);
+
+
+        //dr.setCornerRadius(seekBar.getCircleXRadius());
+        dr.setCircular(true);
+        ImageView imageView = root.findViewById(R.id.seekbar_image);
+        imageView.setImageDrawable(dr);
 
         //final ImageView imageView = new ImageView(getActivity());
-        ImageView imageView = (ImageView) root.findViewById(R.id.seekbar_image);
-        final int dp = (int) convertDpToPixel(5, getActivity());
-        imageView.setLayoutParams(new LinearLayoutCompat.LayoutParams(seekBar.getWidth() - dp,
-                seekBar.getHeight() - dp));
-        imageView.setImageResource(R.drawable.radio_demo);
+//        ImageView imageView = (ImageView) root.findViewById(R.id.seekbar_image);
+//        final int dp = (int) convertDpToPixel(5, getActivity());
+//        imageView.setLayoutParams(new RelativeLayout.LayoutParams(seekBar.getWidth() - dp,
+//                seekBar.getHeight() - dp));
+//        imageView.setImageResource(R.drawable.radio_demo);
 
 //        seekBar.post(new Runnable() {
 //            @Override
@@ -86,6 +100,10 @@ public class PlayerFragment extends Fragment {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         float px = dp * (metrics.densityDpi / 160f); return px;
+    }
+
+    public static float convertPxToDp(float px) {
+        return px / Resources.getSystem().getDisplayMetrics().density;
     }
 
     public PlayerFragment() {

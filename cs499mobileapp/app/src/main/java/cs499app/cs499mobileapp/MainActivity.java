@@ -43,10 +43,10 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager); //layout will use PagerAdapter's page titles
 
-        //Start Music Service
-        Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
-        startServiceIntent.setAction("MUSIC_ACTION_CREATE");
-        startService(startServiceIntent);
+//        //Start Music Service
+//        Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
+//        startServiceIntent.setAction("MUSIC_ACTION_CREATE");
+//        startService(startServiceIntent);
 
         Log.d("PASSED ","passed");
     }
