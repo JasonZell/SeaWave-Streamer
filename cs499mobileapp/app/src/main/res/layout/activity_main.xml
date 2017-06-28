@@ -33,7 +33,7 @@
             app:tabGravity="fill"
             app:tabMaxWidth="0dp"
             app:tabIndicatorColor="@color/Gold"
-            app:tabIndicatorHeight="4dp"
+            app:tabIndicatorHeight="2dp"
             android:background="@color/DeepSkyBlue"
             app:tabMode="fixed">
 

@@ -1,0 +1,29 @@
+<android.support.v4.widget.DrawerLayout
+    xmlns:Android="http://schemas.android.com/apk/res/android"
+    Android:id="@+id/navigation_drawer"
+    Android:layout_width="match_parent"
+    Android:layout_height="match_parent"
+    Android:fitsSystemWindows="true">
+    <LinearLayout
+        Android:layout_width="match_parent"
+        Android:layout_height="match_parent">
+        <Android.support.v7.widget.Toolbar
+            xmlns:Android="http://schemas.Android.com/apk/res/Android"
+            xmlns:app="http://schemas.Android.com/apk/res-auto"
+            Android:id="@+id/toolbar"
+            Android:layout_width="match_parent"
+            Android:layout_height="wrap_content"
+            Android:background="#ff6d7fe2"
+            app:contentInsetEnd="0dp"
+            app:contentInsetStart="0dp"
+            ></Android.support.v7.widget.Toolbar>
+    </LinearLayout>
+    <ListView Android:id="@+id/left_drawer"
+        Android:layout_width="240dp"
+        Android:layout_height="match_parent"
+        Android:layout_gravity="start"
+        Android:choiceMode="singleChoice"
+        Android:divider="@color/Indigo"
+        Android:dividerHeight="0dp"
+        Android:background="@color/Gold"/>
+</android.support.v4.widget.DrawerLayout>

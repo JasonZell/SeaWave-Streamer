@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.customized_toolbar);
         setSupportActionBar(toolbar);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -42,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager); //layout will use PagerAdapter's page titles
-        tabLayout.getTabAt(0).setIcon(R.drawable.player_icon);
-        tabLayout.getTabAt(1).setIcon(R.drawable.library_icon);
+        tabLayout.getTabAt(0).setIcon(R.drawable.player_icon_selector);
+        tabLayout.getTabAt(1).setIcon(R.drawable.library_icon_selector);
 
 
 //        //Start Music Service
