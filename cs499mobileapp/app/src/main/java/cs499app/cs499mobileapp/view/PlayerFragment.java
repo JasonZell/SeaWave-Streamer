@@ -18,6 +18,7 @@ import android.support.v7.graphics.drawable.DrawableWrapper;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 import cs499app.cs499mobileapp.helper.CircularSeekBar.OnCircularSeekBarChangeListener;
 import cs499app.cs499mobileapp.R;
 import cs499app.cs499mobileapp.helper.CircularSeekBar;
+import cs499app.cs499mobileapp.helper.RoundedBitmapDrawableUtility;
 
 /**
  * Created by centa on 6/27/2017.
@@ -64,34 +66,21 @@ public class PlayerFragment extends Fragment {
             }
         });
 
+        //fitting image inside circular seekbar
 
-        Bitmap src  = BitmapFactory.decodeResource(root.getResources(),
-                R.drawable.radio_image);
-
+        Bitmap src  = BitmapFactory.decodeResource(root.getResources(), R.drawable.radio_image);
         RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(seekBar.getResources(), src);
-
-
-        //dr.setCornerRadius(seekBar.getCircleXRadius());
         dr.setCircular(true);
         ImageView imageView = root.findViewById(R.id.seekbar_image);
+        imageView.setMaxHeight(seekBar.getLayoutParams().width - (int)convertDpToPixel(5,root.getContext()));
+        imageView.setMaxWidth(seekBar.getLayoutParams().width - (int)convertDpToPixel(5,root.getContext()));
+
+
+
+       // imageView.requestLayout();
+       // imageView.setLayoutParams(params);
+        Log.e("offset","offset"+(int)convertPxToDp(50));
         imageView.setImageDrawable(dr);
-
-        //final ImageView imageView = new ImageView(getActivity());
-//        ImageView imageView = (ImageView) root.findViewById(R.id.seekbar_image);
-//        final int dp = (int) convertDpToPixel(5, getActivity());
-//        imageView.setLayoutParams(new RelativeLayout.LayoutParams(seekBar.getWidth() - dp,
-//                seekBar.getHeight() - dp));
-//        imageView.setImageResource(R.drawable.radio_demo);
-
-//        seekBar.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                imageView.setLayoutParams(new RelativeLayout.LayoutParams(seekBar.getWidth() - dp,
-//                        seekBar.getHeight() - dp));
-//                imageView.setImageResource(R.drawable.play_arrow);
-//
-//            }
-//        });
 
         return root;
     }

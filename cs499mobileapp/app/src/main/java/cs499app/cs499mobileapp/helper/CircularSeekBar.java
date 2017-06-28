@@ -1078,9 +1078,4 @@ public class CircularSeekBar extends View {
         return isTouchEnabled;
     }
 
-    public float getCircleXRadius()
-    {
-        return mCircleXRadius;
-    }
-
 }

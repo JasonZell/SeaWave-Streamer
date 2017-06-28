@@ -12,19 +12,31 @@
         android:id="@+id/seekbar_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="90">
+        android:layout_weight="90"
+        android:background="@color/gray">
 
-        <ImageView
 
-            android:id="@+id/seekbar_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true" />
+        <android.support.v7.widget.LinearLayoutCompat
+            android:id="@+id/imageview_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+
+            >
+            <ImageView
+                android:id="@+id/seekbar_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:scaleType="centerCrop"
+
+                />
+
+        </android.support.v7.widget.LinearLayoutCompat>
 
 
         <cs499app.cs499mobileapp.helper.CircularSeekBar
-
             android:id="@+id/circular_seek_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -39,9 +51,8 @@
             CircularSeekBar:pointer_color="#0174DF"
             CircularSeekBar:pointer_halo_color="@color/CornflowerBlue">
 
+
         </cs499app.cs499mobileapp.helper.CircularSeekBar>
-
-
 
     </RelativeLayout>
     <!--<android.support.v7.widget.LinearLayoutCompat-->
