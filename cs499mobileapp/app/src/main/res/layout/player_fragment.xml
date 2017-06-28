@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:CircularSeekBar="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="cs499app.cs499mobileapp.view.PlayerFragment">
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/seekbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="90">
+
+        <!--<com.github.lzyzsd.circleprogress.ArcProgress-->
+            <!--android:id="@+id/arc_progress"-->
+            <!--android:background="#214193"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_gravity="center"-->
+            <!--/>-->
+
+        <cs499app.cs499mobileapp.helper.CircularSeekBar
+
+            android:id="@+id/circular_seek_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            CircularSeekBar:progress="25"
+            CircularSeekBar:max="100"
+            CircularSeekBar:pointer_alpha_ontouch="100"
+            CircularSeekBar:pointer_color="#0174DF"
+            CircularSeekBar:pointer_halo_color="#880174DF">
+
+        </cs499app.cs499mobileapp.helper.CircularSeekBar>
+
+        <ImageView
+            android:src="@drawable/radio_demo"
+            android:id="@+id/seekbar_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <!--CircularSeekBar:start_angle="270"-->
+    <!--CircularSeekBar:end_angle="270"-->
+    <!--CircularSeekBar:circle_x_radius="100dp"-->
+    <!--CircularSeekBar:circle_y_radius="100dp"-->
+    <!--CircularSeekBar:use_custom_radii="true"-->
+
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10">
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/controller_album_art"
+                android:src="@drawable/radio_demo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="20"/>
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/controller_station_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="50"
+                android:text="BEST STATION"/>
+
+            <android.support.v7.widget.LinearLayoutCompat
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="30"
+                >
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:src="@drawable/pause_icon"
+                    android:scaleType="fitCenter"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="30"/>
+                <android.support.v7.widget.AppCompatImageButton
+                    android:src="@drawable/play_arrow"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="30"/>
+                <android.support.v7.widget.AppCompatImageButton
+                    android:src="@drawable/skip_next"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="30"/>
+
+            </android.support.v7.widget.LinearLayoutCompat>
+
+
+        </android.support.v7.widget.LinearLayoutCompat>
+
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+
+    </android.support.v7.widget.LinearLayoutCompat>

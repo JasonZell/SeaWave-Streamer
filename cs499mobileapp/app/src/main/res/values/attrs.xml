@@ -1,16 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>    <declare-styleable name="ArcProgress">
-    <attr name="arc_progress" format="integer"/>
-    <attr name="arc_angle" format="float"/>
-    <attr name="arc_stroke_width" format="dimension"/>
-    <attr name="arc_max" format="integer"/>
-    <attr name="arc_unfinished_color" format="color"/>
-    <attr name="arc_finished_color" format="color"/>
-    <attr name="arc_text_size" format="dimension"/>
-    <attr name="arc_text_color" format="color"/>
-    <attr name="arc_suffix_text" format="string"/>
-    <attr name="arc_suffix_text_size" format="dimension"/>
-    <attr name="arc_suffix_text_padding" format="dimension"/>
-    <attr name="arc_bottom_text" format="string"/>
-    <attr name="arc_bottom_text_size" format="dimension"/>
-</declare-styleable></resources>
+<resources>
+
+    <declare-styleable name="ArcProgress">
+        <attr name="arc_progress" format="integer"/>
+        <attr name="arc_angle" format="float"/>
+        <attr name="arc_stroke_width" format="dimension"/>
+        <attr name="arc_max" format="integer"/>
+        <attr name="arc_unfinished_color" format="color"/>
+        <attr name="arc_finished_color" format="color"/>
+        <attr name="arc_text_size" format="dimension"/>
+        <attr name="arc_text_color" format="color"/>
+        <attr name="arc_suffix_text" format="string"/>
+        <attr name="arc_suffix_text_size" format="dimension"/>
+        <attr name="arc_suffix_text_padding" format="dimension"/>
+        <attr name="arc_bottom_text" format="string"/>
+        <attr name="arc_bottom_text_size" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="CircularSeekBar">
+        <attr name="progress" format="integer"/>
+        <attr name="max" format="integer"/>
+        <attr name="move_outside_circle" format="boolean"/>
+        <attr name="maintain_equal_circle" format="boolean"/>
+        <attr name="use_custom_radii" format="boolean"/>
+        <attr name="lock_enabled" format="boolean"/>
+        <attr name="circle_x_radius" format="dimension" />
+        <attr name="circle_y_radius" format="dimension" />
+        <attr name="circle_stroke_width" format="dimension" />
+        <attr name="pointer_radius" format="dimension" />
+        <attr name="pointer_halo_width" format="dimension" />
+        <attr name="pointer_halo_border_width" format="dimension"/>
+        <attr name="circle_color" format="color"/>
+        <attr name="circle_progress_color" format="color"/>
+        <attr name="pointer_color" format="color"/>
+        <attr name="pointer_halo_color" format="color"/>
+        <attr name="pointer_halo_color_ontouch" format="color"/>
+        <attr name="pointer_alpha_ontouch" format="integer"/>
+        <attr name="start_angle" format="float"/>
+        <attr name="end_angle" format="float"/>
+        <attr name="circle_fill" format="color"/>
+    </declare-styleable>
+
+</resources>
