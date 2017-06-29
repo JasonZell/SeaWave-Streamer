@@ -23,14 +23,18 @@ public class ListViewActivity  extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listview);
 
-        dataAdapter = new DataAdapter(this,R.layout.activity_listview,data);
-
-        //listview = (ListView)findViewById(R.layout.activity_listview);
-         data = new ArrayList<>();
+        data = new ArrayList<>();
         data.add("one");
         data.add("two");
         data.add("three");
         data.add("four");
+
+        dataAdapter = new DataAdapter(this,R.layout.activity_listview,data);
+
+        listview = (ListView)findViewById(R.id.listview_view);
+
+
+        listview.setAdapter(dataAdapter);
 
 
     }

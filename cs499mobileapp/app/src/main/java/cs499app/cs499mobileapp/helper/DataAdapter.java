@@ -34,7 +34,8 @@ public class DataAdapter extends ArrayAdapter<String> {
 
         ImageView iconImageView = view.findViewById(R.id.listview_icon);
         TextView textview = view.findViewById(R.id.listview_textview);
-        textview.setText(data.get(position).toString());
+        textview.setText(data.get(position));
+
         return view;
     }
 
