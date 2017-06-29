@@ -27,6 +27,16 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
 
+
+
+
+        </activity>
+
+        <activity
+            android:name=".ListViewActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,7 +45,9 @@
 
 
 
+
         </activity>
+
 
         <service
             android:name=".service.MusicService"
