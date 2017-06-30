@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.main_pager);
         viewPager.setAdapter(adapter);
 
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager); //layout will use PagerAdapter's page titles
         tabLayout.getTabAt(0).setIcon(R.drawable.player_icon_selector);

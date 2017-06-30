@@ -9,24 +9,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"></ListView>
 
-        <ImageView
-            android:id="@+id/listview_icon"
-            android:layout_margin="10dp"
-            android:adjustViewBounds="true"
-            android:layout_weight="20"
-            android:src="@drawable/radio_demo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </ImageView>
 
-        <TextView
-            android:id="@+id/listview_textview"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="80"
-            android:layout_gravity="center"
-            android:text="DATA"
-            android:textSize="30dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
 </LinearLayout>
