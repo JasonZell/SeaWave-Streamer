@@ -8,6 +8,6 @@
     <string name="MUSIC_PLAY_PAUSE_TOGGLE">MUSIC_PLAY_PAUSE_TOGGLE</string>
     <string name="BROADCAST_PRIVATE">AndroidApp.IN_APP_BROADCAST</string>
 
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

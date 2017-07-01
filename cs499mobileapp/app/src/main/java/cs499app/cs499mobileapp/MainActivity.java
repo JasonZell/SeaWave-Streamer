@@ -33,11 +33,11 @@ import cs499app.cs499mobileapp.view.InnerFragment;
 import cs499app.cs499mobileapp.view.LibraryFragment;
 import cs499app.cs499mobileapp.view.PlayerFragment;
 
-public class MainActivity extends AppCompatActivity   {
+public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
 
-    private String navigationDrawerTitle;
+
     private DrawerLayout navigationDrawerLayout;
-    private ListView navigationDrawerListView;
+
     private ActionBarDrawerToggle navigationDrawerToggle;
     private String[] navigationItemTitleArray;
 
@@ -48,7 +48,26 @@ public class MainActivity extends AppCompatActivity   {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.customized_toolbar);
         setSupportActionBar(toolbar);
-        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       // this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
+
+//        //Start Music Service
+//        Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
+//        startServiceIntent.setAction("MUSIC_ACTION_CREATE");
+//        startService(startServiceIntent);
+
+        navigationDrawerLayout = (DrawerLayout) findViewById(R.id.navigation_drawer_layout);
+        navigationDrawerToggle = new ActionBarDrawerToggle(
+                this, navigationDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        navigationDrawerLayout.addDrawerListener(navigationDrawerToggle);
+        navigationDrawerToggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
 
         MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
         ViewPager viewPager = (ViewPager) findViewById(R.id.main_pager);
@@ -58,50 +77,6 @@ public class MainActivity extends AppCompatActivity   {
         tabLayout.setupWithViewPager(viewPager); //layout will use PagerAdapter's page titles
         tabLayout.getTabAt(0).setIcon(R.drawable.player_icon_selector);
         tabLayout.getTabAt(1).setIcon(R.drawable.library_icon_selector);
-
-        //set navivation drawer
-        initNavigationItemTitleArray();
-
-        navigationDrawerTitle = getTitle().toString();
-        navigationDrawerLayout = (DrawerLayout) findViewById(R.id.navigation_drawer_layout);
-        navigationDrawerListView = (ListView) findViewById(R.id.navigation_drawer_listview);
-
-
-        navigationDrawerListView.setAdapter(new ArrayAdapter<>(this,
-                R.layout.navigation_drawer_items,navigationItemTitleArray));
-
-        navigationDrawerListView.setOnItemClickListener(new DrawerItemClickListener());
-
-        // enable ActionBar app icon to behave as action to toggle nav drawer
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-// ActionBarDrawerToggle ties together the the proper interactions
-        // between the sliding drawer and the action bar app icon
-
-        navigationDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                navigationDrawerLayout,         /* DrawerLayout object */
-                  /* nav drawer image to replace 'Up' caret */
-                R.string.drawer_open,  /* "open drawer" description for accessibility */
-                R.string.drawer_close  /* "close drawer" description for accessibility */
-        ) {
-            public void onDrawerClosed(View view) {
-                getActionBar().setTitle(navigationDrawerTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(navigationDrawerTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
-        navigationDrawerLayout.setDrawerListener(navigationDrawerToggle);
-
-
-//        //Start Music Service
-//        Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
-//        startServiceIntent.setAction("MUSIC_ACTION_CREATE");
-//        startService(startServiceIntent);
 
         Log.d("PASSED ","passed");
     }
@@ -128,14 +103,6 @@ public class MainActivity extends AppCompatActivity   {
         return super.onOptionsItemSelected(item);
     }
 
-    /* Called whenever we call invalidateOptionsMenu() */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = navigationDrawerLayout.isDrawerOpen(navigationDrawerListView);
-        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
-        return super.onPrepareOptionsMenu(menu);
-    }
 
 
     //Method: onPause
@@ -206,6 +173,30 @@ public class MainActivity extends AppCompatActivity   {
         }
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.navigation_drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
 
     private class MyPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -240,21 +231,12 @@ public class MainActivity extends AppCompatActivity   {
 //        }
     }
 
-    private void initNavigationItemTitleArray()
-    {
-        navigationItemTitleArray = new String[3];
-        navigationItemTitleArray[0] = "First Item";
-        navigationItemTitleArray[1] = "Second Item";
-        navigationItemTitleArray[2] = "Third Item";
-    }
-
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //selectItem(position);
-        }
-    }
+//    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+//        @Override
+//        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//            //selectItem(position);
+//        }
+//    }
 //      FOR onItemClick of Navigation Drawer items
 //    private void selectItem(int position) {
 //        // update the main content by replacing fragments
