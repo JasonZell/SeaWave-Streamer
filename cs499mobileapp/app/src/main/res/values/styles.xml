@@ -16,9 +16,24 @@
 
     <style name="CustomToolbarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:background">@color/colorPrimary</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="android:textColorSecondary">@color/white</item>
+
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/white</item>
+    </style>
+
+    <style name="SettingSwitchStyle" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/DeepSkyBlue</item>
+        <item name="colorSwitchThumbNormal">@color/LightGray</item>
+        <item name="android:colorForeground">@color/gray</item>
+    </style>
+    <!--<style name="MenuIndicatorStyle" parent="Widget.AppCompat.ActionButton.Overflow">-->
+        <!--<item name="color">@android:color/white</item>-->
+    <!--</style>-->
 </resources>

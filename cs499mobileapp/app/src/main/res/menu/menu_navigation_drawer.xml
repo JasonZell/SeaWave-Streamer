@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:checkableBehavior="single">
         <item
@@ -14,6 +15,11 @@
         <item
             android:id="@+id/nav_manage"
             android:title="Tools" />
+
+        <item android:id="@+id/nav_number"
+            android:title="SettingToggle"
+            app:actionLayout="@layout/setting_toggle_item"/>
+
     </group>
 
     <item android:title="Communicate">
