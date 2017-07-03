@@ -4,10 +4,13 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -41,8 +44,31 @@ public class LibraryFragment extends Fragment{
 
         loadPlaylistLibrary();
         playlistListview = root.findViewById(R.id.listview_playlist);
+        playlistListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.i("onItemClick","Spawn list frag");
+                Fragment stationListFragment = new StationListFragment();
+                Bundle args = new Bundle();
+                args.putInt("StationList", i);
+                stationListFragment.setArguments(args);
+//
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragment_container, stationListFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+//
+//        // update selected item and title, then close the drawer
+//        mDrawerList.setItemChecked(position, true);
+//        setTitle(mPlanetTitles[position]);
+//        mDrawerLayout.closeDrawer(mDrawerList);
+            }
+        });
+        
         playlistAdapter = new PlaylistAdapter(this.getContext(),R.layout.playlist_listview_items,mediaPlaylist);
         playlistListview.setAdapter(playlistAdapter);
+
 
 //        ViewPager pager = (ViewPager) root.findViewById(R.id.pager);
 //        InnerFragment.MyPagerAdapter adapter = new InnerFragment.MyPagerAdapter(getChildFragmentManager());
@@ -63,4 +89,5 @@ public class LibraryFragment extends Fragment{
         mediaPlaylist.add(new MediaPlaylist("This is a very very very long station name, scrolling", R.drawable.radio_demo));
 
     }
+
 }
