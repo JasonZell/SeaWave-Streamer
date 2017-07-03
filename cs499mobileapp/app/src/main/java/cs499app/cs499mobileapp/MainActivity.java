@@ -13,6 +13,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,16 +32,13 @@ import android.support.v4.widget.DrawerLayout;
 import cs499app.cs499mobileapp.service.MusicService;
 import cs499app.cs499mobileapp.view.InnerFragment;
 import cs499app.cs499mobileapp.view.LibraryFragment;
+import cs499app.cs499mobileapp.view.MainFragment;
 import cs499app.cs499mobileapp.view.PlayerFragment;
 
-public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
-
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout navigationDrawerLayout;
-
     private ActionBarDrawerToggle navigationDrawerToggle;
-    private String[] navigationItemTitleArray;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,18 +47,10 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         Toolbar toolbar = (Toolbar) findViewById(R.id.customized_toolbar);
         setSupportActionBar(toolbar);
        // this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-
-
-//        //Start Music Service
-//        Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
-//        startServiceIntent.setAction("MUSIC_ACTION_CREATE");
-//        startService(startServiceIntent);
-
         navigationDrawerLayout = (DrawerLayout) findViewById(R.id.navigation_drawer_layout);
         navigationDrawerToggle = new ActionBarDrawerToggle(
-                this, navigationDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, navigationDrawerLayout, toolbar, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
         navigationDrawerLayout.addDrawerListener(navigationDrawerToggle);
         navigationDrawerToggle.syncState();
 
@@ -69,14 +59,34 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
 
 
-        MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
-        ViewPager viewPager = (ViewPager) findViewById(R.id.main_pager);
-        viewPager.setAdapter(adapter);
+//        //Start Music Service
+//        Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
+//        startServiceIntent.setAction("MUSIC_ACTION_CREATE");
+//        startService(startServiceIntent);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager); //layout will use PagerAdapter's page titles
-        tabLayout.getTabAt(0).setIcon(R.drawable.player_icon_selector);
-        tabLayout.getTabAt(1).setIcon(R.drawable.library_icon_selector);
+        if (findViewById(R.id.fragment_container) != null) {
+            Log.d("Fm not null","fm not null");
+
+            // However, if we're being restored from a previous state,
+            // then we don't need to do anything and should return or else
+            // we could end up with overlapping fragments.
+            if (savedInstanceState != null) {
+                return;
+            }
+
+            // Create a new Fragment to be placed in the activity layout
+            MainFragment firstFragment = new MainFragment();
+            firstFragment.setFragmentManager(getSupportFragmentManager()); //important
+
+            // In case this activity was started with special instructions from an
+            // Intent, pass the Intent's extras to the fragment as arguments
+            firstFragment.setArguments(getIntent().getExtras());
+
+            // Add the fragment to the 'fragment_container' FrameLayout
+            final int commit = getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, firstFragment).commit();
+        }
+
 
         Log.d("PASSED ","passed");
     }
@@ -94,16 +104,12 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
-
-
 
     //Method: onPause
     //Purpose: calls when the activity is paused
@@ -195,40 +201,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.navigation_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-
-    private class MyPagerAdapter extends FragmentStatePagerAdapter {
-
-        public MyPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public android.support.v4.app.Fragment getItem(int i) {
-//            return new InnerFragment();
-
-            switch (i){
-                case 0:
-                    return new PlayerFragment();
-
-                case 1:
-                    return new LibraryFragment();
-                default:
-                    break;
-            }
-            return null;
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            return "TITLE " + (position+1);
-//        }
     }
 
 //    private class DrawerItemClickListener implements ListView.OnItemClickListener {

@@ -51,42 +51,15 @@
             >
         </android.support.v7.widget.Toolbar>
 
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/fragment_container"
             android:layout_below="@id/customized_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabGravity="fill"
-            app:tabMaxWidth="0dp"
-            app:tabIndicatorColor="@color/Gold"
-            app:tabIndicatorHeight="2dp"
-            android:background="@color/DeepSkyBlue"
-            app:tabMode="fixed">
-
-        </android.support.design.widget.TabLayout>
-
-        <android.support.v4.view.ViewPager
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/main_pager"
-            android:layout_below="@id/customized_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="fill"
-            >
-
-            <!--<android.support.v4.view.PagerTitleStrip-->
-            <!--android:id="@+id/pager_title_strip_activity"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="top"-->
-            <!--android:background="#33b5e5"-->
-            <!--android:textColor="#fff"-->
-            <!--android:paddingTop="4dp"-->
-            <!--android:paddingBottom="4dp" />-->
-        </android.support.v4.view.ViewPager>
+            android:layout_height="match_parent" />
 
     </android.support.v7.widget.LinearLayoutCompat>
+
+
 
     <!--<include layout="@layout/content_main" />-->
 

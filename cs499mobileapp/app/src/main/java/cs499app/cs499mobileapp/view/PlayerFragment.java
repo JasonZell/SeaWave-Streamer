@@ -42,6 +42,7 @@ public class PlayerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Log.i("PlayFragmentOnCreate","OnCreatecalled");
         View root = inflater.inflate(R.layout.player_fragment, container, false);
 //        ViewPager pager = (ViewPager) root.findViewById(R.id.pager);
 //        InnerFragment.MyPagerAdapter adapter = new InnerFragment.MyPagerAdapter(getChildFragmentManager());
