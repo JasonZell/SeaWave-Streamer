@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.style.UpdateLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -84,12 +85,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // Add the fragment to the 'fragment_container' FrameLayout
             final int commit = getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, firstFragment).commit();
+                    .add(R.id.fragment_container, firstFragment)
+                    .addToBackStack(firstFragment.getClass().getName()).commit();
         }
 
 
         Log.d("PASSED ","passed");
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -172,9 +175,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.navigation_drawer_layout);
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        Log.i("fragment count:",""+count);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else if(count != 0)
+        {
+            Log.i("backPressed","pop fragment");
+            getSupportFragmentManager().popBackStack();
+
+        }
+
+        else {
             super.onBackPressed();
         }
     }

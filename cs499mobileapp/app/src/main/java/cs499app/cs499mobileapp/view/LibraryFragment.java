@@ -56,7 +56,7 @@ public class LibraryFragment extends Fragment{
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragment_container, stationListFragment);
-                transaction.addToBackStack(null);
+                transaction.addToBackStack(stationListFragment.getClass().getName());
                 transaction.commit();
 //
 //        // update selected item and title, then close the drawer
