@@ -30,7 +30,7 @@ public class StationListFragment extends android.support.v4.app.Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.i("LibFragmentOnCreate","OnCreatecalled");
-        View root = inflater.inflate(R.layout.library_fragment, container, false);
+        View root = inflater.inflate(R.layout.fragment_station_list, container, false);
 
         loadStationList();
         stationlistListview = root.findViewById(R.id.stationlist_listview);
@@ -44,10 +44,11 @@ public class StationListFragment extends android.support.v4.app.Fragment{
     private void loadStationList()
     {
         stationNames = new ArrayList<>();
-        for(MediaPlaylist s: stationNames)
-        {
-            s.setPlaylistName("Station");
-        }
+        stationNames.add(new MediaPlaylist("First song", R.drawable.radio_demo));
+        stationNames.add(new MediaPlaylist("Second song", R.drawable.radio_demo));
+        stationNames.add(new MediaPlaylist("Third song", R.drawable.radio_demo));
+
+
     }
 
 }

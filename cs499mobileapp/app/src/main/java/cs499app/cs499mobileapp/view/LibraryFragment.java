@@ -65,7 +65,7 @@ public class LibraryFragment extends Fragment{
 //        mDrawerLayout.closeDrawer(mDrawerList);
             }
         });
-        
+
         playlistAdapter = new PlaylistAdapter(this.getContext(),R.layout.playlist_listview_items,mediaPlaylist);
         playlistListview.setAdapter(playlistAdapter);
 

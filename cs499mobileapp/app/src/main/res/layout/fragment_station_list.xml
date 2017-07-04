@@ -7,7 +7,6 @@
         android:id="@+id/stationlist_listview"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
-
     </ListView>
 
 </LinearLayout>
