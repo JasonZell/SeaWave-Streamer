@@ -2,6 +2,7 @@ package cs499app.cs499mobileapp;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -18,6 +19,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import cs499app.cs499mobileapp.helper.IcyStreamMeta;
+import cs499app.cs499mobileapp.service.MusicService;
 import cs499app.cs499mobileapp.view.ContainerFragment;
 import cs499app.cs499mobileapp.view.LibraryFragment;
 import cs499app.cs499mobileapp.view.PlayerFragment;
@@ -48,10 +55,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-//        //Start Music Service
-//        Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
-//        startServiceIntent.setAction("MUSIC_ACTION_CREATE");
-//        startService(startServiceIntent);
+        //Start Music Service
+        Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
+        startServiceIntent.setAction("MUSIC_ACTION_CREATE");
+        startService(startServiceIntent);
 //
 //        if (findViewById(R.id.fragment_container) != null) {
 //            Log.d("Fm not null","fm not null");
@@ -125,8 +132,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_add_playlist) {
             return true;
+        } else if(id == R.id.action_add_station)
+        {
+            return true;
+
+        } else if(id == R.id.action_import_list)
+        {
+            return true;
+
+        }else if(id == R.id.action_export_list)
+        {
+            return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -235,6 +254,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_send) {
 
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.navigation_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

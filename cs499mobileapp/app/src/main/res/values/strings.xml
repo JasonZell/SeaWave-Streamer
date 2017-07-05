@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Cs499mobileapp</string>
-    <string name="action_settings">Settings</string>
     <string name="MUSIC_ACTION_CREATE">MUSIC_ACTION_CREATE</string>
     <string name="MUSIC_ACTION_PLAY">MUSIC_ACTION_PLAY</string>
     <string name="MUSIC_ACTION_STOP">MUSIC_ACTION_STOP</string>
@@ -12,5 +11,13 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="TAB_ONE">PLAYER_TAB</string>
     <string name="TAB_TWO">LIBRARY_TAB</string>
+
+    <string name="action_add_playlist">add_playlist</string>
+    <string name="action_add_station">add_station</string>
+    <string name="action_import_list">import_list</string>
+    <string name="action_export_list">export_list</string>
+
+
+
 
 </resources>

@@ -3,8 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="cs499app.cs499mobileapp.MainActivity">
     <item
-        android:id="@+id/action_settings"
+    android:id="@+id/action_add_playlist"
+    android:orderInCategory="100"
+    android:title="@string/action_add_playlist"
+    app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_add_station"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/action_add_station"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_import_list"
+        android:orderInCategory="100"
+        android:title="@string/action_import_list"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_export_list"
+        android:orderInCategory="100"
+        android:title="@string/action_export_list"
         app:showAsAction="never" />
 </menu>

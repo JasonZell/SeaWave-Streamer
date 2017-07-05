@@ -12,20 +12,27 @@ import android.content.IntentFilter;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
 import cs499app.cs499mobileapp.R;
+import cs499app.cs499mobileapp.helper.IcyStreamMeta;
+import cs499app.cs499mobileapp.model.MediaPlaylist;
+import wseemann.media.FFmpegMediaMetadataRetriever;
 
 
-public class MusicService extends Service implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener{
+public class MusicService extends Service implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnInfoListener{
+
 
 
     enum myPlayerState {
@@ -134,7 +141,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
                 {
                     // myPlayer = MediaPlayer.create(this, R.raw.lullaby);
                     //AssetFileDescriptor musicAsset = getResources().openRawResourceFd(R.raw.lullaby);
-                    String url = "http://174.36.206.197:8000";
+                    final String url = "http://174.36.206.197:8000";
                     String url2= "http://s3.voscast.com:8456";
                     myPlayer = new MediaPlayer();
                     try {
@@ -166,6 +173,52 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
                     }
 
                     Log.e("MUSIC","created and prepared player");
+
+//                    MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
+//                    try {
+//                        metaRetriever.setDataSource(getEncodedURL(url));
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    String artist =  metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+//                    String title = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+//                    if(artist != null)
+//                    Log.e("Artist:",artist);
+//                    if(title != null)
+//                        Log.e("Title:",title);
+//
+
+                    
+//                    Log.e("extracting","Metadata..");
+//                    FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
+//                    mmr.setDataSource(url);
+//                    //mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM);
+//                    String ar = mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_TITLE);
+//                    if(ar != null)
+//                        Log.e("Artist:",ar);
+//
+//
+//                    AsyncTask<Void, Void, Void> loadURLTask = new AsyncTask<Void, Void, Void>() {
+//
+//                        @Override
+//                        protected Void doInBackground(Void... voids) {
+//                            try {
+//                                IcyStreamMeta icy = new IcyStreamMeta(new URL("http://174.36.206.197:8000"));
+//                                Log.e("ICYTitle:", icy.getTitle());
+//                                Log.e("ICYArtist:", icy.getArtist());
+//
+//
+//                            } catch (MalformedURLException e) {
+//                                e.printStackTrace();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            return null;
+//                        }
+//                    };
+//                    loadURLTask.execute();
+
+
                 }
             }
         }
@@ -190,6 +243,18 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         Log.e("MUSIC SERVICE:", "onERROR Triggered within service");
         return false;
     }
+
+    @Override
+    public boolean onInfo(MediaPlayer mediaPlayer, int i, int i1) {
+        if(i == MediaPlayer.MEDIA_INFO_METADATA_UPDATE)
+        {
+            Log.e("MEDIAPLAYER","METADATA UPDATED!!!!");
+
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public void onPrepared(MediaPlayer mp) {
