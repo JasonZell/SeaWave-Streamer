@@ -56,9 +56,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         //Start Music Service
-        Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
-        startServiceIntent.setAction("MUSIC_ACTION_CREATE");
-        startService(startServiceIntent);
+//        Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
+//        startServiceIntent.setAction("MUSIC_ACTION_CREATE");
+//        startService(startServiceIntent);
 //
 //        if (findViewById(R.id.fragment_container) != null) {
 //            Log.d("Fm not null","fm not null");

@@ -188,7 +188,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 //                        Log.e("Title:",title);
 //
 
-                    
+
 //                    Log.e("extracting","Metadata..");
 //                    FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
 //                    mmr.setDataSource(url);

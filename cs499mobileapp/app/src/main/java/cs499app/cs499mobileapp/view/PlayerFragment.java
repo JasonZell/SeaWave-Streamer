@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +28,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import cs499app.cs499mobileapp.helper.CircularSeekBar.OnCircularSeekBarChangeListener;
 import cs499app.cs499mobileapp.R;
 import cs499app.cs499mobileapp.helper.CircularSeekBar;
@@ -46,7 +50,29 @@ public class PlayerFragment extends Fragment {
         View root = inflater.inflate(R.layout.player_fragment, container, false);
 
 
+        final int max = 30;
+         int progress = 0;
         final CircularSeekBar seekBar = (CircularSeekBar) root.findViewById(R.id.circular_seek_bar);
+        seekBar.setIsTouchEnabled(false);
+        seekBar.setMax(max);
+        seekBar.setProgress(progress);
+
+//        CountDownTimer cd= new CountDownTimer(max*1000,1000){
+//            @Override
+//            public void onTick(long lefttime) {
+//            seekBar.setProgress(((int)lefttime/1000)-1);
+//                Log.i("timer:", String.valueOf(lefttime));
+//            seekBar.invalidate();
+//
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                //seekBar.setProgress(0);
+//
+//            }
+//        }.start();
+
         seekBar.setOnSeekBarChangeListener(new OnCircularSeekBarChangeListener() {
             @Override
             public void onProgressChanged(CircularSeekBar circularSeekBar, int progress, boolean fromUser) {
@@ -73,7 +99,6 @@ public class PlayerFragment extends Fragment {
         ImageView imageView = root.findViewById(R.id.seekbar_image);
         imageView.setMaxHeight(seekBar.getLayoutParams().width - (int)convertDpToPixel(5,root.getContext()));
         imageView.setMaxWidth(seekBar.getLayoutParams().width - (int)convertDpToPixel(5,root.getContext()));
-
 
 
        // imageView.requestLayout();
