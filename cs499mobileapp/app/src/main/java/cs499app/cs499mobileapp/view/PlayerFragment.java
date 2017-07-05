@@ -44,9 +44,7 @@ public class PlayerFragment extends Fragment {
 
         Log.i("PlayFragmentOnCreate","OnCreatecalled");
         View root = inflater.inflate(R.layout.player_fragment, container, false);
-//        ViewPager pager = (ViewPager) root.findViewById(R.id.pager);
-//        InnerFragment.MyPagerAdapter adapter = new InnerFragment.MyPagerAdapter(getChildFragmentManager());
-//        pager.setAdapter(adapter);
+
 
         final CircularSeekBar seekBar = (CircularSeekBar) root.findViewById(R.id.circular_seek_bar);
         seekBar.setOnSeekBarChangeListener(new OnCircularSeekBarChangeListener() {
@@ -98,25 +96,5 @@ public class PlayerFragment extends Fragment {
 
     public PlayerFragment() {
     }
-    //    private class MyPagerAdapter extends FragmentStatePagerAdapter {
-//
-//        public MyPagerAdapter(FragmentManager fm) {
-//            super(fm);
-//        }
-//
-//        @Override
-//        public android.support.v4.app.Fragment getItem(int i) {
-//            return PageFragment.newInstance(i+1);
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return 3;
-//        }
-//
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            return "FRAGMENT " + (position+1) + " TITLE " + (position+1);
-//        }
-//    }
+
 }

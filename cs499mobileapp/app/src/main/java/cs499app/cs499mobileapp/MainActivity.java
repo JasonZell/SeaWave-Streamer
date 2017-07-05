@@ -286,7 +286,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public android.support.v4.app.Fragment getItem(int i) {
-//            return new InnerFragment();
 
             switch (i){
                 case 0:

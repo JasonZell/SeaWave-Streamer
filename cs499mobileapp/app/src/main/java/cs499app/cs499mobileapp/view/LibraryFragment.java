@@ -70,9 +70,6 @@ public class LibraryFragment extends Fragment{
         playlistListview.setAdapter(playlistAdapter);
 
 
-//        ViewPager pager = (ViewPager) root.findViewById(R.id.pager);
-//        InnerFragment.MyPagerAdapter adapter = new InnerFragment.MyPagerAdapter(getChildFragmentManager());
-//        pager.setAdapter(adapter);
         return root;
     }
 
