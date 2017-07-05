@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import cs499app.cs499mobileapp.R;
@@ -41,8 +43,8 @@ public class PlaylistAdapter extends ArrayAdapter<MediaPlaylist>{
                 Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.playlist_listview_items,parent,false);
 
-        ImageView playlistImageView = view.findViewById(R.id.playlist_listview_image);
-        playlistImageView.setImageResource(playlistDataArray.get(position).getPlaylistImageRes());
+        TextView playlistListnumber = view.findViewById(R.id.playlist_listview_listnumber);
+        playlistListnumber.setText(String.valueOf(position+1));
 
         TextView playlistNameView = view.findViewById(R.id.playlist_listview_textview);
         playlistNameView.setText(playlistDataArray.get(position).getPlaylistName());
@@ -50,5 +52,12 @@ public class PlaylistAdapter extends ArrayAdapter<MediaPlaylist>{
         //playlistNameView.setMovementMethod(new ScrollingMovementMethod());
 
         return view;
+    }
+
+    @Nullable
+    @Override
+    public MediaPlaylist getItem(int position) {
+
+        return super.getItem(position);
     }
 }

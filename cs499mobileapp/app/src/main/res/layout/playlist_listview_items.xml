@@ -10,15 +10,23 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:descendantFocusability="blocksDescendants">
-        <ImageView
-            android:id="@+id/playlist_listview_image"
-            android:adjustViewBounds="true"
-            android:layout_weight="20"
-            android:src="@drawable/radio_demo"
-            android:layout_width="0dp"
-            android:layout_height="match_parent">
-        </ImageView>
+        <!--<ImageView-->
+            <!--android:id="@+id/playlist_listview_image"-->
+            <!--android:adjustViewBounds="true"-->
+            <!--android:layout_weight="20"-->
+            <!--android:src="@drawable/radio_demo"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent">-->
+        <!--</ImageView>-->
 
+        <TextView
+            android:id="@+id/playlist_listview_listnumber"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:textSize="@dimen/text_size"
+            android:textAlignment="center"
+            android:gravity="center"/>
         <!--<ScrollView-->
             <!--android:layout_marginLeft="30dp"-->
             <!--android:layout_weight="60"-->
@@ -29,31 +37,51 @@
 
 
         <!--</ScrollView>-->
-        <LinearLayout
-            android:layout_weight="60"
-            android:layout_width="0dp"
-            android:layout_height="match_parent">
+        <!--<LinearLayout-->
+            <!--android:layout_weight="60"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="start">-->
+        <!--<TextView-->
+            <!--android:id="@+id/playlist_listview_textview"-->
+            <!--android:layout_marginLeft="30dp"-->
+            <!--android:maxLines="1"-->
+            <!--android:textSize="@dimen/text_size"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:ellipsize="marquee"-->
+            <!--android:scrollHorizontally="true"-->
+            <!--android:marqueeRepeatLimit ="marquee_forever"-->
+            <!--android:focusable="true"-->
+            <!--android:focusableInTouchMode="true"-->
+            <!--android:gravity="start"-->
+            <!--android:textAlignment="center"/>-->
+        <!--</LinearLayout>-->
+
         <TextView
             android:id="@+id/playlist_listview_textview"
-            android:layout_marginLeft="30dp"
+
             android:maxLines="1"
-            android:textSize="30dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size"
+            android:gravity="center_vertical|left"
+            android:layout_weight="80"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:ellipsize="marquee"
             android:scrollHorizontally="true"
             android:marqueeRepeatLimit ="marquee_forever"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:gravity="left"/>
-        </LinearLayout>
+
+
+             />
 
         <ImageButton
             android:layout_marginRight="10dp"
             android:src="@drawable/play_arrow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="20"
+            android:layout_weight="10"
             />
     </LinearLayout>
 

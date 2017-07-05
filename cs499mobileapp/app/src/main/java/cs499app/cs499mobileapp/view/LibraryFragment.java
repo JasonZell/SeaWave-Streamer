@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,12 +67,16 @@ public class LibraryFragment extends Fragment{
             }
         });
 
+
         playlistAdapter = new PlaylistAdapter(this.getContext(),R.layout.playlist_listview_items,mediaPlaylist);
         playlistListview.setAdapter(playlistAdapter);
 
 
+
         return root;
     }
+
+
 
     public LibraryFragment() {
 
@@ -80,10 +85,10 @@ public class LibraryFragment extends Fragment{
     private void loadPlaylistLibrary()
     {
         mediaPlaylist = new ArrayList<>();
-        mediaPlaylist.add(new MediaPlaylist("First Station", R.drawable.radio_demo));
-        mediaPlaylist.add(new MediaPlaylist("Second Station", R.drawable.radio_demo));
-        mediaPlaylist.add(new MediaPlaylist("Third Station", R.drawable.radio_demo));
-        mediaPlaylist.add(new MediaPlaylist("This is a very very very long station name, scrolling", R.drawable.radio_demo));
+        mediaPlaylist.add(new MediaPlaylist("First Station"));
+        mediaPlaylist.add(new MediaPlaylist("Second Station"));
+        mediaPlaylist.add(new MediaPlaylist("Third Station"));
+        mediaPlaylist.add(new MediaPlaylist("This is a very very very long station name, scrolling"));
 
     }
 

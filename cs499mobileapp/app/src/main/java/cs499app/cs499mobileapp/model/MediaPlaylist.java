@@ -7,19 +7,9 @@ package cs499app.cs499mobileapp.model;
 public class MediaPlaylist {
 
     private String playlistName;
-    private int playlistImageRes;
 
-    public MediaPlaylist(String playlistName, int playlistImageRes) {
+    public MediaPlaylist(String playlistName) {
         this.playlistName = playlistName;
-        this.playlistImageRes = playlistImageRes;
-    }
-
-    public int getPlaylistImageRes() {
-        return playlistImageRes;
-    }
-
-    public void setPlaylistImageRes(int playlistImageRes) {
-        this.playlistImageRes = playlistImageRes;
     }
 
 

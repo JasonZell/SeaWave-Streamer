@@ -32,7 +32,6 @@ public class DataAdapter extends ArrayAdapter<String> {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = layoutInflater.inflate(R.layout.playlist_listview_items, parent,false);
 
-        ImageView iconImageView = view.findViewById(R.id.playlist_listview_image);
         TextView textview = view.findViewById(R.id.playlist_listview_textview);
         textview.setText(data.get(position));
 

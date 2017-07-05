@@ -34,6 +34,7 @@ public class StationListFragment extends android.support.v4.app.Fragment{
 
         loadStationList();
         stationlistListview = root.findViewById(R.id.stationlist_listview);
+
         stationlistAdapter = new PlaylistAdapter(this.getContext(),R.layout.playlist_listview_items,stationNames);
         stationlistListview.setAdapter(stationlistAdapter);
 
@@ -44,9 +45,9 @@ public class StationListFragment extends android.support.v4.app.Fragment{
     private void loadStationList()
     {
         stationNames = new ArrayList<>();
-        stationNames.add(new MediaPlaylist("First song", R.drawable.radio_demo));
-        stationNames.add(new MediaPlaylist("Second song", R.drawable.radio_demo));
-        stationNames.add(new MediaPlaylist("Third song", R.drawable.radio_demo));
+        stationNames.add(new MediaPlaylist("First song"));
+        stationNames.add(new MediaPlaylist("Second song"));
+        stationNames.add(new MediaPlaylist("Third song"));
 
 
     }
