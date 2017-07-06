@@ -9,26 +9,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.AssetFileDescriptor;
 import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
 import cs499app.cs499mobileapp.R;
-import cs499app.cs499mobileapp.helper.IcyStreamMeta;
-import cs499app.cs499mobileapp.model.MediaPlaylist;
-import wseemann.media.FFmpegMediaMetadataRetriever;
 
 
 public class MusicService extends Service implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnInfoListener{

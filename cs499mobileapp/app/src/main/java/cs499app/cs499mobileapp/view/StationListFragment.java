@@ -1,7 +1,6 @@
 package cs499app.cs499mobileapp.view;
 
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cs499app.cs499mobileapp.R;
-import cs499app.cs499mobileapp.model.MediaPlaylist;
+import cs499app.cs499mobileapp.model.PlaylistRecord;
 import cs499app.cs499mobileapp.viewadapter.PlaylistAdapter;
 
 /**
@@ -25,7 +24,7 @@ public class StationListFragment extends android.support.v4.app.Fragment{
 
     private PlaylistAdapter stationlistAdapter;
     private ListView stationlistListview;
-    private List<MediaPlaylist>stationNames;
+    private List<PlaylistRecord>stationNames;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,9 +44,9 @@ public class StationListFragment extends android.support.v4.app.Fragment{
     private void loadStationList()
     {
         stationNames = new ArrayList<>();
-        stationNames.add(new MediaPlaylist("First song"));
-        stationNames.add(new MediaPlaylist("Second song"));
-        stationNames.add(new MediaPlaylist("Third song"));
+        stationNames.add(new PlaylistRecord("First song"));
+        stationNames.add(new PlaylistRecord("Second song"));
+        stationNames.add(new PlaylistRecord("Third song"));
 
 
     }

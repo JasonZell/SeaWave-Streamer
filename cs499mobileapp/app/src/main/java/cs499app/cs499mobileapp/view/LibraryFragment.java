@@ -1,7 +1,6 @@
 package cs499app.cs499mobileapp.view;
 
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,13 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cs499app.cs499mobileapp.R;
-import cs499app.cs499mobileapp.model.MediaPlaylist;
+import cs499app.cs499mobileapp.model.PlaylistRecord;
 import cs499app.cs499mobileapp.viewadapter.PlaylistAdapter;
 
 /**
@@ -27,7 +25,7 @@ import cs499app.cs499mobileapp.viewadapter.PlaylistAdapter;
 
 public class LibraryFragment extends Fragment{
 
-    private List<MediaPlaylist> mediaPlaylist;
+    private List<PlaylistRecord> playlistRecord;
     private PlaylistAdapter playlistAdapter;
     private ListView playlistListview;
 
@@ -68,7 +66,7 @@ public class LibraryFragment extends Fragment{
         });
 
 
-        playlistAdapter = new PlaylistAdapter(this.getContext(),R.layout.playlist_listview_items,mediaPlaylist);
+        playlistAdapter = new PlaylistAdapter(this.getContext(),R.layout.playlist_listview_items, playlistRecord);
         playlistListview.setAdapter(playlistAdapter);
 
 
@@ -84,11 +82,11 @@ public class LibraryFragment extends Fragment{
 
     private void loadPlaylistLibrary()
     {
-        mediaPlaylist = new ArrayList<>();
-        mediaPlaylist.add(new MediaPlaylist("First Station"));
-        mediaPlaylist.add(new MediaPlaylist("Second Station"));
-        mediaPlaylist.add(new MediaPlaylist("Third Station"));
-        mediaPlaylist.add(new MediaPlaylist("This is a very very very long station name, scrolling"));
+        playlistRecord = new ArrayList<>();
+        playlistRecord.add(new PlaylistRecord("First Station"));
+        playlistRecord.add(new PlaylistRecord("Second Station"));
+        playlistRecord.add(new PlaylistRecord("Third Station"));
+        playlistRecord.add(new PlaylistRecord("This is a very very very long station name, scrolling"));
 
     }
 

@@ -4,31 +4,27 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
 import cs499app.cs499mobileapp.R;
-import cs499app.cs499mobileapp.model.MediaPlaylist;
+import cs499app.cs499mobileapp.model.PlaylistRecord;
 
 /**
  * Created by centa on 6/29/2017.
  */
 
-public class PlaylistAdapter extends ArrayAdapter<MediaPlaylist>{
+public class PlaylistAdapter extends ArrayAdapter<PlaylistRecord>{
 
     private Context context;
-    private List<MediaPlaylist> playlistDataArray;
+    private List<PlaylistRecord> playlistDataArray;
 
-    public PlaylistAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<MediaPlaylist> objects) {
+    public PlaylistAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<PlaylistRecord> objects) {
         super(context, resource, objects);
         this.context = context;
         this.playlistDataArray = objects;
@@ -56,7 +52,7 @@ public class PlaylistAdapter extends ArrayAdapter<MediaPlaylist>{
 
     @Nullable
     @Override
-    public MediaPlaylist getItem(int position) {
+    public PlaylistRecord getItem(int position) {
 
         return super.getItem(position);
     }
