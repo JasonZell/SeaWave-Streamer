@@ -2,6 +2,7 @@ package cs499app.cs499mobileapp.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -50,6 +51,7 @@ public class LibraryFragment extends Fragment{
                 Fragment stationListFragment = new StationListFragment();
                 Bundle args = new Bundle();
                 args.putInt("StationList", i);
+                //args.putString("PlayListTitle",);
                 stationListFragment.setArguments(args);
 //
                 FragmentManager fragmentManager = getFragmentManager();
@@ -69,7 +71,16 @@ public class LibraryFragment extends Fragment{
         playlistAdapter = new PlaylistAdapter(this.getContext(),R.layout.playlist_listview_items, playlistRecord);
         playlistListview.setAdapter(playlistAdapter);
 
+        final FragmentManager fm = getFragmentManager();
+        FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.add_playlist_float_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                AddPlaylistDialogFragment dialogFm = new AddPlaylistDialogFragment();
+                dialogFm.show(fm,"addStationFragment");
+            }
+        });
 
         return root;
     }
