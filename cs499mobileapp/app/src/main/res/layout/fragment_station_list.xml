@@ -8,15 +8,64 @@
     <ListView
         android:id="@+id/stationlist_listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="90">
     </ListView>
 
-    <LinearLayout
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/relative_layout_floatbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="10"-->
+        <!--android:orientation="horizontal">-->
+
+
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/back_arrow_float_button"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="left|bottom"-->
+            <!--android:layout_marginLeft="10dp"-->
+
+            <!--android:src="@drawable/back_arrow"-->
+            <!--android:tint="@color/white"-->
+            <!--app:backgroundTint="@color/DeepSkyBlue"-->
+            <!--/>-->
+
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/add_station_float_button"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_gravity="bottom|center_horizontal"-->
+            <!--android:src="@drawable/add_cross"-->
+            <!--android:tint="@color/white"-->
+            <!--app:backgroundTint="@color/DeepSkyBlue" />-->
+
+
+
+    <!--</RelativeLayout>-->
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="10">
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_marginLeft="5dp"
+
+        android:layout_weight="9">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/back_arrow_float_button"
+            android:tint="@color/white"
+            app:backgroundTint="@color/DeepSkyBlue"
+            android:src="@drawable/back_arrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|bottom"
+            android:layout_marginLeft="4dp"
+            android:layout_marginBottom="6dp"
+            app:pressedTranslationZ="2dp"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_station_float_button"
@@ -24,10 +73,12 @@
             app:backgroundTint="@color/DeepSkyBlue"
             android:src="@drawable/add_cross"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="bottom|center"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"/>
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="6dp"
 
+            app:pressedTranslationZ="2dp"/>
+
+    </RelativeLayout>
 </LinearLayout>

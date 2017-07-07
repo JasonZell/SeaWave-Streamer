@@ -16,6 +16,7 @@
     <string name="action_add_station">add_station</string>
     <string name="action_import_list">import_list</string>
     <string name="action_export_list">export_list</string>
+    <string name="LIB_FRAG_TAG">LIBRARY_FRAGMENT_TAG</string>
 
 
 

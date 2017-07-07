@@ -40,13 +40,14 @@ public class ContainerFragment extends android.support.v4.app.Fragment{
 //        tabLayout.getTabAt(1).setIcon(R.drawable.library_icon_selector);
 
         android.support.v4.app.Fragment libraryFragment = new LibraryFragment();
+
 //        Bundle args = new Bundle();
 //        args.putInt("StationList", i);
 //       libraryFragment.setArguments(args);
 //
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fragment_container, libraryFragment);
+        transaction.add(R.id.fragment_container, libraryFragment,getString(R.string.LIB_FRAG_TAG));
         transaction.addToBackStack(libraryFragment.getClass().getName());
         transaction.commit();
         return view;

@@ -8,7 +8,7 @@
     >
 
     <TextView
-        android:text="Add New Playlist"
+        android:text="Add New Station"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -19,13 +19,32 @@
         android:orientation="horizontal"
         >
         <TextView
-            android:text="Playlist Title:"
+            android:text="Station Title:"
+            android:inputType="textMultiLine"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+        <EditText
+            android:id="@+id/addstationtitle_edittext"
+            android:minLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:text="Station URL:"
             android:maxLines="1"
             android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
         <EditText
-            android:id="@+id/addplaylist_edittext"
+            android:id="@+id/addstationurl_edittext"
             android:inputType="textMultiLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,13 +57,13 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/addplaylist_addbutton"
+            android:id="@+id/addstation_addbutton"
             android:layout_width="0dp"
             android:layout_weight="50"
             android:layout_height="wrap_content"
             android:text="Add"/>
         <Button
-            android:id="@+id/addplaylist_cancelbutton"
+            android:id="@+id/addstation_cancelbutton"
             android:layout_width="0dp"
             android:layout_weight="50"
             android:layout_height="wrap_content"

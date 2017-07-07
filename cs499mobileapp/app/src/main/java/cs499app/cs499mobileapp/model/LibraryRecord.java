@@ -14,12 +14,14 @@ import java.util.List;
 
 import cs499app.cs499mobileapp.helper.DBHelper;
 
-public class LibraryRecord implements  LibraryRecordInterface{
+public class LibraryRecord implements LibraryRecordInterface{
 
     private static final String LOGTAG = "DATABASE_LOG";
     Context context;
     SQLiteOpenHelper dbhelper;
     SQLiteDatabase database;
+
+
     List<PlaylistRecord> playlistRecords;
     HashMap<String,List<StationRecord>> stationListRecords;
 
@@ -36,7 +38,7 @@ public class LibraryRecord implements  LibraryRecordInterface{
             RecordSchema.StationEntry.COLUMN_NAME_HASH
     };
 
-    LibraryRecord(Context context){
+    public LibraryRecord(Context context){
         this.context = context;
         dbhelper = new DBHelper(context);
     }
@@ -137,6 +139,23 @@ public class LibraryRecord implements  LibraryRecordInterface{
         stationListRecords.put(playlistName,sr);
         dbhelper.close();
         return sr;
+    }
+
+
+    public List<PlaylistRecord> getPlaylistRecords() {
+        return playlistRecords;
+    }
+
+    public void setPlaylistRecords(List<PlaylistRecord> playlistRecords) {
+        this.playlistRecords = playlistRecords;
+    }
+
+    public HashMap<String, List<StationRecord>> getStationListRecords() {
+        return stationListRecords;
+    }
+
+    public void setStationListRecords(HashMap<String, List<StationRecord>> stationListRecords) {
+        this.stationListRecords = stationListRecords;
     }
 
 }

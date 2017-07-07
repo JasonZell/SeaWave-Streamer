@@ -21,7 +21,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TABLE_PLAYLIST_CREATE =
             "CREATE TABLE " + RecordSchema.PlaylistEntry.TABLE_NAME + " (" +
                     RecordSchema.PlaylistEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    RecordSchema.PlaylistEntry.COLUMN_NAME_TITLE + " TEXT, " +
+                    RecordSchema.PlaylistEntry.COLUMN_NAME_TITLE + " TEXT " +
                     ")";
 
     private static final String TABLE_STATION_CREATE =

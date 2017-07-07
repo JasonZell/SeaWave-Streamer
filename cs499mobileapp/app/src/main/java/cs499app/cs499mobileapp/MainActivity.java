@@ -26,6 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import cs499app.cs499mobileapp.helper.IcyStreamMeta;
+import cs499app.cs499mobileapp.model.LibraryRecord;
 import cs499app.cs499mobileapp.service.MusicService;
 import cs499app.cs499mobileapp.view.AddPlaylistDialogFragment;
 import cs499app.cs499mobileapp.view.ContainerFragment;
@@ -37,6 +38,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout navigationDrawerLayout;
     private ActionBarDrawerToggle navigationDrawerToggle;
     private int currentFocusedTab;
+
+
+    LibraryRecord libRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,8 +121,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabLayout.getTabAt(0).setIcon(R.drawable.player_icon_selector);
         tabLayout.getTabAt(1).setIcon(R.drawable.library_icon_selector);
 
+        setLibRecord(new LibraryRecord(this.getApplicationContext()));
+//         AsyncTask<Void, Void, Void> loadDataTask = new AsyncTask<Void, Void, Void>() {
+//
+//
+//             @Override
+//             protected Void doInBackground(Void... voids) {
+//
+//                 libRecord.importlPlaylistRecordList();
+//                 Log.i("loadDataTask","loading done");
+//                 return null;
+//             }
+//
+//             @Override
+//             protected void onPostExecute(Void aVoid) {
+//                 LibraryFragment libFrag = (LibraryFragment)
+//                         getSupportFragmentManager().findFragmentByTag(getString(R.string.LIB_FRAG_TAG));
+//
+//                 libFrag.setPlaylistRecord(libRecord.getPlaylistRecords());
+//                 libFrag.notifyFragmentOnDataChange();
+//             }
+//         };
+//         loadDataTask.execute();
 
-        Log.d("PASSED ","passed");
+
+
     }
 
 
@@ -333,6 +360,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            return "TITLE " + (position+1);
 //        }
     }
+
+    public LibraryRecord getLibRecord() {
+        return libRecord;
+    }
+
+    public void setLibRecord(LibraryRecord libRecord) {
+        this.libRecord = libRecord;
+    }
+
 
 
 }
