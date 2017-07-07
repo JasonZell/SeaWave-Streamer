@@ -30,7 +30,8 @@ public class LibraryRecord implements  LibraryRecordInterface{
 
     String[] stationProjection = {
             RecordSchema.StationEntry._ID,
-            RecordSchema.StationEntry.COLUMN_NAME_TITLE,
+            RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTTITLE,
+            RecordSchema.StationEntry.COLUMN_NAME_STATIONTITLE,
             RecordSchema.StationEntry.COLUMN_NAME_URL,
             RecordSchema.StationEntry.COLUMN_NAME_HASH
     };
@@ -57,29 +58,37 @@ public class LibraryRecord implements  LibraryRecordInterface{
 
     public void insertPlaylistRecord(PlaylistRecord pr)
     {
+        openWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(RecordSchema.PlaylistEntry.COLUMN_NAME_TITLE, pr.getPlaylistName());
         long result = database.insert(RecordSchema.PlaylistEntry.TABLE_NAME,null,values);
         if(result == -1)
             Log.e("LOGTAG","Error inserting new playlist record");
+
+        dbhelper.close();
     }
 
 
     // insert one station record 
-    public void inserStationRecord(StationRecord sr)
+    public void insertStationRecord(StationRecord sr)
     {
+        openWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(RecordSchema.StationEntry.COLUMN_NAME_TITLE, sr.getStationTitle());
+        values.put(RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTTITLE, sr.getPlaylistTitle());
+        values.put(RecordSchema.StationEntry.COLUMN_NAME_STATIONTITLE, sr.getStationTitle());
         values.put(RecordSchema.StationEntry.COLUMN_NAME_URL, sr.getStationURL());
         values.put(RecordSchema.StationEntry.COLUMN_NAME_HASH, sr.getStationHash());
         long result = database.insert(RecordSchema.PlaylistEntry.TABLE_NAME,null,values);
         if(result == -1)
             Log.e("LOGTAG","Error inserting new playlist record");
+        dbhelper.close();
     }
+
 
     //import all playlist titles to library record
     public List<PlaylistRecord> importlPlaylistRecordList(){
 
+        openWritableDatabase();
         List<PlaylistRecord> pr = new ArrayList<>();
 
         Cursor cursor = database.query(RecordSchema.PlaylistEntry.TABLE_NAME,playlistProjection,
@@ -96,15 +105,17 @@ public class LibraryRecord implements  LibraryRecordInterface{
             }
         }
         playlistRecords = pr; // load into member variable
+        dbhelper.close();
         return pr;
     }
 
     //import stations from one playlist into the library record.
     public List<StationRecord> importStationRecordList(String playlistName){
 
+        openWritableDatabase();
         List<StationRecord> sr = new ArrayList<>();
 
-        String selection = RecordSchema.StationEntry.COLUMN_NAME_TITLE + " = ?";
+        String selection = RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTTITLE + " = ?";
         String[] selectionArgs = {playlistName};
         Cursor cursor = database.query(RecordSchema.StationEntry.TABLE_NAME,stationProjection,
                 selection,selectionArgs,null,null,null);
@@ -115,7 +126,8 @@ public class LibraryRecord implements  LibraryRecordInterface{
             {
                 StationRecord sRecord = new StationRecord();
                 sRecord.set_ID(cursor.getLong(cursor.getColumnIndex(RecordSchema.StationEntry._ID)));
-                sRecord.setStationTitle(cursor.getString(cursor.getColumnIndex(RecordSchema.StationEntry.COLUMN_NAME_TITLE)));
+                sRecord.setPlaylistTitle(cursor.getString(cursor.getColumnIndex(RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTTITLE)));
+                sRecord.setStationTitle(cursor.getString(cursor.getColumnIndex(RecordSchema.StationEntry.COLUMN_NAME_STATIONTITLE)));
                 sRecord.setStationURL(cursor.getString(cursor.getColumnIndex(RecordSchema.StationEntry.COLUMN_NAME_URL)));
                 sRecord.setStationHash(cursor.getString(cursor.getColumnIndex(RecordSchema.StationEntry.COLUMN_NAME_HASH)));
                 sr.add(sRecord);
@@ -123,6 +135,7 @@ public class LibraryRecord implements  LibraryRecordInterface{
         }
         stationListRecords = new HashMap<>();
         stationListRecords.put(playlistName,sr);
+        dbhelper.close();
         return sr;
     }
 

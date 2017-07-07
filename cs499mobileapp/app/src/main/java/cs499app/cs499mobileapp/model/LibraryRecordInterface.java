@@ -10,5 +10,8 @@ public interface LibraryRecordInterface {
 
     public List<PlaylistRecord> importlPlaylistRecordList();
     public List<StationRecord> importStationRecordList(String playlistName);
+    public void insertStationRecord(StationRecord sr);
+    public void insertPlaylistRecord(PlaylistRecord pr);
+
 
 }

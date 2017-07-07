@@ -27,10 +27,11 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TABLE_STATION_CREATE =
             "CREATE TABLE " + RecordSchema.StationEntry.TABLE_NAME + " (" +
                     RecordSchema.StationEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    RecordSchema.StationEntry.COLUMN_NAME_TITLE + " TEXT, " +
+                    RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTTITLE + " TEXT, " +
+                    RecordSchema.StationEntry.COLUMN_NAME_STATIONTITLE + " TEXT, " +
                     RecordSchema.StationEntry.COLUMN_NAME_URL + " TEXT, "+
                     RecordSchema.StationEntry.COLUMN_NAME_HASH + " TEXT," +
-                    "FOREIGN KEY(" + RecordSchema.StationEntry.COLUMN_NAME_TITLE + ") REFERENCES " +
+                    "FOREIGN KEY(" + RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTTITLE + ") REFERENCES " +
                     RecordSchema.PlaylistEntry.TABLE_NAME + "(" + RecordSchema.PlaylistEntry.COLUMN_NAME_TITLE +") " +
                     "ON UPDATE CASCADE ON DELETE CASCADE" +
                     ")";
