@@ -113,50 +113,9 @@ public class LibraryFragment extends Fragment{
 
             @Override
             protected void onPostExecute(Void aVoid) {
-//                LibraryFragment libFrag = (LibraryFragment)
-//                        getSupportFragmentManager().findFragmentByTag(getString(R.string.LIB_FRAG_TAG));
-//
-//                libFrag.setPlaylistRecord(libRecord.getPlaylistRecords());
-                setPlaylistRecord(libRecord.getPlaylistRecords());
 
-                playlistListview = root.findViewById(R.id.listview_playlist);
-                playlistListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Log.i("onItemClick","Spawn list frag");
-                        Fragment stationListFragment = new StationListFragment();
-                        Bundle args = new Bundle();
-                        args.putInt("StationList", i);
-                        //args.putString("PlayListTitle",);
-                        stationListFragment.setArguments(args);
-//
-                        FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction transaction = fragmentManager.beginTransaction();
-                        transaction.replace(R.id.fragment_container, stationListFragment);
-                        transaction.addToBackStack(stationListFragment.getClass().getName());
-                        transaction.commit();
-//
-//        // update selected item and title, then close the drawer
-//        mDrawerList.setItemChecked(position, true);
-//        setTitle(mPlanetTitles[position]);
-//        mDrawerLayout.closeDrawer(mDrawerList);
-                    }
-                });
+                initViews();
 
-
-                playlistAdapter = new PlaylistAdapter(root.getContext(),R.layout.playlist_listview_items, playlistRecord);
-                playlistListview.setAdapter(playlistAdapter);
-
-                final FragmentManager fm = getFragmentManager();
-                FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.add_playlist_float_button);
-                fab.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        AddPlaylistDialogFragment dialogFm = new AddPlaylistDialogFragment();
-                        dialogFm.show(fm,"addplaylistFragment");
-                    }
-                });
             }
         };
 
@@ -180,16 +139,59 @@ public class LibraryFragment extends Fragment{
     {
         return libRecord;
     }
-    public List<PlaylistRecord> getPlaylistRecord() {
-        return playlistRecord;
-    }
 
-    public void setPlaylistRecord(List<PlaylistRecord> playlistRecord) {
-        this.playlistRecord = playlistRecord;
-    }
 
     public void notifyFragmentOnDataChange()
     {
         playlistAdapter.notifyDataSetChanged();
+    }
+
+    public void initViews()
+    {
+        playlistListview = root.findViewById(R.id.listview_playlist);
+        playlistListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.i("onItemClick","Spawn list frag");
+                Fragment stationListFragment = new StationListFragment();
+                Bundle args = new Bundle();
+                args.putInt("StationList", i);
+                //args.putString("PlayListTitle",);
+                stationListFragment.setArguments(args);
+//
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragment_container, stationListFragment);
+                transaction.addToBackStack(stationListFragment.getClass().getName());
+                transaction.commit();
+//
+//        // update selected item and title, then close the drawer
+//        mDrawerList.setItemChecked(position, true);
+//        setTitle(mPlanetTitles[position]);
+//        mDrawerLayout.closeDrawer(mDrawerList);
+            }
+        });
+
+
+        playlistAdapter = new PlaylistAdapter(root.getContext(),R.layout.playlist_listview_items, libRecord.getPlaylistRecords());//playlistRecord);
+        playlistListview.setAdapter(playlistAdapter);
+
+        final FragmentManager fm = getFragmentManager();
+        FloatingActionButton fab =  root.findViewById(R.id.add_playlist_float_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AddPlaylistDialogFragment dialogFm = new AddPlaylistDialogFragment();
+                dialogFm.setLibRecord(libRecord);
+                dialogFm.setPlaylistAdapter(playlistAdapter);
+                dialogFm.show(fm,"addplaylistFragment");
+            }
+        });
+    }
+
+    public void reloadData()
+    {
+        libRecord.importlPlaylistRecordList();
     }
 }

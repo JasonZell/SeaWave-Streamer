@@ -91,7 +91,13 @@ public class LibraryRecord implements LibraryRecordInterface{
     public List<PlaylistRecord> importlPlaylistRecordList(){
 
         openWritableDatabase();
-        List<PlaylistRecord> pr = new ArrayList<>();
+        List<PlaylistRecord> pr;
+        if(playlistRecords == null)
+            pr = playlistRecords = new ArrayList<>();
+        else {
+            playlistRecords.clear();
+            pr = playlistRecords;
+        }
 
         Cursor cursor = database.query(RecordSchema.PlaylistEntry.TABLE_NAME,playlistProjection,
                 null,null,null,null,null);
@@ -106,7 +112,7 @@ public class LibraryRecord implements LibraryRecordInterface{
                 pr.add(pRecord);
             }
         }
-        playlistRecords = pr; // load into member variable
+        //playlistRecords = pr; // load into member variable
         dbhelper.close();
         return pr;
     }
@@ -116,6 +122,13 @@ public class LibraryRecord implements LibraryRecordInterface{
 
         openWritableDatabase();
         List<StationRecord> sr = new ArrayList<>();
+
+        if(stationListRecords == null)
+            stationListRecords = new HashMap<>();
+        else {
+            stationListRecords.clear();
+        }
+
 
         String selection = RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTTITLE + " = ?";
         String[] selectionArgs = {playlistName};
@@ -135,7 +148,6 @@ public class LibraryRecord implements LibraryRecordInterface{
                 sr.add(sRecord);
             }
         }
-        stationListRecords = new HashMap<>();
         stationListRecords.put(playlistName,sr);
         dbhelper.close();
         return sr;

@@ -13,17 +13,28 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import cs499app.cs499mobileapp.R;
+import cs499app.cs499mobileapp.model.LibraryRecord;
+import cs499app.cs499mobileapp.model.PlaylistRecord;
+import cs499app.cs499mobileapp.viewadapter.PlaylistAdapter;
 
 /**
  * Created by centa on 7/6/2017.
  */
 
 public class AddPlaylistDialogFragment extends AppCompatDialogFragment {
+
+
+
+    private  LibraryRecord libRecord;
+
+
+
+    private PlaylistAdapter playlistAdapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_addplaylist_dialog,container,false);
-        EditText editText = (EditText)rootView.findViewById(R.id.addplaylist_edittext);
+        final EditText editText = (EditText)rootView.findViewById(R.id.addplaylist_edittext);
 
         // show soft keyboard
         editText.requestFocus();
@@ -33,7 +44,14 @@ public class AddPlaylistDialogFragment extends AppCompatDialogFragment {
         addbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                PlaylistRecord pr = new PlaylistRecord(editText.getText().toString());
+                libRecord.insertPlaylistRecord(pr);
+                libRecord.importlPlaylistRecordList();
+                playlistAdapter.notifyDataSetInvalidated();
+                playlistAdapter.notifyDataSetChanged();
+                dismiss();
                 Log.e("addPlaylist","add button clicked");
+
             }
         });
 
@@ -45,5 +63,21 @@ public class AddPlaylistDialogFragment extends AppCompatDialogFragment {
             }
         });
         return rootView;
+    }
+
+    public LibraryRecord getLibRecord() {
+        return libRecord;
+    }
+
+    public void setLibRecord(LibraryRecord libRecord) {
+        this.libRecord = libRecord;
+    }
+
+    public PlaylistAdapter getPlaylistAdapter() {
+        return playlistAdapter;
+    }
+
+    public void setPlaylistAdapter(PlaylistAdapter playlistAdapter) {
+        this.playlistAdapter = playlistAdapter;
     }
 }
