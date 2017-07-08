@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -21,9 +22,8 @@ public class LibraryRecord implements LibraryRecordInterface{
     SQLiteOpenHelper dbhelper;
     SQLiteDatabase database;
 
-
     List<PlaylistRecord> playlistRecords;
-    HashMap<String,List<StationRecord>> stationListRecords;
+    HashMap<String,List<StationRecord>> stationListRecordsMap;
 
     String[] playlistProjection = {
             RecordSchema.PlaylistEntry._ID,
@@ -80,9 +80,16 @@ public class LibraryRecord implements LibraryRecordInterface{
         values.put(RecordSchema.StationEntry.COLUMN_NAME_STATIONTITLE, sr.getStationTitle());
         values.put(RecordSchema.StationEntry.COLUMN_NAME_URL, sr.getStationURL());
         values.put(RecordSchema.StationEntry.COLUMN_NAME_HASH, sr.getStationHash());
-        long result = database.insert(RecordSchema.PlaylistEntry.TABLE_NAME,null,values);
-        if(result == -1)
-            Log.e("LOGTAG","Error inserting new playlist record");
+        try {
+            long result = database.insert(RecordSchema.StationEntry.TABLE_NAME, null, values);
+            if(result == -1)
+                Log.e("LOGTAG","Error inserting new station record");
+        }
+        catch(SQLiteException e)
+        {
+            e.printStackTrace();
+        }
+
         dbhelper.close();
     }
 
@@ -90,7 +97,7 @@ public class LibraryRecord implements LibraryRecordInterface{
     //import all playlist titles to library record
     public List<PlaylistRecord> importlPlaylistRecordList(){
 
-        openWritableDatabase();
+        openReadableDatabase();
         List<PlaylistRecord> pr;
         if(playlistRecords == null)
             pr = playlistRecords = new ArrayList<>();
@@ -120,13 +127,22 @@ public class LibraryRecord implements LibraryRecordInterface{
     //import stations from one playlist into the library record.
     public List<StationRecord> importStationRecordList(String playlistName){
 
-        openWritableDatabase();
-        List<StationRecord> sr = new ArrayList<>();
+        openReadableDatabase();
+        List<StationRecord> sr = null;
 
-        if(stationListRecords == null)
-            stationListRecords = new HashMap<>();
-        else {
-            stationListRecords.clear();
+        if(stationListRecordsMap == null) //should happen only during initialization of this class
+            stationListRecordsMap = new HashMap<>();
+
+        sr = stationListRecordsMap.get(playlistName);
+
+        if(sr == null) // if the station list is not previously loaded / not exist.
+        {
+            Log.e("SR is NULL","NULL");
+            sr = new ArrayList<>();
+        }
+        else // if the list have some previous data, clear it.
+        {
+            sr.clear();
         }
 
 
@@ -148,7 +164,7 @@ public class LibraryRecord implements LibraryRecordInterface{
                 sr.add(sRecord);
             }
         }
-        stationListRecords.put(playlistName,sr);
+        stationListRecordsMap.put(playlistName,sr);
         dbhelper.close();
         return sr;
     }
@@ -162,12 +178,12 @@ public class LibraryRecord implements LibraryRecordInterface{
         this.playlistRecords = playlistRecords;
     }
 
-    public HashMap<String, List<StationRecord>> getStationListRecords() {
-        return stationListRecords;
+    public HashMap<String, List<StationRecord>> getStationListRecordsMap() {
+        return stationListRecordsMap;
     }
 
-    public void setStationListRecords(HashMap<String, List<StationRecord>> stationListRecords) {
-        this.stationListRecords = stationListRecords;
+    public void setStationListRecordsMap(HashMap<String, List<StationRecord>> stationListRecordsMap) {
+        this.stationListRecordsMap = stationListRecordsMap;
     }
 
 }

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import cs499app.cs499mobileapp.R;
 import cs499app.cs499mobileapp.model.LibraryRecord;
@@ -40,10 +41,16 @@ public class AddPlaylistDialogFragment extends AppCompatDialogFragment {
         addbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PlaylistRecord pr = new PlaylistRecord(editText.getText().toString());
-                libRecord.insertPlaylistRecord(pr);
-                refreshLibraryRecordUpdateView();
-                dismiss();
+                if(editText.getText().toString().trim().length() == 0)
+                {
+                    Toast.makeText(getContext(), "Title is empty!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    PlaylistRecord pr = new PlaylistRecord(editText.getText().toString());
+                    libRecord.insertPlaylistRecord(pr);
+                    refreshLibraryRecordUpdateView();
+                    dismiss();
+                }
                 Log.e("addPlaylist","add button clicked");
 
             }
@@ -81,4 +88,6 @@ public class AddPlaylistDialogFragment extends AppCompatDialogFragment {
         libRecord.importlPlaylistRecordList();
         playlistAdapter.notifyDataSetChanged();
     }
+
+
 }

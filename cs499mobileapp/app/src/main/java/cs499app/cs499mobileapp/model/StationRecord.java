@@ -23,6 +23,14 @@ public class StationRecord {
         this.stationHash = stationHash;
     }
 
+    public StationRecord( String playlistTitle, String stationTitle, String stationURL) {
+        this._ID = -1;
+        this.playlistTitle = playlistTitle;
+        this.stationTitle = stationTitle;
+        this.stationURL = stationURL;
+        this.stationHash = "";
+    }
+
     public StationRecord() {
         this._ID = -1;
         this.playlistTitle = "";

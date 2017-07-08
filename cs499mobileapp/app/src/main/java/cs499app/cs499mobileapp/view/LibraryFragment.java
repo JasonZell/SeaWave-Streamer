@@ -107,6 +107,7 @@ public class LibraryFragment extends Fragment{
             protected Void doInBackground(Void... voids) {
                 libRecord = new LibraryRecord(getContext());
                 libRecord.importlPlaylistRecordList();
+               // playlistRecord = libRecord.getPlaylistRecords();
                 Log.i("loadDataTask","loading done");
                 return null;
             }
@@ -146,19 +147,24 @@ public class LibraryFragment extends Fragment{
         playlistAdapter.notifyDataSetChanged();
     }
 
-    public void initViews()
+    private void initViews()
     {
         playlistListview = root.findViewById(R.id.listview_playlist);
         playlistListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.i("onItemClick","Spawn list frag");
-                Fragment stationListFragment = new StationListFragment();
+                Log.i("playlist Item pos:",i+"");
+                StationListFragment stationListFragment = new StationListFragment();
                 Bundle args = new Bundle();
-                args.putInt("StationList", i);
+                args.putInt(getString(R.string.PlayListViewPos), i);
                 //args.putString("PlayListTitle",);
                 stationListFragment.setArguments(args);
-//
+//                stationListFragment.setStationRecordList(libRecord.getStationListRecordsMap()
+//                        .get(playlistRecord.get(i).getPlaylistName()));
+                stationListFragment.setLibRecord(libRecord);
+                stationListFragment.setParentPlaylistName(
+                        libRecord.getPlaylistRecords().get(i).getPlaylistName());
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragment_container, stationListFragment);

@@ -10,22 +10,36 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import cs499app.cs499mobileapp.R;
+import cs499app.cs499mobileapp.model.LibraryRecord;
+import cs499app.cs499mobileapp.model.PlaylistRecord;
+import cs499app.cs499mobileapp.model.StationRecord;
+import cs499app.cs499mobileapp.viewadapter.PlaylistAdapter;
+import cs499app.cs499mobileapp.viewadapter.StationListAdapter;
 
 /**
  * Created by centa on 7/6/2017.
  */
 
 public class AddStationDialogFragment extends AppCompatDialogFragment {
+
+
+
+    private String parentPlaylistTitle;
+    private LibraryRecord libRecord;
+    private StationListAdapter stationListAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_addstation_dialog,container,false);
-        EditText editText = (EditText)rootView.findViewById(R.id.addstationtitle_edittext);
+        final EditText addStationTitleEditText = (EditText)rootView.findViewById(R.id.addstationtitle_edittext);
+        final EditText addStationUrlEditText = (EditText)rootView.findViewById(R.id.addstationurl_edittext);
 
         // show soft keyboard
-        editText.requestFocus();
+        addStationTitleEditText.requestFocus();
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         getDialog().setCanceledOnTouchOutside(false);
 
@@ -33,6 +47,20 @@ public class AddStationDialogFragment extends AppCompatDialogFragment {
         addbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(addStationTitleEditText.getText().toString().trim().length() == 0)
+                {
+                    Toast.makeText(getContext(), "Title is empty!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    StationRecord sr = new StationRecord(
+                            parentPlaylistTitle,
+                            addStationTitleEditText.getText().toString(),
+                            addStationUrlEditText.getText().toString());
+                    libRecord.insertStationRecord(sr);
+                    refreshLibraryRecordUpdateView();
+                    dismiss();
+                }
+
                 Log.e("addStation","add button clicked");
             }
         });
@@ -45,5 +73,35 @@ public class AddStationDialogFragment extends AppCompatDialogFragment {
             }
         });
         return rootView;
+    }
+
+    public LibraryRecord getLibRecord() {
+        return libRecord;
+    }
+
+    public void setLibRecord(LibraryRecord libRecord) {
+        this.libRecord = libRecord;
+    }
+
+    public StationListAdapter getStationListAdapter() {
+        return stationListAdapter;
+    }
+
+    public void setStationListAdapter(StationListAdapter stationListAdapter) {
+        this.stationListAdapter = stationListAdapter;
+    }
+
+    public String getParentPlaylistTitle() {
+        return parentPlaylistTitle;
+    }
+
+    public void setParentPlaylistTitle(String parentPlaylistTitle) {
+        this.parentPlaylistTitle = parentPlaylistTitle;
+    }
+
+    private void refreshLibraryRecordUpdateView()
+    {
+        libRecord.importStationRecordList(parentPlaylistTitle);
+        stationListAdapter.notifyDataSetChanged();
     }
 }
