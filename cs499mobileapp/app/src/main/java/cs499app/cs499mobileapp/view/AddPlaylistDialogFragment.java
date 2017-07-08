@@ -24,11 +24,7 @@ import cs499app.cs499mobileapp.viewadapter.PlaylistAdapter;
 public class AddPlaylistDialogFragment extends AppCompatDialogFragment {
 
 
-
     private  LibraryRecord libRecord;
-
-
-
     private PlaylistAdapter playlistAdapter;
     @Nullable
     @Override
@@ -46,9 +42,7 @@ public class AddPlaylistDialogFragment extends AppCompatDialogFragment {
             public void onClick(View view) {
                 PlaylistRecord pr = new PlaylistRecord(editText.getText().toString());
                 libRecord.insertPlaylistRecord(pr);
-                libRecord.importlPlaylistRecordList();
-                playlistAdapter.notifyDataSetInvalidated();
-                playlistAdapter.notifyDataSetChanged();
+                refreshLibraryRecordUpdateView();
                 dismiss();
                 Log.e("addPlaylist","add button clicked");
 
@@ -65,6 +59,7 @@ public class AddPlaylistDialogFragment extends AppCompatDialogFragment {
         return rootView;
     }
 
+
     public LibraryRecord getLibRecord() {
         return libRecord;
     }
@@ -79,5 +74,11 @@ public class AddPlaylistDialogFragment extends AppCompatDialogFragment {
 
     public void setPlaylistAdapter(PlaylistAdapter playlistAdapter) {
         this.playlistAdapter = playlistAdapter;
+    }
+
+    public void refreshLibraryRecordUpdateView()
+    {
+        libRecord.importlPlaylistRecordList();
+        playlistAdapter.notifyDataSetChanged();
     }
 }

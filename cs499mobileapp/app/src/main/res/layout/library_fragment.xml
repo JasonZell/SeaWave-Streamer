@@ -29,8 +29,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
             android:layout_centerHorizontal="true"
+            android:hapticFeedbackEnabled="true"
+            android:scaleType="center"
             app:pressedTranslationZ="2dp"/>
     </RelativeLayout>
 

@@ -64,7 +64,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|bottom"
             android:layout_marginLeft="4dp"
+            android:layout_marginTop="6dp"
+            android:hapticFeedbackEnabled="true"
             android:layout_marginBottom="6dp"
+            android:scaleType="center"
             app:pressedTranslationZ="2dp"/>
 
         <android.support.design.widget.FloatingActionButton
@@ -76,8 +79,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="6dp"
             android:layout_marginBottom="6dp"
-
+            android:hapticFeedbackEnabled="true"
+            android:scaleType="center"
             app:pressedTranslationZ="2dp"/>
 
     </RelativeLayout>
