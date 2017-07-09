@@ -1,5 +1,6 @@
 package cs499app.cs499mobileapp.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;

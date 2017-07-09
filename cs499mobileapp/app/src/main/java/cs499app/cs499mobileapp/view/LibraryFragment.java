@@ -46,49 +46,8 @@ public class LibraryFragment extends Fragment{
                              Bundle savedInstanceState) {
 
         Log.i("LibFragmentOnCreate","OnCreatecalled");
-         root = inflater.inflate(R.layout.library_fragment, container, false);
+        root = inflater.inflate(R.layout.library_fragment, container, false);
         loadPlaylistLibrary();
-//        playlistListview = root.findViewById(R.id.listview_playlist);
-//        playlistListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Log.i("onItemClick","Spawn list frag");
-//                Fragment stationListFragment = new StationListFragment();
-//                Bundle args = new Bundle();
-//                args.putInt("StationList", i);
-//                //args.putString("PlayListTitle",);
-//                stationListFragment.setArguments(args);
-////
-//                FragmentManager fragmentManager = getFragmentManager();
-//                FragmentTransaction transaction = fragmentManager.beginTransaction();
-//                transaction.replace(R.id.fragment_container, stationListFragment);
-//                transaction.addToBackStack(stationListFragment.getClass().getName());
-//                transaction.commit();
-////
-////        // update selected item and title, then close the drawer
-////        mDrawerList.setItemChecked(position, true);
-////        setTitle(mPlanetTitles[position]);
-////        mDrawerLayout.closeDrawer(mDrawerList);
-//            }
-//        });
-//
-//
-//        playlistAdapter = new PlaylistAdapter(this.getContext(),R.layout.playlist_listview_items, playlistRecord);
-//        playlistListview.setAdapter(playlistAdapter);
-//
-//        final FragmentManager fm = getFragmentManager();
-//        FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.add_playlist_float_button);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                AddPlaylistDialogFragment dialogFm = new AddPlaylistDialogFragment();
-//                dialogFm.show(fm,"addplaylistFragment");
-//            }
-//        });
-
-
-
         return root;
     }
 
@@ -102,10 +61,12 @@ public class LibraryFragment extends Fragment{
     {
         AsyncTask<Void, Void, Void> loadDataTask = new AsyncTask<Void, Void, Void>() {
 
-
             @Override
             protected Void doInBackground(Void... voids) {
-                libRecord = new LibraryRecord(getContext());
+                if(libRecord == null) {
+                    Log.e("loadPlaylistLibrary","libRecord created");
+                    libRecord = new LibraryRecord(getContext());
+                }
                 libRecord.importlPlaylistRecordList();
                // playlistRecord = libRecord.getPlaylistRecords();
                 Log.i("loadDataTask","loading done");
@@ -162,6 +123,7 @@ public class LibraryFragment extends Fragment{
                 stationListFragment.setArguments(args);
 //                stationListFragment.setStationRecordList(libRecord.getStationListRecordsMap()
 //                        .get(playlistRecord.get(i).getPlaylistName()));
+
                 stationListFragment.setLibRecord(libRecord);
                 stationListFragment.setParentPlaylistID(
                         libRecord.getPlaylistRecords().get(i).get_ID());

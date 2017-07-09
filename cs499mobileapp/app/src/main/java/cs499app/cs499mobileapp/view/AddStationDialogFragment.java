@@ -101,6 +101,7 @@ public class AddStationDialogFragment extends AppCompatDialogFragment {
 
     private void refreshLibraryRecordUpdateView()
     {
+//        libRecord.setStationListRecordsMap(libRecord.getStationListRecordsMap());
         libRecord.importStationRecordList(parentPlaylistID);
         stationListAdapter.notifyDataSetChanged();
     }

@@ -43,11 +43,7 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
         Log.i("LibFragmentOnCreate","OnCreatecalled");
         rootview = inflater.inflate(R.layout.fragment_station_list, container, false);
         parentPlaylistViewID = getArguments().getInt(getString(R.string.PlayListViewPos));
-
         loadStationList();
-
-
-
 
         return rootview;
     }
@@ -56,7 +52,6 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
     private void loadStationList()
     {
         AsyncTask<Void, Void, Void> loadDataTask = new AsyncTask<Void, Void, Void>() {
-
 
             @Override
             protected Void doInBackground(Void... voids) {

@@ -131,7 +131,10 @@ public class LibraryRecord implements LibraryRecordInterface{
         List<StationRecord> sr = null;
 
         if(stationListRecordsMap == null) //should happen only during initialization of this class
+        {
+            Log.e("StationListRM","IS NULL, creating..");
             stationListRecordsMap = new HashMap<>();
+        }
 
         sr = stationListRecordsMap.get(playlistID);
 
