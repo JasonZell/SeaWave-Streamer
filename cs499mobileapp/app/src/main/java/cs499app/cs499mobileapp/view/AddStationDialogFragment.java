@@ -27,7 +27,7 @@ public class AddStationDialogFragment extends AppCompatDialogFragment {
 
 
 
-    private String parentPlaylistTitle;
+    private int parentPlaylistID;
     private LibraryRecord libRecord;
     private StationListAdapter stationListAdapter;
 
@@ -53,7 +53,7 @@ public class AddStationDialogFragment extends AppCompatDialogFragment {
                 }
                 else {
                     StationRecord sr = new StationRecord(
-                            parentPlaylistTitle,
+                            parentPlaylistID,
                             addStationTitleEditText.getText().toString(),
                             addStationUrlEditText.getText().toString());
                     libRecord.insertStationRecord(sr);
@@ -91,17 +91,17 @@ public class AddStationDialogFragment extends AppCompatDialogFragment {
         this.stationListAdapter = stationListAdapter;
     }
 
-    public String getParentPlaylistTitle() {
-        return parentPlaylistTitle;
+    public int getParentPlaylistID() {
+        return parentPlaylistID;
     }
 
-    public void setParentPlaylistTitle(String parentPlaylistTitle) {
-        this.parentPlaylistTitle = parentPlaylistTitle;
+    public void setParentPlaylistID(int parentPlaylistID) {
+        this.parentPlaylistID = parentPlaylistID;
     }
 
     private void refreshLibraryRecordUpdateView()
     {
-        libRecord.importStationRecordList(parentPlaylistTitle);
+        libRecord.importStationRecordList(parentPlaylistID);
         stationListAdapter.notifyDataSetChanged();
     }
 }

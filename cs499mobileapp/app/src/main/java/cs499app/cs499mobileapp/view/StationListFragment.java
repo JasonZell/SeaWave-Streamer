@@ -34,9 +34,7 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
     private List<StationRecord> stationRecordList;
     private int parentPlaylistViewID;
     View rootview;
-
-
-    private String parentPlaylistName;
+    private int parentPlaylistID;
     private LibraryRecord libRecord;
 
     @Nullable
@@ -63,7 +61,7 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
             @Override
             protected Void doInBackground(Void... voids) {
                 //libRecord = new LibraryRecord(getContext());
-                libRecord.importStationRecordList(parentPlaylistName);
+                libRecord.importStationRecordList(parentPlaylistID);
                 Log.i("loadDataTask","loading done");
                 return null;
             }
@@ -99,19 +97,19 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
         this.libRecord = libRecord;
     }
 
-    public String getParentPlaylistName() {
-        return parentPlaylistName;
+    public int getParentPlaylistID() {
+        return parentPlaylistID;
     }
 
-    public void setParentPlaylistName(String parentPlaylistName) {
-        this.parentPlaylistName = parentPlaylistName;
+    public void setParentPlaylistID(int parentPlaylistID) {
+        this.parentPlaylistID = parentPlaylistID;
     }
 
     private void initViews()
     {
         stationlistListview = rootview.findViewById(R.id.stationlist_listview);
         stationlistAdapter = new StationListAdapter(this.getContext(),R.layout.playlist_listview_items,
-                libRecord.getStationListRecordsMap().get(parentPlaylistName));//stationRecordList);
+                libRecord.getStationListRecordsMap().get(parentPlaylistID));//stationRecordList);
 
         stationlistListview.setAdapter(stationlistAdapter);
 
@@ -123,7 +121,7 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
 
                 AddStationDialogFragment dialogFm = new AddStationDialogFragment();
                 dialogFm.setLibRecord(libRecord);
-                dialogFm.setParentPlaylistTitle(parentPlaylistName);
+                dialogFm.setParentPlaylistID(parentPlaylistID);
                 dialogFm.setStationListAdapter(stationlistAdapter);
                 dialogFm.show(fm,"addstationfragment");
             }

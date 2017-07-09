@@ -20,25 +20,23 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_PLAYLIST_CREATE =
             "CREATE TABLE " + RecordSchema.PlaylistEntry.TABLE_NAME + " (" +
-                    RecordSchema.PlaylistEntry._ID + " INTEGER , " +
-                    RecordSchema.PlaylistEntry.COLUMN_NAME_TITLE + " TEXT," +
-                    "PRIMARY KEY (" + RecordSchema.PlaylistEntry._ID + "," +
-                    RecordSchema.PlaylistEntry.COLUMN_NAME_TITLE+")" +
-                    ")";
+                    RecordSchema.PlaylistEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    RecordSchema.PlaylistEntry.COLUMN_NAME_TITLE + " TEXT)";
+                    ;
 
     private static final String TABLE_STATION_CREATE =
             "CREATE TABLE " + RecordSchema.StationEntry.TABLE_NAME + " (" +
-                    RecordSchema.StationEntry._ID + " INTEGER , " +
-                    RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTTITLE + " TEXT , " +
+                    RecordSchema.StationEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTID + " INTEGER , " +
                     RecordSchema.StationEntry.COLUMN_NAME_STATIONTITLE + " TEXT, " +
                     RecordSchema.StationEntry.COLUMN_NAME_URL + " TEXT, "+
-                    RecordSchema.StationEntry.COLUMN_NAME_HASH + " TEXT," +
-                    "PRIMARY KEY ("+RecordSchema.StationEntry._ID + "," +
-                    RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTTITLE+")" +
-                    "FOREIGN KEY (" + RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTTITLE + ") REFERENCES " +
-                    RecordSchema.PlaylistEntry.TABLE_NAME + "(" + RecordSchema.PlaylistEntry.COLUMN_NAME_TITLE +") " +
-                    "ON UPDATE CASCADE ON DELETE CASCADE" +
-                    ")";
+                    RecordSchema.StationEntry.COLUMN_NAME_HASH + " TEXT)";
+//                    "PRIMARY KEY ("+RecordSchema.StationEntry._ID + "," +
+//                    RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTID+")";
+//                    "FOREIGN KEY (" + RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTTITLE + ") REFERENCES " +
+//                    RecordSchema.PlaylistEntry.TABLE_NAME + "(" + RecordSchema.PlaylistEntry.COLUMN_NAME_TITLE +") " +
+//                    "ON UPDATE CASCADE ON DELETE CASCADE" +
+//                    ")";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

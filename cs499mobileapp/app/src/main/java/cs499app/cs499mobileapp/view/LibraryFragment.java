@@ -163,8 +163,8 @@ public class LibraryFragment extends Fragment{
 //                stationListFragment.setStationRecordList(libRecord.getStationListRecordsMap()
 //                        .get(playlistRecord.get(i).getPlaylistName()));
                 stationListFragment.setLibRecord(libRecord);
-                stationListFragment.setParentPlaylistName(
-                        libRecord.getPlaylistRecords().get(i).getPlaylistName());
+                stationListFragment.setParentPlaylistID(
+                        libRecord.getPlaylistRecords().get(i).get_ID());
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragment_container, stationListFragment);

@@ -6,26 +6,23 @@ package cs499app.cs499mobileapp.model;
 
 public class StationRecord {
 
-    private long _ID;
-
-
-
-    private String playlistTitle;
+    private int _ID;
+    private int playlistID;
     private String stationTitle;
     private String stationURL;
     private String stationHash;
 
-    public StationRecord(long _ID, String playlistTitle, String stationTitle, String stationURL, String stationHash) {
+    public StationRecord(int _ID, int playlistID, String stationTitle, String stationURL, String stationHash) {
         this._ID = _ID;
-        this.playlistTitle = playlistTitle;
+        this.playlistID = playlistID;
         this.stationTitle = stationTitle;
         this.stationURL = stationURL;
         this.stationHash = stationHash;
     }
 
-    public StationRecord( String playlistTitle, String stationTitle, String stationURL) {
+    public StationRecord( int playlistID, String stationTitle, String stationURL) {
         this._ID = -1;
-        this.playlistTitle = playlistTitle;
+        this.playlistID = playlistID;
         this.stationTitle = stationTitle;
         this.stationURL = stationURL;
         this.stationHash = "";
@@ -33,28 +30,30 @@ public class StationRecord {
 
     public StationRecord() {
         this._ID = -1;
-        this.playlistTitle = "";
+        this.playlistID = -1;
         this.stationTitle = "";
         this.stationURL = "";
         this.stationHash = "";
     }
-    public String getPlaylistTitle() {
-        return playlistTitle;
+
+
+    public int getPlaylistID() {
+        return playlistID;
     }
 
-    public void setPlaylistTitle(String playlistTitle) {
-        this.playlistTitle = playlistTitle;
+    public void setPlaylistID(int playlistID) {
+        this.playlistID = playlistID;
     }
 
     public String getStationTitle() {
         return stationTitle;
     }
 
-    public long get_ID() {
+    public int get_ID() {
         return _ID;
     }
 
-    public void set_ID(long _ID) {
+    public void set_ID(int _ID) {
         this._ID = _ID;
     }
 

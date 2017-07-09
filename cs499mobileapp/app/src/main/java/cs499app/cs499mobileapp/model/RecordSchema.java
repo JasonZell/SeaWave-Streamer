@@ -19,7 +19,7 @@ public final class RecordSchema {
     public static class StationEntry implements BaseColumns{
 
         public static final String TABLE_NAME = "StationTable";
-        public static final String COLUMN_NAME_PLAYLISTTITLE = "playlistTitle";
+        public static final String COLUMN_NAME_PLAYLISTID = "playlistID";
         public static final String COLUMN_NAME_STATIONTITLE="stationTitle";
         public static final String COLUMN_NAME_URL="url";
         public static final String COLUMN_NAME_HASH="hash";
