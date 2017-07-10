@@ -115,6 +115,7 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
                 ContextMenuDialogFragment cmdf = new ContextMenuDialogFragment();
                 Bundle args = new Bundle();
                 args.putInt(getString(R.string.StationListViewPos), i);
+                args.putInt(getString(R.string.PlayListViewPos),parentPlaylistViewID);
                 args.putLong(getString(R.string.ParentPlaylistID),parentPlaylistID);
                 cmdf.setArguments(args);
 

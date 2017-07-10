@@ -234,12 +234,30 @@ public class LibraryRecord implements LibraryRecordInterface{
 
     @Override
     public void deleteStationRecord(StationRecord sr) {
-
+        openWritableDatabase();
+        String selection = RecordSchema.StationEntry._ID + " = ?";
+        String[] selectionArg = { String.valueOf(sr.get_ID())};
+        int count = database.delete(RecordSchema.StationEntry.TABLE_NAME,selection,selectionArg);
+        Log.i("Delete Station",count +" rows deleted");
+        dbhelper.close();
     }
 
     @Override
-    public void deletePlaylistRecord(PlaylistRecord sr) {
+    public void deletePlaylistRecord(PlaylistRecord pr) {
+        //delete from database
+        openWritableDatabase();
+        String selection = RecordSchema.PlaylistEntry._ID + " = ?";
+        String[] selectionArg = { String.valueOf(pr.get_ID())};
+        int playlistCount = database.delete(RecordSchema.PlaylistEntry.TABLE_NAME,selection,selectionArg);
 
+        selection = RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTID + " = ?";
+        selectionArg[0] = String.valueOf(pr.get_ID());
+        int stationCount = database.delete(RecordSchema.StationEntry.TABLE_NAME,selection,selectionArg);
+        Log.i("Delete playlist",playlistCount +" rows deleted");
+        Log.i("Delete Stations",stationCount +" rows deleted");
+
+        dbhelper.close();
+        //delete from libRecord object
     }
 
     public List<PlaylistRecord> getPlaylistRecords() {
