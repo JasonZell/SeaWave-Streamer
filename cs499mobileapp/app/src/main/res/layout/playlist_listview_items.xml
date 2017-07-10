@@ -27,40 +27,9 @@
             android:textSize="@dimen/number_size"
             android:textAlignment="center"
             android:gravity="center"/>
-        <!--<ScrollView-->
-            <!--android:layout_marginLeft="30dp"-->
-            <!--android:layout_weight="60"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:scrollbars="horizontal"-->
-            <!--android:fillViewport="true">-->
-
-
-        <!--</ScrollView>-->
-        <!--<LinearLayout-->
-            <!--android:layout_weight="60"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:gravity="start">-->
-        <!--<TextView-->
-            <!--android:id="@+id/playlist_listview_textview"-->
-            <!--android:layout_marginLeft="30dp"-->
-            <!--android:maxLines="1"-->
-            <!--android:textSize="@dimen/text_size"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:ellipsize="marquee"-->
-            <!--android:scrollHorizontally="true"-->
-            <!--android:marqueeRepeatLimit ="marquee_forever"-->
-            <!--android:focusable="true"-->
-            <!--android:focusableInTouchMode="true"-->
-            <!--android:gravity="start"-->
-            <!--android:textAlignment="center"/>-->
-        <!--</LinearLayout>-->
 
         <TextView
             android:id="@+id/playlist_listview_textview"
-
             android:maxLines="1"
             android:textSize="@dimen/text_size"
             android:gravity="center_vertical|left"
@@ -71,10 +40,7 @@
             android:scrollHorizontally="true"
             android:marqueeRepeatLimit ="marquee_forever"
             android:focusable="true"
-            android:focusableInTouchMode="true"
-
-
-             />
+            android:focusableInTouchMode="true"/>
 
         <ImageButton
             android:layout_marginRight="10dp"

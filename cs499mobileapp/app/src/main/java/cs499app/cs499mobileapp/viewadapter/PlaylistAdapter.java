@@ -44,6 +44,7 @@ public class PlaylistAdapter extends ArrayAdapter<PlaylistRecord>{
 
         TextView playlistNameView = view.findViewById(R.id.playlist_listview_textview);
         playlistNameView.setText(playlistDataArray.get(position).getPlaylistName());
+        playlistNameView.setHorizontallyScrolling(true);
         playlistNameView.setSelected(true);
         //playlistNameView.setMovementMethod(new ScrollingMovementMethod());
 
