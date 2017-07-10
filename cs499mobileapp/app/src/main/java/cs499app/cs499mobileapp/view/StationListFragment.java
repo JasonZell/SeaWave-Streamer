@@ -41,6 +41,7 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
         Log.i("LibFragmentOnCreate","OnCreatecalled");
         rootview = inflater.inflate(R.layout.fragment_station_list, container, false);
         parentPlaylistViewID = getArguments().getInt(getString(R.string.PlayListViewPos));
+        parentPlaylistID = getArguments().getLong(getString(R.string.ParentPlaylistID));
         loadStationList();
 
         return rootview;
@@ -88,13 +89,13 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
         this.libRecord = libRecord;
     }
 
-    public Long getParentPlaylistID() {
-        return parentPlaylistID;
-    }
-
-    public void setParentPlaylistID(Long parentPlaylistID) {
-        this.parentPlaylistID = parentPlaylistID;
-    }
+//    public Long getParentPlaylistID() {
+//        return parentPlaylistID;
+//    }
+//
+//    public void setParentPlaylistID(Long parentPlaylistID) {
+//        this.parentPlaylistID = parentPlaylistID;
+//    }
 
     private void initViews()
     {
@@ -115,7 +116,6 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
                 Bundle args = new Bundle();
                 args.putInt(getString(R.string.StationListViewPos), i);
                 args.putLong(getString(R.string.ParentPlaylistID),parentPlaylistID);
-                //args.putString(R);
                 cmdf.setArguments(args);
 
                 cmdf.setContextMenuMode(ContextMenuMode.STATION_MODE);

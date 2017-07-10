@@ -1,10 +1,13 @@
 package cs499app.cs499mobileapp.view;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
+
+import java.io.IOException;
 
 import cs499app.cs499mobileapp.R;
 import cs499app.cs499mobileapp.helper.ContextMenuMode;
@@ -30,11 +35,11 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
     LibraryRecord libRecord;
     private PlaylistAdapter playlistAdapter;
     private StationListAdapter stationlistAdapter;
-    //private int listItemPosition;
+
+
     public ContextMenuDialogFragment() {
         CMM = ContextMenuMode.NULL_MODE;
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_context_menu_dialog, container, false);
@@ -85,17 +90,48 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
             }
         });
 
+        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int choice) {
+                switch (choice) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        callDeleteAction();
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dismiss();
+                        break;
+                }
+            }
+        };
         deleteActionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(CMM == ContextMenuMode.PLAYLIST_MODE)
                 {
+
+                    String playlistTitle = libRecord.getPlaylistRecords().get(
+                            getArguments().getInt(getString(R.string.PlayListViewPos)))
+                            .getPlaylistName();
+                    Log.i("Delete playlist"," name: "+playlistTitle );
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Delete Playlist: "+playlistTitle+"?")
+                            .setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+
                     Toast.makeText(getContext(), "delete action called for playlist", Toast.LENGTH_SHORT).show();
 
-
                 }
-                else
+                else //deleting a station record.
                 {
+                    String stationTitle = libRecord.getStationListRecordsMap().get(
+                            getArguments().getLong(getString(R.string.ParentPlaylistID))).get(
+                                    getArguments().getInt(getString(R.string.StationListViewPos)))
+                            .getStationTitle();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Delete Station: "+stationTitle+"?")
+                            .setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
                     Toast.makeText(getContext(), "delete action called for station", Toast.LENGTH_SHORT).show();
 
                 }
@@ -103,6 +139,8 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
 
             }
         });
+
+
 
         return rootView;
     }
@@ -149,6 +187,11 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
 //        this.listItemPosition = listItemPosition;
 //    }
 
+    public void callDeleteAction()
+    {
+        Log.i("Delete action","Called");
+
+    }
 
 
 }

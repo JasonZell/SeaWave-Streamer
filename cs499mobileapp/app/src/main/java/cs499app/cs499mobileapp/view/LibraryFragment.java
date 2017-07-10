@@ -35,6 +35,7 @@ public class LibraryFragment extends Fragment{
     private PlaylistAdapter playlistAdapter;
     private ListView playlistListview;
     private LibraryRecord libRecord;
+    private int lastViewedFirstVisibleItemPos;
     private View root;
 
     @Override
@@ -55,7 +56,7 @@ public class LibraryFragment extends Fragment{
 
 
     public LibraryFragment() {
-
+        lastViewedFirstVisibleItemPos = -1;
     }
 
     private void loadPlaylistLibrary()
@@ -113,17 +114,16 @@ public class LibraryFragment extends Fragment{
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.i("onItemClick","Spawn list frag");
                 Log.i("playlist Item pos:",i+"");
+                setlastViewedFirstVisibleItemPos(playlistListview.getFirstVisiblePosition());
                 StationListFragment stationListFragment = new StationListFragment();
                 Bundle args = new Bundle();
                 args.putInt(getString(R.string.PlayListViewPos), i);
-               // args.putLong(getString((R.string.ParentPlaylistID),));
-                stationListFragment.setArguments(args);
-//                stationListFragment.setStationRecordList(libRecord.getStationListRecordsMap()
-//                        .get(playlistRecord.get(i).getPlaylistName()));
-
-                stationListFragment.setLibRecord(libRecord);
-                stationListFragment.setParentPlaylistID(
+                args.putLong(getString(R.string.ParentPlaylistID),
                         libRecord.getPlaylistRecords().get(i).get_ID());
+                stationListFragment.setArguments(args);
+                stationListFragment.setLibRecord(libRecord);
+//                stationListFragment.setParentPlaylistID(
+//                        libRecord.getPlaylistRecords().get(i).get_ID());
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragment_container, stationListFragment);
@@ -154,6 +154,9 @@ public class LibraryFragment extends Fragment{
         playlistAdapter = new PlaylistAdapter(root.getContext(),R.layout.playlist_listview_items, libRecord.getPlaylistRecords());//playlistRecord);
         playlistListview.setAdapter(playlistAdapter);
 
+        if(lastViewedFirstVisibleItemPos != -1)
+            playlistListview.setSelectionFromTop(lastViewedFirstVisibleItemPos,0);
+
 
         FloatingActionButton fab =  root.findViewById(R.id.add_playlist_float_button);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -174,4 +177,13 @@ public class LibraryFragment extends Fragment{
     {
         libRecord.importlPlaylistRecordList();
     }
+
+    public int getlastViewedFirstVisibleItemPos() {
+        return lastViewedFirstVisibleItemPos;
+    }
+
+    public void setlastViewedFirstVisibleItemPos(int lastViewedFirstVisibleItemPos) {
+        this.lastViewedFirstVisibleItemPos = lastViewedFirstVisibleItemPos;
+    }
+
 }

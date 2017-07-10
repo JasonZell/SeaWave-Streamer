@@ -67,7 +67,6 @@ public class PlaylistDialogFragment extends AppCompatDialogFragment {
                                 libRecord.insertPlaylistRecord(pr)); //insert into database then add into libRecord object.
                         playlistAdapter.notifyDataSetChanged();
                         Log.i("AddPlaylist","playlist added");
-
                     }
                     else if(DM == DialogActionMode.MODIFY_MODE)
                     {
