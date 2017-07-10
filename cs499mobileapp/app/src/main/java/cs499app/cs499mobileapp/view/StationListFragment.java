@@ -34,13 +34,13 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
     View rootview;
     private Long parentPlaylistID;
     private LibraryRecord libRecord;
-
+    private  int parentPlaylistViewID;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.i("LibFragmentOnCreate","OnCreatecalled");
         rootview = inflater.inflate(R.layout.fragment_station_list, container, false);
-        //parentPlaylistViewID = getArguments().getInt(getString(R.string.PlayListViewPos));
+        parentPlaylistViewID = getArguments().getInt(getString(R.string.PlayListViewPos));
         loadStationList();
 
         return rootview;
@@ -133,6 +133,13 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
             public void onClick(View view) {
 
                 StationDialogFragment dialogFm = new StationDialogFragment();
+
+                Bundle args = new Bundle();
+                args.putInt(getString(R.string.PlayListViewPos),
+                        getArguments().getInt(getString(R.string.PlayListViewPos)));
+                args.putLong(getString(R.string.ParentPlaylistID),parentPlaylistID);
+                dialogFm.setArguments(args);
+
                 dialogFm.setLibRecord(libRecord);
                 dialogFm.setParentPlaylistID(parentPlaylistID);
                 dialogFm.setStationListAdapter(stationlistAdapter);

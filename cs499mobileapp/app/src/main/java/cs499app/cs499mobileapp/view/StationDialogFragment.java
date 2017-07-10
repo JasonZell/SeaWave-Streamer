@@ -46,6 +46,7 @@ public class StationDialogFragment extends AppCompatDialogFragment {
         final EditText StationTitleEditText = (EditText)rootView.findViewById(R.id.dialog_stationtitle_edittext);
         final EditText StationUrlEditText = (EditText)rootView.findViewById(R.id.dialog_stationurl_edittext);
         final Button confirmButton = rootView.findViewById(R.id.dialog_station_confirm_button);
+        parentPlaylistID = getArguments().getLong(getString(R.string.ParentPlaylistID));
 
         TextView tv = rootView.findViewById(R.id.station_dialog_fragment_title);
         tv.setText(dialogTitle);
@@ -66,7 +67,6 @@ public class StationDialogFragment extends AppCompatDialogFragment {
                 }
             }
         });
-
 
         // show soft keyboard
         StationTitleEditText.requestFocus();
@@ -89,11 +89,28 @@ public class StationDialogFragment extends AppCompatDialogFragment {
                                 StationUrlEditText.getText().toString());
                         List<StationRecord> srl = libRecord.getStationListRecordsMap().get(parentPlaylistID);
                         srl.add(libRecord.insertStationRecord(sr));
+                        stationListAdapter.notifyDataSetChanged();
+                        Log.i("AddStation","station added");
+
                         //refreshLibraryRecordUpdateView();
                     }
                     else if(DM == DialogActionMode.MODIFY_MODE)
                     {
 
+                        Log.i("STATIIONVEWPOS :","" + getArguments().getInt(
+                                getString(R.string.StationListViewPos)));
+                        Log.i("PARENTPLAYID :","" + parentPlaylistID);
+
+                        parentPlaylistID = getArguments().getLong(getString(R.string.ParentPlaylistID));
+                            StationRecord sr = libRecord.getStationListRecordsMap()
+                                    .get(parentPlaylistID).get(
+                                            getArguments().getInt(
+                                                    getString(R.string.StationListViewPos)));
+                            sr.setStationTitle(StationTitleEditText.getText().toString());
+                            sr.setStationURL(StationUrlEditText.getText().toString());
+                            libRecord.updateStationRecord(sr);
+                        stationListAdapter.notifyDataSetChanged();
+                        Log.i("ModifyStation","station modified");
                     }
                     dismiss();
                 }

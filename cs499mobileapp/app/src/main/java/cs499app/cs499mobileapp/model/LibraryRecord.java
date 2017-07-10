@@ -184,11 +184,51 @@ public class LibraryRecord implements LibraryRecordInterface{
 
     @Override
     public void updateStationRecord(StationRecord sr) {
-
+        //only need to update database
+        openReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(RecordSchema.StationEntry.COLUMN_NAME_STATIONTITLE,sr.getStationTitle());
+        values.put(RecordSchema.StationEntry.COLUMN_NAME_URL,sr.getStationURL());
+        String selection = RecordSchema.StationEntry._ID + " = ?";
+        String[] selectionArg = {String.valueOf(sr.get_ID())};
+        int count = database.update(
+                RecordSchema.StationEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArg);
+        Log.i("Database","Updated "+count+"station column");
+        dbhelper.close();
     }
 
+
     @Override
-    public void updatePlaylistRecord(PlaylistRecord sr) {
+    public void updatePlaylistRecord(PlaylistRecord pr) {
+        // update database ONLY
+        openReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(RecordSchema.PlaylistEntry.COLUMN_NAME_TITLE,pr.getPlaylistName());
+        String selection = RecordSchema.PlaylistEntry._ID + " = ?";
+        String[] selectionArg = {String.valueOf(pr.get_ID())};
+        int playlistcount = database.update(
+                RecordSchema.PlaylistEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArg);
+
+//        values.clear();
+//        values.put(RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTID,pr.get_ID());
+//        selection = RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTID + " = ?";
+//        selectionArg[0] = String.valueOf(pr.get_ID());
+//        int stationCount = database.update(
+//                RecordSchema.StationEntry.TABLE_NAME,
+//                values,
+//                selection,
+//                selectionArg);
+
+        Log.i("Database","Updated "+playlistcount+"playlist column");
+        //Log.i("Database","Updated "+stationCount+"station column");
+
+        dbhelper.close();
 
     }
 

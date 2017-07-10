@@ -116,7 +116,7 @@ public class LibraryFragment extends Fragment{
                 StationListFragment stationListFragment = new StationListFragment();
                 Bundle args = new Bundle();
                 args.putInt(getString(R.string.PlayListViewPos), i);
-                //args.putString("PlayListTitle",);
+               // args.putLong(getString((R.string.ParentPlaylistID),));
                 stationListFragment.setArguments(args);
 //                stationListFragment.setStationRecordList(libRecord.getStationListRecordsMap()
 //                        .get(playlistRecord.get(i).getPlaylistName()));

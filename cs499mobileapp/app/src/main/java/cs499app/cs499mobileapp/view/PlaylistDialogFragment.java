@@ -66,14 +66,21 @@ public class PlaylistDialogFragment extends AppCompatDialogFragment {
                         libRecord.getPlaylistRecords().add(
                                 libRecord.insertPlaylistRecord(pr)); //insert into database then add into libRecord object.
                         playlistAdapter.notifyDataSetChanged();
+                        Log.i("AddPlaylist","playlist added");
+
                     }
                     else if(DM == DialogActionMode.MODIFY_MODE)
                     {
-                        PlaylistRecord pr = new PlaylistRecord(dialogPlaylistTitleEditText.getText().toString());
-
+                       // PlaylistRecord pr = new PlaylistRecord(dialogPlaylistTitleEditText.getText().toString());
+                        PlaylistRecord pr = libRecord.getPlaylistRecords().get(getArguments().getInt(getString(R.string.PlayListViewPos)));
+                        pr.setPlaylistName(dialogPlaylistTitleEditText.getText().toString());
+                        libRecord.updatePlaylistRecord(pr);
+                        playlistAdapter.notifyDataSetChanged();
+                        Log.i("ModifyPlaylist","playlist updated");
                     }
                     else //NULL mode
                     {
+                        Log.i("ModifyPlaylist","NULL MODE!");
 
                     }
                     //refreshLibraryRecordUpdateView();
