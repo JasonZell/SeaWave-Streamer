@@ -14,11 +14,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cs499app.cs499mobileapp.R;
 import cs499app.cs499mobileapp.helper.ContextMenuMode;
+import cs499app.cs499mobileapp.helper.DialogActionMode;
 import cs499app.cs499mobileapp.model.LibraryRecord;
 import cs499app.cs499mobileapp.model.PlaylistRecord;
 import cs499app.cs499mobileapp.viewadapter.PlaylistAdapter;
@@ -164,9 +164,11 @@ public class LibraryFragment extends Fragment{
             @Override
             public void onClick(View view) {
 
-                AddPlaylistDialogFragment dialogFm = new AddPlaylistDialogFragment();
+                PlaylistDialogFragment dialogFm = new PlaylistDialogFragment();
                 dialogFm.setLibRecord(libRecord);
                 dialogFm.setPlaylistAdapter(playlistAdapter);
+                dialogFm.setDialogActionMode(DialogActionMode.ADD_MODE);
+                dialogFm.setDialogTitle("Add New Playlist");
                 dialogFm.show(fm,"addplaylistFragment");
             }
         });

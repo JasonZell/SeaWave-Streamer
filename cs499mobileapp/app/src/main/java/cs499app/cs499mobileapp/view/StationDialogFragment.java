@@ -3,6 +3,9 @@ package cs499app.cs499mobileapp.view;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.text.Editable;
+import android.text.Selection;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,33 +13,66 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import cs499app.cs499mobileapp.R;
+import cs499app.cs499mobileapp.helper.DialogActionMode;
 import cs499app.cs499mobileapp.model.LibraryRecord;
-import cs499app.cs499mobileapp.model.PlaylistRecord;
 import cs499app.cs499mobileapp.model.StationRecord;
-import cs499app.cs499mobileapp.viewadapter.PlaylistAdapter;
 import cs499app.cs499mobileapp.viewadapter.StationListAdapter;
 
 /**
  * Created by centa on 7/6/2017.
  */
 
-public class AddStationDialogFragment extends AppCompatDialogFragment {
+public class StationDialogFragment extends AppCompatDialogFragment {
 
 
 
     private int parentPlaylistID;
     private LibraryRecord libRecord;
     private StationListAdapter stationListAdapter;
+    private DialogActionMode DM;
+    private String dialogTitle;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_addstation_dialog,container,false);
+        View rootView = inflater.inflate(R.layout.fragment_station_dialog,container,false);
         final EditText addStationTitleEditText = (EditText)rootView.findViewById(R.id.addstationtitle_edittext);
         final EditText addStationUrlEditText = (EditText)rootView.findViewById(R.id.addstationurl_edittext);
+
+        TextView tv = rootView.findViewById(R.id.station_dialog_fragment_title);
+        tv.setText(dialogTitle);
+
+        addStationUrlEditText.setText("http://");
+        Selection.setSelection(addStationUrlEditText.getText(), addStationUrlEditText.getText().length());
+
+
+        addStationUrlEditText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!s.toString().contains("http://")){
+                    addStationUrlEditText.setText("http://");
+                    Selection.setSelection(addStationUrlEditText.getText(), addStationUrlEditText.getText().length());
+
+                }
+
+            }
+        });
+
 
         // show soft keyboard
         addStationTitleEditText.requestFocus();
@@ -104,5 +140,22 @@ public class AddStationDialogFragment extends AppCompatDialogFragment {
 //        libRecord.setStationListRecordsMap(libRecord.getStationListRecordsMap());
         libRecord.importStationRecordList(parentPlaylistID);
         stationListAdapter.notifyDataSetChanged();
+    }
+
+
+    public DialogActionMode getDialogActionMode() {
+        return DM;
+    }
+
+    public void setDialogActionMode(DialogActionMode DM) {
+        this.DM = DM;
+    }
+
+    public String getDialogTitle() {
+        return dialogTitle;
+    }
+
+    public void setDialogTitle(String dialogTitle) {
+        this.dialogTitle = dialogTitle;
     }
 }

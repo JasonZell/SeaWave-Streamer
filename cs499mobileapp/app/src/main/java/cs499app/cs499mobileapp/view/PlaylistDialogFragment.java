@@ -2,7 +2,6 @@ package cs499app.cs499mobileapp.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,9 +10,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import cs499app.cs499mobileapp.R;
+import cs499app.cs499mobileapp.helper.DialogActionMode;
 import cs499app.cs499mobileapp.model.LibraryRecord;
 import cs499app.cs499mobileapp.model.PlaylistRecord;
 import cs499app.cs499mobileapp.viewadapter.PlaylistAdapter;
@@ -22,15 +23,24 @@ import cs499app.cs499mobileapp.viewadapter.PlaylistAdapter;
  * Created by centa on 7/6/2017.
  */
 
-public class AddPlaylistDialogFragment extends AppCompatDialogFragment {
+public class PlaylistDialogFragment extends AppCompatDialogFragment {
 
     private  LibraryRecord libRecord;
     private PlaylistAdapter playlistAdapter;
+    private DialogActionMode DM;
+    private String dialogTitle;
+    public PlaylistDialogFragment() {
+        DM = DialogActionMode.NULL_MODE;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_addplaylist_dialog,container,false);
+        View rootView = inflater.inflate(R.layout.fragment_playlist_dialog,container,false);
         final EditText editText = (EditText)rootView.findViewById(R.id.addplaylist_edittext);
+
+        TextView tv = rootView.findViewById(R.id.playlist_dialog_fragment_title);
+        tv.setText(dialogTitle);
 
         // show soft keyboard
         editText.requestFocus();
@@ -51,7 +61,6 @@ public class AddPlaylistDialogFragment extends AppCompatDialogFragment {
                     dismiss();
                 }
                 Log.e("addPlaylist","add button clicked");
-
             }
         });
 
@@ -86,5 +95,21 @@ public class AddPlaylistDialogFragment extends AppCompatDialogFragment {
     {
         libRecord.importlPlaylistRecordList();
         playlistAdapter.notifyDataSetChanged();
+    }
+
+    public DialogActionMode getDialogActionMode() {
+        return DM;
+    }
+
+    public void setDialogActionMode(DialogActionMode DM) {
+        this.DM = DM;
+    }
+
+    public String getDialogTitle() {
+        return dialogTitle;
+    }
+
+    public void setDialogTitle(String dialogTitle) {
+        this.dialogTitle = dialogTitle;
     }
 }

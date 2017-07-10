@@ -21,9 +21,11 @@ import cs499app.cs499mobileapp.helper.ContextMenuMode;
 
 public class ContextMenuDialogFragment extends AppCompatDialogFragment {
 
-
-
     ContextMenuMode CMM;
+
+    public ContextMenuDialogFragment() {
+        CMM = ContextMenuMode.NULL_MODE;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
                 {
                     Toast.makeText(getContext(), "modify action called for station", Toast.LENGTH_SHORT).show();
                 }
+                dismiss();
             }
         });
 
@@ -53,12 +56,15 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
                 {
                     Toast.makeText(getContext(), "delete action called for playlist", Toast.LENGTH_SHORT).show();
 
+
                 }
                 else
                 {
                     Toast.makeText(getContext(), "delete action called for station", Toast.LENGTH_SHORT).show();
 
                 }
+                dismiss();
+
             }
         });
 
