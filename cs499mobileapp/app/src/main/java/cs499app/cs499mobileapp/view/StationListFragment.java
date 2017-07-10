@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cs499app.cs499mobileapp.R;
+import cs499app.cs499mobileapp.helper.ContextMenuMode;
 import cs499app.cs499mobileapp.model.LibraryRecord;
 import cs499app.cs499mobileapp.model.PlaylistRecord;
 import cs499app.cs499mobileapp.model.StationRecord;
@@ -102,13 +104,27 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
 
     private void initViews()
     {
+        final FragmentManager fm = getFragmentManager();
+
         stationlistListview = rootview.findViewById(R.id.stationlist_listview);
         stationlistAdapter = new StationListAdapter(this.getContext(),R.layout.playlist_listview_items,
                 libRecord.getStationListRecordsMap().get(parentPlaylistID));//stationRecordList);
 
         stationlistListview.setAdapter(stationlistAdapter);
 
-        final FragmentManager fm = getFragmentManager();
+
+        stationlistListview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                ContextMenuDialogFragment cmdf = new ContextMenuDialogFragment();
+                cmdf.setContextMenuMode(ContextMenuMode.STATION_MODE);
+                cmdf.show(fm,"contextMenuFragment");
+
+                return true; // return true prevents calling of onItemClickListener
+            }
+        });
+
         FloatingActionButton fab = (FloatingActionButton) rootview.findViewById(R.id.add_station_float_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

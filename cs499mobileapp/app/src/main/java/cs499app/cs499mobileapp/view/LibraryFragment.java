@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cs499app.cs499mobileapp.R;
+import cs499app.cs499mobileapp.helper.ContextMenuMode;
 import cs499app.cs499mobileapp.model.LibraryRecord;
 import cs499app.cs499mobileapp.model.PlaylistRecord;
 import cs499app.cs499mobileapp.viewadapter.PlaylistAdapter;
@@ -110,6 +111,8 @@ public class LibraryFragment extends Fragment{
 
     private void initViews()
     {
+        final FragmentManager fm = getFragmentManager();
+
         playlistListview = root.findViewById(R.id.listview_playlist);
         playlistListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -139,12 +142,23 @@ public class LibraryFragment extends Fragment{
 //        mDrawerLayout.closeDrawer(mDrawerList);
             }
         });
+        playlistListview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                ContextMenuDialogFragment cmdf = new ContextMenuDialogFragment();
+                cmdf.setContextMenuMode(ContextMenuMode.PLAYLIST_MODE);
+                cmdf.show(fm,"contextMenuFragment");
+
+                return true; // return true prevents calling of onItemClickListener
+            }
+        });
 
 
         playlistAdapter = new PlaylistAdapter(root.getContext(),R.layout.playlist_listview_items, libRecord.getPlaylistRecords());//playlistRecord);
         playlistListview.setAdapter(playlistAdapter);
 
-        final FragmentManager fm = getFragmentManager();
+
         FloatingActionButton fab =  root.findViewById(R.id.add_playlist_float_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

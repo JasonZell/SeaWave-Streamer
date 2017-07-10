@@ -24,7 +24,6 @@ import cs499app.cs499mobileapp.viewadapter.PlaylistAdapter;
 
 public class AddPlaylistDialogFragment extends AppCompatDialogFragment {
 
-
     private  LibraryRecord libRecord;
     private PlaylistAdapter playlistAdapter;
     @Nullable
@@ -88,6 +87,4 @@ public class AddPlaylistDialogFragment extends AppCompatDialogFragment {
         libRecord.importlPlaylistRecordList();
         playlistAdapter.notifyDataSetChanged();
     }
-
-
 }
