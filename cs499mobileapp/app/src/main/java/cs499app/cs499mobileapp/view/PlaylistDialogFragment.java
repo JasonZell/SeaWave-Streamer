@@ -29,6 +29,9 @@ public class PlaylistDialogFragment extends AppCompatDialogFragment {
     private PlaylistAdapter playlistAdapter;
     private DialogActionMode DM;
     private String dialogTitle;
+   // private int listItemPosition;
+
+
     public PlaylistDialogFragment() {
         DM = DialogActionMode.NULL_MODE;
     }
@@ -37,28 +40,42 @@ public class PlaylistDialogFragment extends AppCompatDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_playlist_dialog,container,false);
-        final EditText editText = (EditText)rootView.findViewById(R.id.addplaylist_edittext);
+        final EditText dialogPlaylistTitleEditText = (EditText)rootView.findViewById(R.id.dialog_playlist_title_edittext);
+        final Button confirmButton = rootView.findViewById(R.id.dialog_playlist_confirm_button);
 
         TextView tv = rootView.findViewById(R.id.playlist_dialog_fragment_title);
         tv.setText(dialogTitle);
 
+        initializeView(dialogPlaylistTitleEditText,confirmButton);
         // show soft keyboard
-        editText.requestFocus();
+        dialogPlaylistTitleEditText.requestFocus();
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         getDialog().setCanceledOnTouchOutside(false);
-        Button addbutton = rootView.findViewById(R.id.addplaylist_addbutton);
-        addbutton.setOnClickListener(new View.OnClickListener() {
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(editText.getText().toString().trim().length() == 0)
+                if(dialogPlaylistTitleEditText.getText().toString().trim().length() == 0)
                 {
                     Toast.makeText(getContext(), "Title is empty!", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    PlaylistRecord pr = new PlaylistRecord(editText.getText().toString());
-                    libRecord.getPlaylistRecords().add(
-                            libRecord.insertPlaylistRecord(pr)); //insert into database then add into libRecord object.
-                    playlistAdapter.notifyDataSetChanged();
+
+                    if(DM == DialogActionMode.ADD_MODE) {
+                        PlaylistRecord pr = new PlaylistRecord(dialogPlaylistTitleEditText.getText().toString());
+                        libRecord.getPlaylistRecords().add(
+                                libRecord.insertPlaylistRecord(pr)); //insert into database then add into libRecord object.
+                        playlistAdapter.notifyDataSetChanged();
+                    }
+                    else if(DM == DialogActionMode.MODIFY_MODE)
+                    {
+                        PlaylistRecord pr = new PlaylistRecord(dialogPlaylistTitleEditText.getText().toString());
+
+                    }
+                    else //NULL mode
+                    {
+
+                    }
                     //refreshLibraryRecordUpdateView();
                     dismiss();
                 }
@@ -66,7 +83,7 @@ public class PlaylistDialogFragment extends AppCompatDialogFragment {
             }
         });
 
-        Button cancelButton = rootView.findViewById(R.id.addplaylist_cancelbutton);
+        Button cancelButton = rootView.findViewById(R.id.dialog_playlist_cancelbutton);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,5 +130,21 @@ public class PlaylistDialogFragment extends AppCompatDialogFragment {
 
     public void setDialogTitle(String dialogTitle) {
         this.dialogTitle = dialogTitle;
+    }
+
+    public void initializeView(EditText et, Button confirmButton)
+    {
+        if(DM == DialogActionMode.ADD_MODE)
+        {
+            et.setHint("Enter New Playlist Name");
+            confirmButton.setText("Add");
+        }
+        else if (DM == DialogActionMode.MODIFY_MODE)
+        {
+            confirmButton.setText("Modify");
+            et.setText(libRecord.getPlaylistRecords().get(
+                    getArguments().getInt(getString(R.string.PlayListViewPos))
+            ).getPlaylistName());
+        }
     }
 }

@@ -37,66 +37,64 @@ public class StationDialogFragment extends AppCompatDialogFragment {
     private StationListAdapter stationListAdapter;
     private DialogActionMode DM;
     private String dialogTitle;
+   // private int listItemPosition;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_station_dialog,container,false);
-        final EditText addStationTitleEditText = (EditText)rootView.findViewById(R.id.addstationtitle_edittext);
-        final EditText addStationUrlEditText = (EditText)rootView.findViewById(R.id.addstationurl_edittext);
+        final EditText StationTitleEditText = (EditText)rootView.findViewById(R.id.dialog_stationtitle_edittext);
+        final EditText StationUrlEditText = (EditText)rootView.findViewById(R.id.dialog_stationurl_edittext);
+        final Button confirmButton = rootView.findViewById(R.id.dialog_station_confirm_button);
 
         TextView tv = rootView.findViewById(R.id.station_dialog_fragment_title);
         tv.setText(dialogTitle);
-
-        addStationUrlEditText.setText("http://");
-        Selection.setSelection(addStationUrlEditText.getText(), addStationUrlEditText.getText().length());
-
-
-        addStationUrlEditText.addTextChangedListener(new TextWatcher() {
-
+        initializeView(StationTitleEditText,StationUrlEditText,confirmButton);
+        Selection.setSelection(StationUrlEditText.getText(), StationUrlEditText.getText().length());
+        StationUrlEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-            }
-
+                                          int after) {}
             @Override
             public void afterTextChanged(Editable s) {
                 if(!s.toString().contains("http://")){
-                    addStationUrlEditText.setText("http://");
-                    Selection.setSelection(addStationUrlEditText.getText(), addStationUrlEditText.getText().length());
-
+                    StationUrlEditText.setText("http://");
+                    Selection.setSelection(StationUrlEditText.getText(), StationUrlEditText.getText().length());
                 }
-
             }
         });
 
 
         // show soft keyboard
-        addStationTitleEditText.requestFocus();
+        StationTitleEditText.requestFocus();
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         getDialog().setCanceledOnTouchOutside(false);
 
-        Button addbutton = rootView.findViewById(R.id.addstation_addbutton);
-        addbutton.setOnClickListener(new View.OnClickListener() {
+        confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(addStationTitleEditText.getText().toString().trim().length() == 0)
+                if(StationTitleEditText.getText().toString().trim().length() == 0)
                 {
                     Toast.makeText(getContext(), "Title is empty!", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    StationRecord sr = new StationRecord(
-                            parentPlaylistID,
-                            addStationTitleEditText.getText().toString(),
-                            addStationUrlEditText.getText().toString());
-                    List<StationRecord>  srl = libRecord.getStationListRecordsMap().get(parentPlaylistID);
-                    srl.add(libRecord.insertStationRecord(sr));
-                    //refreshLibraryRecordUpdateView();
+
+                    if(DM == DialogActionMode.ADD_MODE) {
+                        StationRecord sr = new StationRecord(
+                                parentPlaylistID,
+                                StationTitleEditText.getText().toString(),
+                                StationUrlEditText.getText().toString());
+                        List<StationRecord> srl = libRecord.getStationListRecordsMap().get(parentPlaylistID);
+                        srl.add(libRecord.insertStationRecord(sr));
+                        //refreshLibraryRecordUpdateView();
+                    }
+                    else if(DM == DialogActionMode.MODIFY_MODE)
+                    {
+
+                    }
                     dismiss();
                 }
 
@@ -104,7 +102,7 @@ public class StationDialogFragment extends AppCompatDialogFragment {
             }
         });
 
-        Button cancelButton = rootView.findViewById(R.id.addstation_cancelbutton);
+        Button cancelButton = rootView.findViewById(R.id.dialog_station_cancel_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,4 +159,36 @@ public class StationDialogFragment extends AppCompatDialogFragment {
     public void setDialogTitle(String dialogTitle) {
         this.dialogTitle = dialogTitle;
     }
+
+//    public int getListItemPosition() {
+//        return listItemPosition;
+//    }
+//
+//    public void setListItemPosition(int listItemPosition) {
+//        this.listItemPosition = listItemPosition;
+//    }
+    private void initializeView(EditText titleEditText, EditText urlEditText,Button confirmButton)
+    {
+        if(DM == DialogActionMode.ADD_MODE) {
+            titleEditText.setHint("Enter New Station Name");
+            urlEditText.setText("http://");
+            confirmButton.setText("Add");
+        }
+        else if(DM == DialogActionMode.MODIFY_MODE)
+        {
+            confirmButton.setText("Modify");
+            titleEditText.setText(libRecord.getStationListRecordsMap()
+                    .get(getArguments().getLong(getString(R.string.ParentPlaylistID)))
+                    .get(getArguments().getInt(
+                            getString(R.string.StationListViewPos)))
+                    .getStationTitle());
+            urlEditText.setText(libRecord.getStationListRecordsMap()
+                    .get(getArguments().getLong(getString(R.string.ParentPlaylistID)))
+                    .get(getArguments().getInt(
+                            getString(R.string.StationListViewPos)))
+                    .getStationURL());
+        }
+
+    }
+
 }

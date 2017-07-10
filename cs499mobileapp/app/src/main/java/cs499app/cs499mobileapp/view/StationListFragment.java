@@ -31,7 +31,6 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
     private StationListAdapter stationlistAdapter;
     private ListView stationlistListview;
     private List<StationRecord> stationRecordList;
-    private int parentPlaylistViewID;
     View rootview;
     private Long parentPlaylistID;
     private LibraryRecord libRecord;
@@ -41,7 +40,7 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.i("LibFragmentOnCreate","OnCreatecalled");
         rootview = inflater.inflate(R.layout.fragment_station_list, container, false);
-        parentPlaylistViewID = getArguments().getInt(getString(R.string.PlayListViewPos));
+        //parentPlaylistViewID = getArguments().getInt(getString(R.string.PlayListViewPos));
         loadStationList();
 
         return rootview;
@@ -113,7 +112,15 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 ContextMenuDialogFragment cmdf = new ContextMenuDialogFragment();
+                Bundle args = new Bundle();
+                args.putInt(getString(R.string.StationListViewPos), i);
+                args.putLong(getString(R.string.ParentPlaylistID),parentPlaylistID);
+                //args.putString(R);
+                cmdf.setArguments(args);
+
                 cmdf.setContextMenuMode(ContextMenuMode.STATION_MODE);
+                cmdf.setLibRecord(libRecord);
+                cmdf.setStationlistAdapter(stationlistAdapter);
                 cmdf.show(fm,"contextMenuFragment");
 
                 return true; // return true prevents calling of onItemClickListener
@@ -130,7 +137,7 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
                 dialogFm.setParentPlaylistID(parentPlaylistID);
                 dialogFm.setStationListAdapter(stationlistAdapter);
                 dialogFm.setDialogActionMode(DialogActionMode.ADD_MODE);
-                dialogFm.setDialogTitle("Add New Station");
+                dialogFm.setDialogTitle("ADD STATION");
                 dialogFm.show(fm,"addstationfragment");
             }
         });

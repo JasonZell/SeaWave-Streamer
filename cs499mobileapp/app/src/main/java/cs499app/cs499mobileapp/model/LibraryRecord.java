@@ -62,6 +62,7 @@ public class LibraryRecord implements LibraryRecordInterface{
 
     // Insert the playlistRecord into database, and return the playlistRecord with unique ROWID
     // from database, for that data entry.
+    @Override
     public PlaylistRecord insertPlaylistRecord(PlaylistRecord pr)
     {
         openWritableDatabase();
@@ -78,6 +79,7 @@ public class LibraryRecord implements LibraryRecordInterface{
         dbhelper.close();
         return pr;
     }
+
 
 
     // insert one station record 
@@ -179,6 +181,26 @@ public class LibraryRecord implements LibraryRecordInterface{
         return sr;
     }
 
+
+    @Override
+    public void updateStationRecord(StationRecord sr) {
+
+    }
+
+    @Override
+    public void updatePlaylistRecord(PlaylistRecord sr) {
+
+    }
+
+    @Override
+    public void deleteStationRecord(StationRecord sr) {
+
+    }
+
+    @Override
+    public void deletePlaylistRecord(PlaylistRecord sr) {
+
+    }
 
     public List<PlaylistRecord> getPlaylistRecords() {
         return playlistRecords;

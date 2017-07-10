@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/station_dialog_fragment_title"
-        android:text="Title"
+        android:text="dialogTitle"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -19,13 +19,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:text="Station Title:"
+            android:text="TITLE:"
             android:inputType="textMultiLine"
             android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
         <EditText
-            android:id="@+id/addstationtitle_edittext"
+            android:id="@+id/dialog_stationtitle_edittext"
             android:minLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,13 +38,13 @@
         android:orientation="horizontal"
         >
         <TextView
-            android:text="Station URL:"
+            android:text="URL:"
             android:maxLines="1"
             android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
         <EditText
-            android:id="@+id/addstationurl_edittext"
+            android:id="@+id/dialog_stationurl_edittext"
             android:inputType="textMultiLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,13 +57,13 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/addstation_addbutton"
+            android:id="@+id/dialog_station_confirm_button"
             android:layout_width="0dp"
             android:layout_weight="50"
             android:layout_height="wrap_content"
-            android:text="Add"/>
+            android:text="confirmButton"/>
         <Button
-            android:id="@+id/addstation_cancelbutton"
+            android:id="@+id/dialog_station_cancel_button"
             android:layout_width="0dp"
             android:layout_weight="50"
             android:layout_height="wrap_content"

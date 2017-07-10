@@ -12,6 +12,9 @@ public interface LibraryRecordInterface {
     public List<StationRecord> importStationRecordList(Long playlistID);
     public StationRecord insertStationRecord(StationRecord sr);
     public PlaylistRecord insertPlaylistRecord(PlaylistRecord pr);
-
+    public void updateStationRecord(StationRecord sr);
+    public void updatePlaylistRecord(PlaylistRecord sr);
+    public void deleteStationRecord(StationRecord sr);
+    public void deletePlaylistRecord(PlaylistRecord sr);
 
 }

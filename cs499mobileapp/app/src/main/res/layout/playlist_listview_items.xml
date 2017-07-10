@@ -24,7 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="10"
-            android:textSize="@dimen/text_size"
+            android:textSize="@dimen/number_size"
             android:textAlignment="center"
             android:gravity="center"/>
         <!--<ScrollView-->

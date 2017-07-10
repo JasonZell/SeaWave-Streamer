@@ -18,8 +18,6 @@
     <string name="action_export_list">export_list</string>
     <string name="LIB_FRAG_TAG">LIBRARY_FRAGMENT_TAG</string>
     <string name="PlayListViewPos">PLAYLIST_LISTVIEW_POSITION</string>
-
-
-
-
+    <string name="StationListViewPos">STATION_LISTVIEW_POSITION</string>
+    <string name="ParentPlaylistID">PARENT_PLAYLIST_ID</string>
 </resources>

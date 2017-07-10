@@ -86,14 +86,6 @@ public class LibraryFragment extends Fragment{
 
         loadDataTask.execute();
 
-
-        //playlistRecord = new ArrayList<>();
-////        playlistRecord = new ArrayList<>();
-//        playlistRecord.add(new PlaylistRecord("First Station"));
-//        playlistRecord.add(new PlaylistRecord("Second Station"));
-//        playlistRecord.add(new PlaylistRecord("Third Station"));
-//        playlistRecord.add(new PlaylistRecord("This is a very very very long station name, scrolling"));
-
     }
 
     public void setLibraryRecord(LibraryRecord lr){
@@ -137,11 +129,6 @@ public class LibraryFragment extends Fragment{
                 transaction.replace(R.id.fragment_container, stationListFragment);
                 transaction.addToBackStack(stationListFragment.getClass().getName());
                 transaction.commit();
-//
-//        // update selected item and title, then close the drawer
-//        mDrawerList.setItemChecked(position, true);
-//        setTitle(mPlanetTitles[position]);
-//        mDrawerLayout.closeDrawer(mDrawerList);
             }
         });
         playlistListview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -149,7 +136,14 @@ public class LibraryFragment extends Fragment{
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 ContextMenuDialogFragment cmdf = new ContextMenuDialogFragment();
+                Bundle args = new Bundle();
+                args.putInt(getString(R.string.PlayListViewPos), i);
+                cmdf.setArguments(args);
+
+                cmdf.setLibRecord(libRecord);
                 cmdf.setContextMenuMode(ContextMenuMode.PLAYLIST_MODE);
+                cmdf.setPlaylistAdapter(playlistAdapter);
+                //cmdf.setListItemPosition(i);
                 cmdf.show(fm,"contextMenuFragment");
 
                 return true; // return true prevents calling of onItemClickListener
@@ -170,7 +164,7 @@ public class LibraryFragment extends Fragment{
                 dialogFm.setLibRecord(libRecord);
                 dialogFm.setPlaylistAdapter(playlistAdapter);
                 dialogFm.setDialogActionMode(DialogActionMode.ADD_MODE);
-                dialogFm.setDialogTitle("Add New Playlist");
+                dialogFm.setDialogTitle("ADD PLAYLIST");
                 dialogFm.show(fm,"addplaylistFragment");
             }
         });
