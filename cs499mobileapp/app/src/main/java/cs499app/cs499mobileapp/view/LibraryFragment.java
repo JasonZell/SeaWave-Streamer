@@ -67,10 +67,12 @@ public class LibraryFragment extends Fragment{
                 if(libRecord == null) {
                     Log.e("loadPlaylistLibrary","libRecord created");
                     libRecord = new LibraryRecord(getContext());
+
+                    libRecord.importlPlaylistRecordList();
+                    // playlistRecord = libRecord.getPlaylistRecords();
+                    Log.i("loadDataTask","loading done");
                 }
-                libRecord.importlPlaylistRecordList();
-               // playlistRecord = libRecord.getPlaylistRecords();
-                Log.i("loadDataTask","loading done");
+
                 return null;
             }
 

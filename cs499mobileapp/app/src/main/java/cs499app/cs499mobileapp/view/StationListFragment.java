@@ -55,9 +55,14 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
             @Override
             protected Void doInBackground(Void... voids) {
                 //libRecord = new LibraryRecord(getContext());
-                libRecord.importStationRecordList(parentPlaylistID);
-                Log.i("loadDataTask","loading done");
+
+                if(libRecord.getStationListRecordsMap().get(parentPlaylistID) == null) {
+                    libRecord.importStationRecordList(parentPlaylistID);
+                    Log.i("loadDataTask", "loading done");
+                }
+
                 return null;
+
             }
 
             @Override

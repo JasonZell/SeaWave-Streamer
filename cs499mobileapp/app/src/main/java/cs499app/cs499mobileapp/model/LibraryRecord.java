@@ -41,6 +41,8 @@ public class LibraryRecord implements LibraryRecordInterface{
     public LibraryRecord(Context context){
         this.context = context;
         dbhelper = new DBHelper(context);
+        stationListRecordsMap = new HashMap<>();
+        playlistRecords = new ArrayList<>();
     }
 
     public void openReadableDatabase()
