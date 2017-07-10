@@ -23,7 +23,7 @@ public class LibraryRecord implements LibraryRecordInterface{
     SQLiteDatabase database;
 
     List<PlaylistRecord> playlistRecords;
-    HashMap<Integer,List<StationRecord>> stationListRecordsMap;
+    HashMap<Long,List<StationRecord>> stationListRecordsMap;
 
     String[] playlistProjection = {
             RecordSchema.PlaylistEntry._ID,
@@ -58,7 +58,9 @@ public class LibraryRecord implements LibraryRecordInterface{
         dbhelper.close();
     }
 
-    public void insertPlaylistRecord(PlaylistRecord pr)
+    // Insert the playlistRecord into database, and return the playlistRecord with unique ROWID
+    // from database, for that data entry.
+    public PlaylistRecord insertPlaylistRecord(PlaylistRecord pr)
     {
         openWritableDatabase();
         ContentValues values = new ContentValues();
@@ -66,13 +68,18 @@ public class LibraryRecord implements LibraryRecordInterface{
         long result = database.insert(RecordSchema.PlaylistEntry.TABLE_NAME,null,values);
         if(result == -1)
             Log.e("LOGTAG","Error inserting new playlist record");
+        else
+        {
+            pr.set_ID(result);
+        }
 
         dbhelper.close();
+        return pr;
     }
 
 
     // insert one station record 
-    public void insertStationRecord(StationRecord sr)
+    public StationRecord insertStationRecord(StationRecord sr)
     {
         openWritableDatabase();
         ContentValues values = new ContentValues();
@@ -80,17 +87,15 @@ public class LibraryRecord implements LibraryRecordInterface{
         values.put(RecordSchema.StationEntry.COLUMN_NAME_STATIONTITLE, sr.getStationTitle());
         values.put(RecordSchema.StationEntry.COLUMN_NAME_URL, sr.getStationURL());
         values.put(RecordSchema.StationEntry.COLUMN_NAME_HASH, sr.getStationHash());
-        try {
-            long result = database.insert(RecordSchema.StationEntry.TABLE_NAME, null, values);
-            if(result == -1)
-                Log.e("LOGTAG","Error inserting new station record");
-        }
-        catch(SQLiteException e)
+        long result = database.insert(RecordSchema.StationEntry.TABLE_NAME, null, values);
+        if(result == -1)
+            Log.e("LOGTAG","Error inserting new station record");
+        else
         {
-            e.printStackTrace();
+            sr.set_ID(result);
         }
-
         dbhelper.close();
+        return sr;
     }
 
 
@@ -114,7 +119,7 @@ public class LibraryRecord implements LibraryRecordInterface{
             while(cursor.moveToNext())
             {
                 PlaylistRecord pRecord = new PlaylistRecord();
-                pRecord.set_ID(cursor.getInt(cursor.getColumnIndex(RecordSchema.PlaylistEntry._ID)));
+                pRecord.set_ID(cursor.getLong(cursor.getColumnIndex(RecordSchema.PlaylistEntry._ID)));
                 pRecord.setPlaylistName(cursor.getString(cursor.getColumnIndex(RecordSchema.PlaylistEntry.COLUMN_NAME_TITLE)));
                 pr.add(pRecord);
             }
@@ -125,7 +130,7 @@ public class LibraryRecord implements LibraryRecordInterface{
     }
 
     //import stations from one playlist into the library record.
-    public List<StationRecord> importStationRecordList(int playlistID){
+    public List<StationRecord> importStationRecordList(Long playlistID){
 
         openReadableDatabase();
         List<StationRecord> sr = null;
@@ -159,8 +164,8 @@ public class LibraryRecord implements LibraryRecordInterface{
             while(cursor.moveToNext())
             {
                 StationRecord sRecord = new StationRecord();
-                sRecord.set_ID(cursor.getInt(cursor.getColumnIndex(RecordSchema.StationEntry._ID)));
-                sRecord.setPlaylistID(cursor.getInt(cursor.getColumnIndex(RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTID)));
+                sRecord.set_ID(cursor.getLong(cursor.getColumnIndex(RecordSchema.StationEntry._ID)));
+                sRecord.setPlaylistID(cursor.getLong(cursor.getColumnIndex(RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTID)));
                 sRecord.setStationTitle(cursor.getString(cursor.getColumnIndex(RecordSchema.StationEntry.COLUMN_NAME_STATIONTITLE)));
                 sRecord.setStationURL(cursor.getString(cursor.getColumnIndex(RecordSchema.StationEntry.COLUMN_NAME_URL)));
                 sRecord.setStationHash(cursor.getString(cursor.getColumnIndex(RecordSchema.StationEntry.COLUMN_NAME_HASH)));
@@ -181,11 +186,11 @@ public class LibraryRecord implements LibraryRecordInterface{
         this.playlistRecords = playlistRecords;
     }
 
-    public HashMap<Integer, List<StationRecord>> getStationListRecordsMap() {
+    public HashMap<Long, List<StationRecord>> getStationListRecordsMap() {
         return stationListRecordsMap;
     }
 
-    public void setStationListRecordsMap(HashMap<Integer, List<StationRecord>> stationListRecordsMap) {
+    public void setStationListRecordsMap(HashMap<Long, List<StationRecord>> stationListRecordsMap) {
         this.stationListRecordsMap = stationListRecordsMap;
     }
 

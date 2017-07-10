@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import cs499app.cs499mobileapp.R;
 import cs499app.cs499mobileapp.helper.DialogActionMode;
 import cs499app.cs499mobileapp.model.LibraryRecord;
@@ -30,7 +32,7 @@ public class StationDialogFragment extends AppCompatDialogFragment {
 
 
 
-    private int parentPlaylistID;
+    private Long parentPlaylistID;
     private LibraryRecord libRecord;
     private StationListAdapter stationListAdapter;
     private DialogActionMode DM;
@@ -92,8 +94,9 @@ public class StationDialogFragment extends AppCompatDialogFragment {
                             parentPlaylistID,
                             addStationTitleEditText.getText().toString(),
                             addStationUrlEditText.getText().toString());
-                    libRecord.insertStationRecord(sr);
-                    refreshLibraryRecordUpdateView();
+                    List<StationRecord>  srl = libRecord.getStationListRecordsMap().get(parentPlaylistID);
+                    srl.add(libRecord.insertStationRecord(sr));
+                    //refreshLibraryRecordUpdateView();
                     dismiss();
                 }
 
@@ -127,11 +130,11 @@ public class StationDialogFragment extends AppCompatDialogFragment {
         this.stationListAdapter = stationListAdapter;
     }
 
-    public int getParentPlaylistID() {
+    public Long getParentPlaylistID() {
         return parentPlaylistID;
     }
 
-    public void setParentPlaylistID(int parentPlaylistID) {
+    public void setParentPlaylistID(Long parentPlaylistID) {
         this.parentPlaylistID = parentPlaylistID;
     }
 

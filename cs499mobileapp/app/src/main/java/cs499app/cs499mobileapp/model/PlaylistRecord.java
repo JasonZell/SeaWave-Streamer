@@ -7,17 +7,17 @@ package cs499app.cs499mobileapp.model;
 public class PlaylistRecord {
 
     private String playlistName;
-    private int _ID;
+    private long _ID;
 
-    public int get_ID() {
+    public long get_ID() {
         return _ID;
     }
 
-    public void set_ID(int _ID) {
+    public void set_ID(long _ID) {
         this._ID = _ID;
     }
 
-    public PlaylistRecord(String playlistName, int _ID) {
+    public PlaylistRecord(String playlistName, long _ID) {
         this.playlistName = playlistName;
         this._ID = _ID;
     }

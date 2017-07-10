@@ -6,13 +6,13 @@ package cs499app.cs499mobileapp.model;
 
 public class StationRecord {
 
-    private int _ID;
-    private int playlistID;
+    private long _ID;
+    private long playlistID;
     private String stationTitle;
     private String stationURL;
     private String stationHash;
 
-    public StationRecord(int _ID, int playlistID, String stationTitle, String stationURL, String stationHash) {
+    public StationRecord(long _ID, long playlistID, String stationTitle, String stationURL, String stationHash) {
         this._ID = _ID;
         this.playlistID = playlistID;
         this.stationTitle = stationTitle;
@@ -20,7 +20,7 @@ public class StationRecord {
         this.stationHash = stationHash;
     }
 
-    public StationRecord( int playlistID, String stationTitle, String stationURL) {
+    public StationRecord( long playlistID, String stationTitle, String stationURL) {
         this._ID = -1;
         this.playlistID = playlistID;
         this.stationTitle = stationTitle;
@@ -37,11 +37,11 @@ public class StationRecord {
     }
 
 
-    public int getPlaylistID() {
+    public long getPlaylistID() {
         return playlistID;
     }
 
-    public void setPlaylistID(int playlistID) {
+    public void setPlaylistID(long playlistID) {
         this.playlistID = playlistID;
     }
 
@@ -49,11 +49,11 @@ public class StationRecord {
         return stationTitle;
     }
 
-    public int get_ID() {
+    public long get_ID() {
         return _ID;
     }
 
-    public void set_ID(int _ID) {
+    public void set_ID(long _ID) {
         this._ID = _ID;
     }
 

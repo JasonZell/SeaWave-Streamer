@@ -9,9 +9,9 @@ import java.util.List;
 public interface LibraryRecordInterface {
 
     public List<PlaylistRecord> importlPlaylistRecordList();
-    public List<StationRecord> importStationRecordList(int playlistName);
-    public void insertStationRecord(StationRecord sr);
-    public void insertPlaylistRecord(PlaylistRecord pr);
+    public List<StationRecord> importStationRecordList(Long playlistID);
+    public StationRecord insertStationRecord(StationRecord sr);
+    public PlaylistRecord insertPlaylistRecord(PlaylistRecord pr);
 
 
 }

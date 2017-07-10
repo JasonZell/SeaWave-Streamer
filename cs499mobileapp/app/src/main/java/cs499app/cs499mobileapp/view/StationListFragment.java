@@ -33,7 +33,7 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
     private List<StationRecord> stationRecordList;
     private int parentPlaylistViewID;
     View rootview;
-    private int parentPlaylistID;
+    private Long parentPlaylistID;
     private LibraryRecord libRecord;
 
     @Nullable
@@ -69,13 +69,6 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
         };
 
         loadDataTask.execute();
-
-//        stationNames = new ArrayList<>();
-//        stationNames.add(new PlaylistRecord("First song"));
-//        stationNames.add(new PlaylistRecord("Second song"));
-//        stationNames.add(new PlaylistRecord("Third song"));
-
-
     }
 
     public void setStationRecordList(List<StationRecord> srl)
@@ -91,11 +84,11 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
         this.libRecord = libRecord;
     }
 
-    public int getParentPlaylistID() {
+    public Long getParentPlaylistID() {
         return parentPlaylistID;
     }
 
-    public void setParentPlaylistID(int parentPlaylistID) {
+    public void setParentPlaylistID(Long parentPlaylistID) {
         this.parentPlaylistID = parentPlaylistID;
     }
 
