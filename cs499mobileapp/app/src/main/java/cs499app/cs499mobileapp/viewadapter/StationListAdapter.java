@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -21,6 +23,8 @@ import cs499app.cs499mobileapp.model.StationRecord;
  */
 
 public class StationListAdapter extends ArrayAdapter<StationRecord>{
+
+    LibraryCallbackListener callbackListener;
 
     private Context context;
     private List<StationRecord> playlistDataArray;
@@ -49,6 +53,7 @@ public class StationListAdapter extends ArrayAdapter<StationRecord>{
         playlistNameView.setSelected(true);
         //playlistNameView.setMovementMethod(new ScrollingMovementMethod());
 
+
         return view;
     }
 
@@ -58,4 +63,13 @@ public class StationListAdapter extends ArrayAdapter<StationRecord>{
 
         return super.getItem(position);
     }
+
+    public interface LibraryCallbackListener {
+        public void onPlayStationButtonPressed(
+                long playListViewID, long stationViewID);
+        public void onPlayAllStationButtonPressed(
+                long playListViewID);
+    }
+
+
 }

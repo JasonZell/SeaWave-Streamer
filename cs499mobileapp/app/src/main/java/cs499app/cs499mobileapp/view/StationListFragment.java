@@ -1,5 +1,6 @@
 package cs499app.cs499mobileapp.view;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,9 +31,9 @@ import cs499app.cs499mobileapp.viewadapter.StationListAdapter;
 public class StationListFragment extends android.support.v4.app.DialogFragment{
 
 
+    StationListCallbackListener callbackListener;
     private StationListAdapter stationlistAdapter;
     private ListView stationlistListview;
-    private List<StationRecord> stationRecordList;
     View rootview;
     private Long parentPlaylistID;
     private LibraryRecord libRecord;
@@ -45,9 +47,17 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
         parentPlaylistID = getArguments().getLong(getString(R.string.ParentPlaylistID));
         loadStationList();
 
+        //setup callback
+        try {
+            callbackListener = (StationListCallbackListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+
+
         return rootview;
     }
-
 
     private void loadStationList()
     {
@@ -55,31 +65,18 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
 
             @Override
             protected Void doInBackground(Void... voids) {
-                //libRecord = new LibraryRecord(getContext());
-
                 if(libRecord.getStationListRecordsMap().get(parentPlaylistID) == null) {
                     libRecord.importStationRecordList(parentPlaylistID);
                     Log.i("loadDataTask", "loading done");
                 }
-
                 return null;
-
             }
-
             @Override
             protected void onPostExecute(Void aVoid) {
-
                 initViews();
-
             }
         };
-
         loadDataTask.execute();
-    }
-
-    public void setStationRecordList(List<StationRecord> srl)
-    {
-        stationRecordList = srl;
     }
 
     public LibraryRecord getLibRecord() {
@@ -89,14 +86,6 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
     public void setLibRecord(LibraryRecord libRecord) {
         this.libRecord = libRecord;
     }
-
-//    public Long getParentPlaylistID() {
-//        return parentPlaylistID;
-//    }
-//
-//    public void setParentPlaylistID(Long parentPlaylistID) {
-//        this.parentPlaylistID = parentPlaylistID;
-//    }
 
     private void initViews()
     {
@@ -109,7 +98,6 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
                 libRecord.getStationListRecordsMap().get(parentPlaylistID));//stationRecordList);
 
         stationlistListview.setAdapter(stationlistAdapter);
-
 
         stationlistListview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -128,6 +116,13 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
                 cmdf.show(fm,"contextMenuFragment");
 
                 return true; // return true prevents calling of onItemClickListener
+            }
+        });
+
+        stationlistListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                callbackListener.onPlayStationButtonPressed(parentPlaylistViewID,i);
             }
         });
 
@@ -163,7 +158,12 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
         });
 
     }
-
+    public interface StationListCallbackListener {
+        public void onPlayStationButtonPressed(
+                long playListViewID, long stationViewID);
+        public void onPlayAllStationButtonPressed(
+                long playListViewID);
+    }
 
 
 }

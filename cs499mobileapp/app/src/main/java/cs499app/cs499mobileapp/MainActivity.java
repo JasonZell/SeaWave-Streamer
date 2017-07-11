@@ -17,12 +17,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import cs499app.cs499mobileapp.model.LibraryRecord;
 import cs499app.cs499mobileapp.view.ContainerFragment;
 import cs499app.cs499mobileapp.view.PlayerFragment;
+import cs499app.cs499mobileapp.view.StationListFragment;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener,
+        StationListFragment.StationListCallbackListener{
 
     private DrawerLayout navigationDrawerLayout;
     private ActionBarDrawerToggle navigationDrawerToggle;
@@ -360,5 +364,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    @Override
+    public void onPlayStationButtonPressed(long playListViewID, long stationViewID) {
+        Log.i("StationClicked","Playlistviewid: "+playListViewID+" stationviewID"+stationViewID);
+    }
 
+    @Override
+    public void onPlayAllStationButtonPressed(long playListViewID) {
+
+    }
 }

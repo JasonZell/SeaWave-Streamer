@@ -43,6 +43,7 @@
             android:focusableInTouchMode="true"/>
 
         <ImageButton
+            android:id="@+id/station_list_play_button"
             android:layout_marginRight="10dp"
             android:src="@drawable/play_arrow"
             android:layout_width="0dp"
