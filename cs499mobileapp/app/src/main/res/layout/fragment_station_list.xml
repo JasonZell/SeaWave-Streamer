@@ -5,11 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="95"
+            android:gravity="center"
+            android:text="PLAYLIST NAME HERE"/>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_weight="5"
+            android:background="@color/DeepSkyBlue"/>
+    </LinearLayout>
     <ListView
         android:id="@+id/stationlist_listview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="90">
+        android:layout_weight="80">
     </ListView>
 
     <!--<RelativeLayout-->

@@ -48,6 +48,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:theme="@style/CustomToolbarTheme"
+            android:elevation="4dp"
             >
         </android.support.v7.widget.Toolbar>
 
@@ -58,7 +59,7 @@
             android:layout_height="wrap_content"
             app:tabGravity="fill"
             app:tabMaxWidth="0dp"
-            app:tabIndicatorColor="@color/Gold"
+            app:tabIndicatorColor="@color/LightGold"
             app:tabIndicatorHeight="2dp"
             android:background="@color/DeepSkyBlue"
             app:tabMode="fixed">

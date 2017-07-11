@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Cs499mobileapp</string>
+    <string name="app_name">Internet Radio Xtreamer</string>
     <string name="MUSIC_ACTION_CREATE">MUSIC_ACTION_CREATE</string>
     <string name="MUSIC_ACTION_PLAY">MUSIC_ACTION_PLAY</string>
     <string name="MUSIC_ACTION_STOP">MUSIC_ACTION_STOP</string>
