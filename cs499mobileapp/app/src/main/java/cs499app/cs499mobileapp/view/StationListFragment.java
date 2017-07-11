@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -100,7 +101,9 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
     private void initViews()
     {
         final FragmentManager fm = getFragmentManager();
-
+        TextView titleHeaderView = rootview.findViewById(R.id.station_view_playlist_title_header);
+        titleHeaderView.setText(libRecord.getPlaylistRecords()
+                .get(parentPlaylistViewID).getPlaylistName());
         stationlistListview = rootview.findViewById(R.id.stationlist_listview);
         stationlistAdapter = new StationListAdapter(this.getContext(),R.layout.playlist_listview_items,
                 libRecord.getStationListRecordsMap().get(parentPlaylistID));//stationRecordList);

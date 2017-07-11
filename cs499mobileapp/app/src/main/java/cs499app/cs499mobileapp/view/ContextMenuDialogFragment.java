@@ -59,7 +59,7 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
             public void onClick(View view) {
                 if(CMM == ContextMenuMode.PLAYLIST_MODE)
                 {
-                    Toast.makeText(getContext(), "modify action called for playlist", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(getContext(), "modify action called for playlist", Toast.LENGTH_SHORT).show();
                     PlaylistDialogFragment dialogFm = new PlaylistDialogFragment();
                     Bundle args = new Bundle();
                     args.putInt(getString(R.string.PlayListViewPos), PlaylistViewPos);
@@ -74,7 +74,7 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
                 }
                 else // station view is the one calling the context menu
                 {
-                    Toast.makeText(getContext(), "modify action called for station", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(getContext(), "modify action called for station", Toast.LENGTH_SHORT).show();
                     StationDialogFragment dialogFm = new StationDialogFragment();
                     Bundle args = new Bundle();
                     args.putInt(getString(R.string.StationListViewPos), stationViewPos);
@@ -119,7 +119,7 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
                             .setPositiveButton("Yes", dialogClickListener)
                             .setNegativeButton("No", dialogClickListener).show();
 
-                    Toast.makeText(getContext(), "delete action called for playlist", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getContext(), "delete action called for playlist", Toast.LENGTH_SHORT).show();
 
                 }
                 else //deleting a station record.
@@ -132,7 +132,7 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
                     builder.setMessage("Delete Station: "+stationTitle+"?")
                             .setPositiveButton("Yes", dialogClickListener)
                             .setNegativeButton("No", dialogClickListener).show();
-                    Toast.makeText(getContext(), "delete action called for station", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(getContext(), "delete action called for station", Toast.LENGTH_SHORT).show();
 
                 }
                 dismiss();
