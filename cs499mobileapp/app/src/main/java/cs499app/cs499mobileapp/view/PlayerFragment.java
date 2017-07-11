@@ -52,9 +52,10 @@ public class PlayerFragment extends Fragment {
 
 
         final int max = 30;
-         int progress = 0;
+         int progress = 20;
         final CircularSeekBar seekBar = (CircularSeekBar) root.findViewById(R.id.circular_seek_bar);
         seekBar.setIsTouchEnabled(false);
+
         seekBar.setMax(max);
         seekBar.setProgress(progress);
 

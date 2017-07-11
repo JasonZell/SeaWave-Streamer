@@ -161,6 +161,6 @@
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
     <color name="LightGray">#D3D3D3</color>
-
+    <color name="RecordRed">#E50110</color>
 
 </resources>
