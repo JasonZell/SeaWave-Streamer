@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import cs499app.cs499mobileapp.model.LibraryRecord;
+import cs499app.cs499mobileapp.service.MusicService;
 import cs499app.cs499mobileapp.view.ContainerFragment;
 import cs499app.cs499mobileapp.view.PlayerFragment;
 import cs499app.cs499mobileapp.view.StationListFragment;
@@ -57,9 +58,9 @@ public class MainActivity extends AppCompatActivity
 
 
         //Start Music Service
-//        Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
-//        startServiceIntent.setAction("MUSIC_ACTION_CREATE");
-//        startService(startServiceIntent);
+        Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
+        startServiceIntent.setAction("MUSIC_ACTION_CREATE");
+        startService(startServiceIntent);
 //
 
 //        if (findViewById(R.id.fragment_container) != null) {
@@ -365,8 +366,18 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void onPlayStationButtonPressed(long playListViewID, long stationViewID) {
-        Log.i("StationClicked","Playlistviewid: "+playListViewID+" stationviewID"+stationViewID);
+    public void onPlayStationButtonPressed(long parentPlaylistID, int stationViewID) {
+        Log.i("StationClicked","Playlistviewid: "+parentPlaylistID+" stationviewID"+stationViewID);
+
+
+        String url = libRecord.getStationListRecordsMap()
+                .get(parentPlaylistID)
+                .get(stationViewID)
+                .getStationURL();
+        Intent intent = new Intent(getString(R.string.MUSIC_ACTION_PLAY_URL));
+        intent.putExtra(getString(R.string.MUSIC_URL_TO_PLAY),url);
+        sendBroadcast(intent,getString(R.string.BROADCAST_PRIVATE));
+
     }
 
     @Override

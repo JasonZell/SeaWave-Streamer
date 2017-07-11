@@ -14,8 +14,10 @@ import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
@@ -36,6 +38,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
     MediaPlayer myPlayer = null;
     myPlayerState playerState;
+    String currentURL;
 
     private BroadcastReceiver musicToggleReceiver = new BroadcastReceiver() {
         @Override
@@ -112,6 +115,43 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         }
     };
 
+    private BroadcastReceiver musicPlayUrlReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e("INSIDE PLAYURL RECEIVER","INSIDE PLAY URL REVEICER");
+            if(intent.getAction().equals(getString(R.string.MUSIC_ACTION_PLAY_URL)))
+            {
+                currentURL = intent.getStringExtra(getString(R.string.MUSIC_URL_TO_PLAY));
+                Log.i("currentURL to PLAY:",currentURL);
+                Log.e("MUSIC RECEIVER IN MUSIC", "MUSIC PLAYING URL");
+                myPlayer.reset();
+                try {
+                    myPlayer.setDataSource(getEncodedURL(currentURL));
+                    myPlayer.prepare();
+                } catch (IOException ex)
+                {
+                    Toast.makeText(context, "MUSIC PREPARATION FAILED", Toast.LENGTH_SHORT).show();
+                    Log.e("MUSIC","PREPARATION FAILED");
+                    ex.printStackTrace();
+                } catch (Exception e) {
+                    Toast.makeText(context, "MUSIC EXCECPTION IN PLAY URL", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+                if(playerState == myPlayerState.Paused) {
+
+                    myPlayer.start();
+                    playerState = myPlayerState.Playing;
+                }
+                else if(playerState == myPlayerState.Stopped)
+                {
+                    myPlayer.start();
+                    playerState = myPlayerState.Playing;
+                }
+
+            }
+        }
+    };
+
     //Method: onStartCommand
     //Purpose: method is called when the service is started
     //setup all the receivers that the service is associated with
@@ -142,9 +182,9 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
                                 .setUsage(AudioAttributes.USAGE_MEDIA)
                                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                                 .build());
-                        myPlayer.setDataSource(getEncodedURL(url));
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                       // myPlayer.setDataSource(getEncodedURL(url));
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -155,15 +195,16 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
                     // myPlayer.prepareAsync();
 
-                    try {
-                        myPlayer.prepare(); // see onPrepared()
+//                    try {
+//                        myPlayer.prepare(); // see onPrepared()
+//
+//                    } catch (IOException e) {
+//                        Toast.makeText(this, "MUSIC PREPARATION FAILED!!!", Toast.LENGTH_SHORT).show();
+//                        Log.e("MUSIC","PREPARATION FAILED");
+//                        e.printStackTrace();
+//                    }
 
-                    } catch (IOException e) {
-                        Log.e("MUSIC","PREPARATION FAILED");
-                        e.printStackTrace();
-                    }
-
-                    Log.e("MUSIC","created and prepared player");
+                   // Log.e("MUSIC","created and prepared player");
 
 //                    MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
 //                    try {
