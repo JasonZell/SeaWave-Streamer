@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.LinearLayoutCompat
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:CircularSeekBar="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="cs499app.cs499mobileapp.view.PlayerFragment">
 
@@ -12,7 +12,7 @@
         android:id="@+id/seekbar_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="90"
+        android:layout_weight="80"
         android:background="@color/gray">
 
 
@@ -20,15 +20,20 @@
             android:id="@+id/imageview_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
-            <ImageView
-                android:id="@+id/seekbar_image"
-                android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="4dp">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/record_floatingButton"
+                android:src="@drawable/record_icon"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:scaleType="centerCrop"
-                />
+                android:hapticFeedbackEnabled="true"
+                android:scaleType="center"
+                app:pressedTranslationZ="2dp"/>
+
         </android.support.v7.widget.LinearLayoutCompat>
 
         <cs499app.cs499mobileapp.helper.CircularSeekBar
@@ -86,14 +91,44 @@
 
 
     <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/controller_titles_layouts"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10">
+        android:layout_weight="20"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="50"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/controller_station_name"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="50"
+                android:text="BEST STATION"
+                android:textStyle="bold"
+                android:gravity="center_horizontal|fill_vertical"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/controller_playlist_name"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="50"
+                android:text="BEST PLAYLIST"
+                android:gravity="center_vertical|center_horizontal"/>
+
+
+        </LinearLayout>
+
 
         <android.support.v7.widget.LinearLayoutCompat
+            android:id="@+id/controller_control_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="50">
 
             <android.support.v7.widget.AppCompatImageButton
                 android:id="@+id/controller_record_button"
@@ -103,37 +138,13 @@
                 android:layout_weight="15"
                 android:scaleType="fitCenter"/>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="55"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/controller_playlist_name"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="50"
-                android:text="BEST PLAYLIST"
-                    android:gravity="center_vertical"/>
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/controller_station_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="50"
-                    android:text="BEST STATION"
-                    android:gravity="center_vertical"/>
-
-            </LinearLayout>
-
-
             <android.support.v7.widget.LinearLayoutCompat
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="30">
 
                 <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/controller_skipprev_button"
                     android:src="@drawable/skip_prev_icon"
                     android:scaleType="fitCenter"
                     android:layout_width="0dp"
@@ -144,7 +155,7 @@
                     android:src="@drawable/play_arrow"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="50"/>
+                    android:layout_weight="50" />
                 <android.support.v7.widget.AppCompatImageButton
                     android:id="@+id/controller_skipnext_button"
                     android:src="@drawable/skip_next"

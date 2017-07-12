@@ -32,7 +32,8 @@ import cs499app.cs499mobileapp.view.StationListFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        StationListFragment.StationListCallbackListener{
+        StationListFragment.StationListCallbackListener,
+        PlayerFragment.MediaControllerCallbackListener{
 
     public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     private DrawerLayout navigationDrawerLayout;
@@ -201,7 +202,7 @@ public class MainActivity extends AppCompatActivity
     {
         super.onPause();
         Log.e("MENU ACTIVITY","ACTIVITY PAUSED");
-        sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PAUSE)), getString(R.string.BROADCAST_PRIVATE));
+        //sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PAUSE)), getString(R.string.BROADCAST_PRIVATE));
 
 //           Log.e("MENU ACTIVITY", "TRANSITION: " + isTransition);
 //        if(!isTransition) {
@@ -405,6 +406,7 @@ public class MainActivity extends AppCompatActivity
                 libRecord.getPlaylistRecords().get(parentPlaylistViewID).getPlaylistName());
         playerTabFragmentRef.setCurrentStationTitle(record.getStationTitle());
         playerTabFragmentRef.updateDisplayTitles();
+        playerTabFragmentRef.setStateToPlay();
 
     }
 
@@ -430,5 +432,31 @@ public class MainActivity extends AppCompatActivity
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+
+    @Override
+    public void onPlayButtonPressed() {
+        Toast.makeText(this, "PlayButton event Catch in Activity", Toast.LENGTH_SHORT).show();
+        sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PLAY)), getString(R.string.BROADCAST_PRIVATE));
+    }
+
+    @Override
+    public void onPauseButtonPressed() {
+        Toast.makeText(this, "PauseButton event Catch in Activity", Toast.LENGTH_SHORT).show();
+        sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PAUSE)), getString(R.string.BROADCAST_PRIVATE));
+
+    }
+
+    @Override
+    public void onSkipForwardButtonPressed() {
+        Toast.makeText(this, "Skip Forward Button event Catch in Activity", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onSkipPrevButtonPressed() {
+        Toast.makeText(this, "Skip Prev Button event Catch in Activity", Toast.LENGTH_SHORT).show();
+
     }
 }

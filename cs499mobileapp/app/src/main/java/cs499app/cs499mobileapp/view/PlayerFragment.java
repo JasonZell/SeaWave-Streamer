@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -45,6 +46,8 @@ import cs499app.cs499mobileapp.model.LibraryRecord;
 
 public class PlayerFragment extends Fragment {
 
+    enum playOrPause {PLAY_STATE, PAUSE_STATE};
+
     private LibraryRecord libRecord;
     private String currentStationTitle;
     private String currentPlaylistTitle;
@@ -53,20 +56,42 @@ public class PlayerFragment extends Fragment {
     private TextView stationTitleView;
     private TextView playlistTitleView;
 
+    MediaControllerCallbackListener controllerCallbackListener;
+    private View rootView;
+    private ImageButton playPauseButton;
+    private ImageButton pauseButton;
+    private ImageButton skipForwardButton;
+    private ImageButton skipPrevButton;
+    private playOrPause playOrPauseState;
 
-    public PlayerFragment() {}
+
+
+    public PlayerFragment() {
+        playOrPauseState = playOrPause.PAUSE_STATE;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i("PlayFragmentOnCreate","OnCreatecalled");
-        View root = inflater.inflate(R.layout.player_fragment, container, false);
-        playlistTitleView = root.findViewById(R.id.controller_playlist_name);
-        stationTitleView = root.findViewById(R.id.controller_station_name);
+        rootView = inflater.inflate(R.layout.player_fragment, container, false);
+        playlistTitleView = rootView.findViewById(R.id.controller_playlist_name);
+        stationTitleView = rootView.findViewById(R.id.controller_station_name);
+
+        //setup callback
+        try {
+            controllerCallbackListener = (PlayerFragment.MediaControllerCallbackListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement MediaControllerCallbackListener Methods");
+        }
+        setupMediaControlButtons();
+
+
 
         final int max = 30;
          int progress = 20;
-        final CircularSeekBar seekBar = (CircularSeekBar) root.findViewById(R.id.circular_seek_bar);
+        final CircularSeekBar seekBar = (CircularSeekBar) rootView.findViewById(R.id.circular_seek_bar);
         seekBar.setIsTouchEnabled(false);
         seekBar.setMax(max);
         seekBar.setProgress(progress);
@@ -103,22 +128,22 @@ public class PlayerFragment extends Fragment {
 
             }
         });
+//
+//        //fitting image inside circular seekbar
+//
+//        Bitmap src  = BitmapFactory.decodeResource(rootView.getResources(), R.drawable.radio_image);
+//        RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(seekBar.getResources(), src);
+//        dr.setCircular(true);
+//        ImageView imageView = rootView.findViewById(R.id.seekbar_image);
+//        imageView.setMaxHeight(seekBar.getLayoutParams().width - (int)convertDpToPixel(5,rootView.getContext()));
+//        imageView.setMaxWidth(seekBar.getLayoutParams().width - (int)convertDpToPixel(5,rootView.getContext()));
+//
+//       // imageView.requestLayout();
+//       // imageView.setLayoutParams(params);
+//        Log.e("offset","offset"+(int)convertPxToDp(50));
+//        imageView.setImageDrawable(dr);
 
-        //fitting image inside circular seekbar
-
-        Bitmap src  = BitmapFactory.decodeResource(root.getResources(), R.drawable.radio_image);
-        RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(seekBar.getResources(), src);
-        dr.setCircular(true);
-        ImageView imageView = root.findViewById(R.id.seekbar_image);
-        imageView.setMaxHeight(seekBar.getLayoutParams().width - (int)convertDpToPixel(5,root.getContext()));
-        imageView.setMaxWidth(seekBar.getLayoutParams().width - (int)convertDpToPixel(5,root.getContext()));
-
-       // imageView.requestLayout();
-       // imageView.setLayoutParams(params);
-        Log.e("offset","offset"+(int)convertPxToDp(50));
-        imageView.setImageDrawable(dr);
-
-        return root;
+        return rootView;
     }
 
     public static float convertDpToPixel(float dp, Context context){
@@ -169,5 +194,63 @@ public class PlayerFragment extends Fragment {
         playlistTitleView.setText(currentPlaylistTitle);
         stationTitleView.setText(currentStationTitle);
 
+    }
+
+    public interface MediaControllerCallbackListener {
+        public void onPlayButtonPressed();
+        public void onPauseButtonPressed();
+        public void onSkipForwardButtonPressed();
+        public void onSkipPrevButtonPressed();
+    }
+
+    public void setupMediaControlButtons()
+    {
+        playPauseButton = rootView.findViewById(R.id.controller_playpause_button);
+        skipForwardButton = rootView.findViewById(R.id.controller_skipnext_button);
+        skipPrevButton = rootView.findViewById(R.id.controller_skipprev_button);
+
+        playPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(playOrPauseState == playOrPause.PAUSE_STATE) {
+                    controllerCallbackListener.onPlayButtonPressed();
+                    playPauseButton.setImageResource(R.drawable.pause_icon);
+                    playOrPauseState = playOrPause.PLAY_STATE;
+                }
+                else
+                {
+                    controllerCallbackListener.onPauseButtonPressed();
+                    playPauseButton.setImageResource(R.drawable.play_arrow);
+                    //view.setBackgroundResource(R.drawable.pause_icon);
+                    playOrPauseState = playOrPause.PAUSE_STATE;
+
+                }
+
+            }
+        });
+
+        skipForwardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                controllerCallbackListener.onSkipForwardButtonPressed();
+
+            }
+        });
+
+        skipPrevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                controllerCallbackListener.onSkipPrevButtonPressed();
+
+            }
+        });
+    }
+
+    public void setStateToPlay()
+    {
+        controllerCallbackListener.onPlayButtonPressed();
+        playPauseButton.setImageResource(R.drawable.pause_icon);
+        playOrPauseState = playOrPause.PLAY_STATE;
     }
 }

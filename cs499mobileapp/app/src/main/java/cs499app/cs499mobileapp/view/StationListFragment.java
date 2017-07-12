@@ -52,7 +52,7 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
             callbackListener = (StationListCallbackListener) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
-                    + " must implement OnHeadlineSelectedListener");
+                    + " must implement StationListCallbackListener Methods");
         }
 
 
