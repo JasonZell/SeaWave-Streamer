@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Timer;
@@ -44,7 +45,13 @@ import cs499app.cs499mobileapp.model.LibraryRecord;
 
 public class PlayerFragment extends Fragment {
 
-    LibraryRecord libRecord;
+    private LibraryRecord libRecord;
+    private String currentStationTitle;
+    private String currentPlaylistTitle;
+    private String currentStationURL;
+
+    private TextView stationTitleView;
+    private TextView playlistTitleView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,7 +59,8 @@ public class PlayerFragment extends Fragment {
 
         Log.i("PlayFragmentOnCreate","OnCreatecalled");
         View root = inflater.inflate(R.layout.player_fragment, container, false);
-
+        playlistTitleView = root.findViewById(R.id.controller_playlist_name);
+        stationTitleView = root.findViewById(R.id.controller_station_name);
 
         final int max = 30;
          int progress = 20;
@@ -124,6 +132,7 @@ public class PlayerFragment extends Fragment {
     }
 
     public PlayerFragment() {
+
     }
 
     public LibraryRecord getLibRecord() {
@@ -132,5 +141,36 @@ public class PlayerFragment extends Fragment {
 
     public void setLibRecord(LibraryRecord libRecord) {
         this.libRecord = libRecord;
+    }
+
+    public String getCurrentStationTitle() {
+        return currentStationTitle;
+    }
+
+    public void setCurrentStationTitle(String currentStationTitle) {
+        this.currentStationTitle = currentStationTitle;
+    }
+
+    public String getCurrentPlaylistTitle() {
+        return currentPlaylistTitle;
+    }
+
+    public void setCurrentPlaylistTItle(String currentPlaylistTitle) {
+        this.currentPlaylistTitle = currentPlaylistTitle;
+    }
+
+    public String getCurrentStationURL() {
+        return currentStationURL;
+    }
+
+    public void setCurrentStationURL(String currentStationURL) {
+        this.currentStationURL = currentStationURL;
+    }
+
+    public void updateDisplayTitles()
+    {
+        playlistTitleView.setText(currentPlaylistTitle);
+        stationTitleView.setText(currentStationTitle);
+
     }
 }

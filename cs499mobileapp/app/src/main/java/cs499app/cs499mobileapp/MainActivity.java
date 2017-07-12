@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout navigationDrawerLayout;
     private ActionBarDrawerToggle navigationDrawerToggle;
     private int currentFocusedTab;
+    private PlayerFragment playerTabFragmentRef;
+    private ContainerFragment containerTabFragmentRef;
 
 
     LibraryRecord libRecord;
@@ -111,6 +113,11 @@ public class MainActivity extends AppCompatActivity
             }
         });
         viewPager.setAdapter(adapter);
+
+        adapter.startUpdate(viewPager);
+        playerTabFragmentRef = (PlayerFragment) adapter.instantiateItem(viewPager,0);
+        containerTabFragmentRef = (ContainerFragment) adapter.instantiateItem(viewPager,1);
+        adapter.finishUpdate(viewPager);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager); //layout will use PagerAdapter's page titles
@@ -374,7 +381,7 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void onPlayStationButtonPressed(long parentPlaylistID, int stationViewID) {
+    public void onPlayStationButtonPressed(long parentPlaylistID, int parentPlaylistViewID,int stationViewID) {
         Log.i("StationClicked","Playlistviewid: "+parentPlaylistID+" stationviewID: "+stationViewID);
 
 
@@ -382,14 +389,20 @@ public class MainActivity extends AppCompatActivity
 //        List<StationRecord> srl = srmap.get(parentPlaylistID);
 //        Log.i("SRMAP SIZE:"," "+srmap.size());
 //        String url = srl.get(stationViewID).getStationURL();
-        String url = libRecord.getStationListRecordsMap()
+        StationRecord record = libRecord.getStationListRecordsMap()
                 .get(parentPlaylistID)
-                .get(stationViewID)
-                .getStationURL();
-        Log.i("callback","received URL:" +url);
+                .get(stationViewID);
+
+        Log.i("callback","received URL:" +record.getStationURL());
+
         Intent intent = new Intent(getString(R.string.MUSIC_ACTION_PLAY_URL));
-        intent.putExtra(getString(R.string.MUSIC_URL_TO_PLAY),url);
+        intent.putExtra(getString(R.string.MUSIC_URL_TO_PLAY),record.getStationURL());
         sendBroadcast(intent,getString(R.string.BROADCAST_PRIVATE));
+
+        //PlayerFragment pF = (PlayerFragment) getFragmentManager().findFragmentById(R.id.play)
+        playerTabFragmentRef.setCurrentPlaylistTItle(libRecord.getPlaylistRecords().get(parentPlaylistViewID).getPlaylistName());
+        playerTabFragmentRef.setCurrentStationTitle(record.getStationTitle());
+        playerTabFragmentRef.updateDisplayTitles();
 
     }
 

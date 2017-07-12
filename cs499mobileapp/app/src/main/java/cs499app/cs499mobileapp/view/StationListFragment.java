@@ -122,7 +122,7 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
         stationlistListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                callbackListener.onPlayStationButtonPressed(parentPlaylistID,i);
+                callbackListener.onPlayStationButtonPressed(parentPlaylistID,parentPlaylistViewID,i);
             }
         });
 
@@ -160,7 +160,7 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
     }
     public interface StationListCallbackListener {
         public void onPlayStationButtonPressed(
-                long parentPlayListID, int stationViewID);
+                long parentPlayListID, int parentPlaylistViewID,int stationViewID);
         public void onPlayAllStationButtonPressed(
                 long parentPlayListViewID);
     }

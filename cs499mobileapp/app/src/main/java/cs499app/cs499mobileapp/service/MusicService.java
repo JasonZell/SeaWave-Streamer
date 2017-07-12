@@ -128,7 +128,8 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
                 myPlayer.reset();
                 try {
                     myPlayer.setDataSource(getEncodedURL(currentURL));
-                    myPlayer.prepare();
+                    //myPlayer.prepare();
+                    myPlayer.prepareAsync();
                 } catch (IOException ex)
                 {
                     Toast.makeText(context, "MUSIC PREPARATION FAILED", Toast.LENGTH_SHORT).show();
