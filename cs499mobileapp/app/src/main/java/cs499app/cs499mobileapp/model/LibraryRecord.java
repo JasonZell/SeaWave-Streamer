@@ -3,23 +3,39 @@ package cs499app.cs499mobileapp.model;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import cs499app.cs499mobileapp.MainActivity;
+import cs499app.cs499mobileapp.Manifest;
+import cs499app.cs499mobileapp.R;
 import cs499app.cs499mobileapp.helper.DBHelper;
+import cs499app.cs499mobileapp.helper.FileUtils;
 
 public class LibraryRecord implements LibraryRecordInterface{
 
     private static final String LOGTAG = "DATABASE_LOG";
+    private  File DB_FILEPATH;
     Context context;
-    SQLiteOpenHelper dbhelper;
+    DBHelper dbhelper;
     SQLiteDatabase database;
 
     List<PlaylistRecord> playlistRecords;
@@ -43,6 +59,7 @@ public class LibraryRecord implements LibraryRecordInterface{
         dbhelper = new DBHelper(context);
         stationListRecordsMap = new HashMap<>();
         playlistRecords = new ArrayList<>();
+        DB_FILEPATH = context.getDatabasePath(DBHelper.getDbName());
     }
 
     public void openReadableDatabase()
@@ -276,4 +293,72 @@ public class LibraryRecord implements LibraryRecordInterface{
         this.stationListRecordsMap = stationListRecordsMap;
     }
 
+
+    //not tested yet
+    public boolean importDatabase(String dbPath) throws IOException {
+
+        // Close the SQLiteOpenHelper so it will commit the created empty
+        // database to internal storage.
+        dbhelper.close();
+        File newDb = new File(dbPath);
+        File oldDb = DB_FILEPATH;
+        if (newDb.exists()) {
+            FileUtils.copyFile(new FileInputStream(newDb), new FileOutputStream(oldDb));
+            // Access the copied database so SQLiteHelper will cache it and mark
+            // it as created.
+            dbhelper.getWritableDatabase().close();
+            return true;
+        }
+        return false;
+    }
+
+    public static void exportDatabase(Context context, AppCompatActivity activity)
+    {
+        String DATABASE_NAME = context.getString(R.string.DATABASE_NAME);
+        String databasePath = context.getDatabasePath(DATABASE_NAME).getPath();
+        String inFileName = databasePath;
+
+//
+//        int permissionCheck = ContextCompat.checkSelfPermission(context,
+//                "android.permission.WRITE_EXTERNAL_STORAGE");
+
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MainActivity.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+
+
+        }
+        else {
+
+
+            try {
+                File dbFile = new File(inFileName);
+                FileInputStream fis = new FileInputStream(dbFile);
+
+                String outFileName = Environment.getExternalStorageDirectory()
+                        + "/" + context.getString(R.string.app_name_no_space) + ".db";
+
+                OutputStream output = new FileOutputStream(outFileName);
+
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = fis.read(buffer)) > 0) {
+                    output.write(buffer, 0, length);
+                }
+
+                //Close the streams
+                output.flush();
+                output.close();
+                fis.close();
+                Toast.makeText(context, "Database exported Successfully", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(context, "Error! Database export failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }

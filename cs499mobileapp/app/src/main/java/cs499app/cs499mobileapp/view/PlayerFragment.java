@@ -53,10 +53,12 @@ public class PlayerFragment extends Fragment {
     private TextView stationTitleView;
     private TextView playlistTitleView;
 
+
+    public PlayerFragment() {}
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         Log.i("PlayFragmentOnCreate","OnCreatecalled");
         View root = inflater.inflate(R.layout.player_fragment, container, false);
         playlistTitleView = root.findViewById(R.id.controller_playlist_name);
@@ -91,7 +93,6 @@ public class PlayerFragment extends Fragment {
 //                AppCompatTextView text = (AppCompatTextView) circularSeekBar.findViewById(R.id.controller_station_name);
 //                text.setText("Progress:" +progress);
             }
-
             @Override
             public void onStopTrackingTouch(CircularSeekBar seekBar) {
 
@@ -112,7 +113,6 @@ public class PlayerFragment extends Fragment {
         imageView.setMaxHeight(seekBar.getLayoutParams().width - (int)convertDpToPixel(5,root.getContext()));
         imageView.setMaxWidth(seekBar.getLayoutParams().width - (int)convertDpToPixel(5,root.getContext()));
 
-
        // imageView.requestLayout();
        // imageView.setLayoutParams(params);
         Log.e("offset","offset"+(int)convertPxToDp(50));
@@ -131,9 +131,6 @@ public class PlayerFragment extends Fragment {
         return px / Resources.getSystem().getDisplayMetrics().density;
     }
 
-    public PlayerFragment() {
-
-    }
 
     public LibraryRecord getLibRecord() {
         return libRecord;

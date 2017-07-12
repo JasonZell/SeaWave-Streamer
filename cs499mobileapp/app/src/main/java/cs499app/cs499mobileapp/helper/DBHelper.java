@@ -66,4 +66,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.setForeignKeyConstraintsEnabled(true);
         super.onConfigure(db);
     }
+
+    public static String getDbName() {
+        return DATABASE_NAME;
+    }
 }

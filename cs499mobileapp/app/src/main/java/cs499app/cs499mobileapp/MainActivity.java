@@ -1,6 +1,7 @@
 package cs499app.cs499mobileapp;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         StationListFragment.StationListCallbackListener{
 
+    public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     private DrawerLayout navigationDrawerLayout;
     private ActionBarDrawerToggle navigationDrawerToggle;
     private int currentFocusedTab;
@@ -182,7 +184,12 @@ public class MainActivity extends AppCompatActivity
         }else if(id == R.id.action_export_list)
         {
             return true;
+        }
+        else if(id == R.id.action_export_database)
+        {
+            libRecord.exportDatabase(getApplicationContext(),this);
 
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -384,11 +391,6 @@ public class MainActivity extends AppCompatActivity
     public void onPlayStationButtonPressed(long parentPlaylistID, int parentPlaylistViewID,int stationViewID) {
         Log.i("StationClicked","Playlistviewid: "+parentPlaylistID+" stationviewID: "+stationViewID);
 
-
-//        HashMap<Long,List<StationRecord>> srmap = libRecord.getStationListRecordsMap();
-//        List<StationRecord> srl = srmap.get(parentPlaylistID);
-//        Log.i("SRMAP SIZE:"," "+srmap.size());
-//        String url = srl.get(stationViewID).getStationURL();
         StationRecord record = libRecord.getStationListRecordsMap()
                 .get(parentPlaylistID)
                 .get(stationViewID);
@@ -399,8 +401,8 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(getString(R.string.MUSIC_URL_TO_PLAY),record.getStationURL());
         sendBroadcast(intent,getString(R.string.BROADCAST_PRIVATE));
 
-        //PlayerFragment pF = (PlayerFragment) getFragmentManager().findFragmentById(R.id.play)
-        playerTabFragmentRef.setCurrentPlaylistTItle(libRecord.getPlaylistRecords().get(parentPlaylistViewID).getPlaylistName());
+        playerTabFragmentRef.setCurrentPlaylistTItle(
+                libRecord.getPlaylistRecords().get(parentPlaylistViewID).getPlaylistName());
         playerTabFragmentRef.setCurrentStationTitle(record.getStationTitle());
         playerTabFragmentRef.updateDisplayTitles();
 
@@ -409,5 +411,24 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onPlayAllStationButtonPressed(long playListViewID) {
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    libRecord.exportDatabase(getApplicationContext(),this);
+
+                } else {
+                    Toast.makeText(this, "Write External Permission Required To Export Database!", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 }

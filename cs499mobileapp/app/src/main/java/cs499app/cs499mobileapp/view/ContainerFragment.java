@@ -45,14 +45,13 @@ public class ContainerFragment extends android.support.v4.app.Fragment{
         LibraryFragment libFragment = new LibraryFragment();
         libFragment.setLibRecord(libRecord);
 
-
 //        Bundle args = new Bundle();
 //        args.putInt("StationList", i);
 //       libraryFragment.setArguments(args);
 //
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fragment_container, libFragment,getString(R.string.LIB_FRAG_TAG));
+        transaction.add(R.id.fragment_container, libFragment,getString(R.string.LibraryFragmentTag));
         transaction.addToBackStack(libFragment.getClass().getName());
         transaction.commit();
 

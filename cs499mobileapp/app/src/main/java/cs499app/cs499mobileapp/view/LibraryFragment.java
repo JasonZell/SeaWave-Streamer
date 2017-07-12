@@ -89,10 +89,10 @@ public class LibraryFragment extends Fragment{
 
     }
 
-    public void notifyFragmentOnDataChange()
-    {
-        playlistAdapter.notifyDataSetChanged();
-    }
+//    public void notifyFragmentOnDataChange()
+//    {
+//        playlistAdapter.notifyDataSetChanged();
+//    }
 
     private void initViews()
     {
@@ -116,7 +116,7 @@ public class LibraryFragment extends Fragment{
 //                        libRecord.getPlaylistRecords().get(i).get_ID());
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.fragment_container, stationListFragment);
+                transaction.replace(R.id.fragment_container, stationListFragment,getString(R.string.StationListFragmentTag));
                 transaction.addToBackStack(stationListFragment.getClass().getName());
                 transaction.commit();
             }
@@ -165,14 +165,14 @@ public class LibraryFragment extends Fragment{
 
     }
 
-    public void reloadData()
-    {
-        libRecord.importlPlaylistRecordList();
-    }
-
-    public int getlastViewedFirstVisibleItemPos() {
-        return lastViewedFirstVisibleItemPos;
-    }
+//    public void reloadData()
+//    {
+//        libRecord.importlPlaylistRecordList();
+//    }
+//
+//    public int getlastViewedFirstVisibleItemPos() {
+//        return lastViewedFirstVisibleItemPos;
+//    }
 
     public void setlastViewedFirstVisibleItemPos(int lastViewedFirstVisibleItemPos) {
         this.lastViewedFirstVisibleItemPos = lastViewedFirstVisibleItemPos;
