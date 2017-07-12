@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cs499app.cs499mobileapp.R;
+import cs499app.cs499mobileapp.model.LibraryRecord;
 
 /**
  * Created by jason on 7/3/2017.
@@ -26,6 +27,7 @@ public class ContainerFragment extends android.support.v4.app.Fragment{
     FragmentManager fm;
     ViewPager viewPager;
     TabLayout tabLayout;
+    LibraryRecord libRecord;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -39,7 +41,10 @@ public class ContainerFragment extends android.support.v4.app.Fragment{
 //        tabLayout.getTabAt(0).setIcon(R.drawable.player_icon_selector);
 //        tabLayout.getTabAt(1).setIcon(R.drawable.library_icon_selector);
 
-        android.support.v4.app.Fragment libraryFragment = new LibraryFragment();
+
+        LibraryFragment libFragment = new LibraryFragment();
+        libFragment.setLibRecord(libRecord);
+
 
 //        Bundle args = new Bundle();
 //        args.putInt("StationList", i);
@@ -47,9 +52,10 @@ public class ContainerFragment extends android.support.v4.app.Fragment{
 //
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fragment_container, libraryFragment,getString(R.string.LIB_FRAG_TAG));
-        transaction.addToBackStack(libraryFragment.getClass().getName());
+        transaction.add(R.id.fragment_container, libFragment,getString(R.string.LIB_FRAG_TAG));
+        transaction.addToBackStack(libFragment.getClass().getName());
         transaction.commit();
+
         return view;
     }
 
@@ -59,4 +65,11 @@ public class ContainerFragment extends android.support.v4.app.Fragment{
         this.fm = fm;
     }
 
+    public LibraryRecord getLibRecord() {
+        return libRecord;
+    }
+
+    public void setLibRecord(LibraryRecord libRecord) {
+        this.libRecord = libRecord;
+    }
 }

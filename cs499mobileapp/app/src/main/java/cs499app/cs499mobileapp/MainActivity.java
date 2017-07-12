@@ -19,7 +19,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.List;
+
 import cs499app.cs499mobileapp.model.LibraryRecord;
+import cs499app.cs499mobileapp.model.StationRecord;
 import cs499app.cs499mobileapp.service.MusicService;
 import cs499app.cs499mobileapp.view.ContainerFragment;
 import cs499app.cs499mobileapp.view.PlayerFragment;
@@ -41,6 +45,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //initialize library record
+        setLibRecord(new LibraryRecord(this.getApplicationContext()));
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.customized_toolbar);
         setSupportActionBar(toolbar);
        // this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -55,12 +62,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-
-
-        //Start Music Service
-        Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
-        startServiceIntent.setAction("MUSIC_ACTION_CREATE");
-        startService(startServiceIntent);
 //
 
 //        if (findViewById(R.id.fragment_container) != null) {
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity
         tabLayout.getTabAt(0).setIcon(R.drawable.player_icon_selector);
         tabLayout.getTabAt(1).setIcon(R.drawable.library_icon_selector);
 
-        setLibRecord(new LibraryRecord(this.getApplicationContext()));
+
 //         AsyncTask<Void, Void, Void> loadDataTask = new AsyncTask<Void, Void, Void>() {
 //
 //
@@ -139,7 +140,10 @@ public class MainActivity extends AppCompatActivity
 //         };
 //         loadDataTask.execute();
 
-
+        //Start Music Service
+        Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
+        startServiceIntent.setAction("MUSIC_ACTION_CREATE");
+        startService(startServiceIntent);
 
     }
 
@@ -335,10 +339,14 @@ public class MainActivity extends AppCompatActivity
 
             switch (i){
                 case 0:
-                    return new PlayerFragment();
-
+                    PlayerFragment pf = new PlayerFragment();
+                    pf.setLibRecord(libRecord);
+                    return pf;
                 case 1:
-                    return new ContainerFragment();
+                    ContainerFragment cf = new ContainerFragment();
+                    cf.setLibRecord(libRecord);
+                    return cf;
+
                 default:
                     break;
             }
@@ -367,13 +375,18 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onPlayStationButtonPressed(long parentPlaylistID, int stationViewID) {
-        Log.i("StationClicked","Playlistviewid: "+parentPlaylistID+" stationviewID"+stationViewID);
+        Log.i("StationClicked","Playlistviewid: "+parentPlaylistID+" stationviewID: "+stationViewID);
 
 
+//        HashMap<Long,List<StationRecord>> srmap = libRecord.getStationListRecordsMap();
+//        List<StationRecord> srl = srmap.get(parentPlaylistID);
+//        Log.i("SRMAP SIZE:"," "+srmap.size());
+//        String url = srl.get(stationViewID).getStationURL();
         String url = libRecord.getStationListRecordsMap()
                 .get(parentPlaylistID)
                 .get(stationViewID)
                 .getStationURL();
+        Log.i("callback","received URL:" +url);
         Intent intent = new Intent(getString(R.string.MUSIC_ACTION_PLAY_URL));
         intent.putExtra(getString(R.string.MUSIC_URL_TO_PLAY),url);
         sendBroadcast(intent,getString(R.string.BROADCAST_PRIVATE));

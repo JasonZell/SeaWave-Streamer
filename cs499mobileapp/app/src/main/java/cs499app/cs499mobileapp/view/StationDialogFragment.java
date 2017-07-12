@@ -88,9 +88,11 @@ public class StationDialogFragment extends AppCompatDialogFragment {
                                 StationTitleEditText.getText().toString(),
                                 StationUrlEditText.getText().toString());
                         List<StationRecord> srl = libRecord.getStationListRecordsMap().get(parentPlaylistID);
+
                         srl.add(libRecord.insertStationRecord(sr));
                         stationListAdapter.notifyDataSetChanged();
-                        Log.i("AddStation","station added");
+                        Log.i("AddStation","station added at location ");
+
 
                         //refreshLibraryRecordUpdateView();
                     }

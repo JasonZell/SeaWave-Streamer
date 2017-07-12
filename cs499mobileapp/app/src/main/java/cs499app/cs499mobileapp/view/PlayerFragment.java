@@ -36,12 +36,15 @@ import cs499app.cs499mobileapp.helper.CircularSeekBar.OnCircularSeekBarChangeLis
 import cs499app.cs499mobileapp.R;
 import cs499app.cs499mobileapp.helper.CircularSeekBar;
 import cs499app.cs499mobileapp.helper.RoundedBitmapDrawableUtility;
+import cs499app.cs499mobileapp.model.LibraryRecord;
 
 /**
  * Created by centa on 6/27/2017.
  */
 
 public class PlayerFragment extends Fragment {
+
+    LibraryRecord libRecord;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,7 +58,6 @@ public class PlayerFragment extends Fragment {
          int progress = 20;
         final CircularSeekBar seekBar = (CircularSeekBar) root.findViewById(R.id.circular_seek_bar);
         seekBar.setIsTouchEnabled(false);
-
         seekBar.setMax(max);
         seekBar.setProgress(progress);
 
@@ -124,4 +126,11 @@ public class PlayerFragment extends Fragment {
     public PlayerFragment() {
     }
 
+    public LibraryRecord getLibRecord() {
+        return libRecord;
+    }
+
+    public void setLibRecord(LibraryRecord libRecord) {
+        this.libRecord = libRecord;
+    }
 }

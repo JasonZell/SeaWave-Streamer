@@ -19,6 +19,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import cs499app.cs499mobileapp.R;
@@ -133,10 +134,15 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
                     Toast.makeText(context, "MUSIC PREPARATION FAILED", Toast.LENGTH_SHORT).show();
                     Log.e("MUSIC","PREPARATION FAILED");
                     ex.printStackTrace();
-                } catch (Exception e) {
+                }
+                catch(URISyntaxException uriexception)
+                {
+                    Toast.makeText(context, "Invalid URL!", Toast.LENGTH_SHORT).show();
+                }catch (Exception e) {
                     Toast.makeText(context, "MUSIC EXCECPTION IN PLAY URL", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
+
                 if(playerState == myPlayerState.Paused) {
 
                     myPlayer.start();
@@ -163,6 +169,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         registerReceiver(musicPlayReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_PLAY)),getString(R.string.BROADCAST_PRIVATE),null);
         registerReceiver(musicStopReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_STOP)),getString(R.string.BROADCAST_PRIVATE),null);
         registerReceiver(musicPauseReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_PAUSE)),getString(R.string.BROADCAST_PRIVATE),null);
+        registerReceiver(musicPlayUrlReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_PLAY_URL)),getString(R.string.BROADCAST_PRIVATE),null);
 
         Log.d("INSISDE MUSIC SERVICE","MUSIC SERVICE");
         if (intent.getAction().equals(getString(R.string.MUSIC_ACTION_CREATE))) {
@@ -314,5 +321,6 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         unregisterReceiver(musicPauseReceiver);
         unregisterReceiver(musicStopReceiver);
         unregisterReceiver(musicPlayReceiver);
+        unregisterReceiver(musicPlayUrlReceiver);
     }
 }

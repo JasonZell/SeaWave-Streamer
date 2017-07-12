@@ -29,9 +29,6 @@ import cs499app.cs499mobileapp.viewadapter.PlaylistAdapter;
 
 public class LibraryFragment extends Fragment{
 
-
-
-    private List<PlaylistRecord> playlistRecord;
     private PlaylistAdapter playlistAdapter;
     private ListView playlistListview;
     private LibraryRecord libRecord;
@@ -53,10 +50,16 @@ public class LibraryFragment extends Fragment{
         return root;
     }
 
-
-
     public LibraryFragment() {
         lastViewedFirstVisibleItemPos = -1;
+    }
+
+    public LibraryRecord getLibRecord() {
+        return libRecord;
+    }
+
+    public void setLibRecord(LibraryRecord libRecord) {
+        this.libRecord = libRecord;
     }
 
     private void loadPlaylistLibrary()
@@ -66,14 +69,11 @@ public class LibraryFragment extends Fragment{
             @Override
             protected Void doInBackground(Void... voids) {
                 if(libRecord == null) {
-                    Log.e("loadPlaylistLibrary","libRecord created");
+                    Log.e("loadPlaylistLibrary","libRecord is null");
                     libRecord = new LibraryRecord(getContext());
-
-                    libRecord.importlPlaylistRecordList();
-                    // playlistRecord = libRecord.getPlaylistRecords();
-                    Log.i("loadDataTask","loading done");
                 }
-
+                libRecord.importlPlaylistRecordList();
+                Log.i("loadDataTask","loading done");
                 return null;
             }
 
@@ -88,16 +88,6 @@ public class LibraryFragment extends Fragment{
         loadDataTask.execute();
 
     }
-
-    public void setLibraryRecord(LibraryRecord lr){
-        libRecord = lr;
-
-    }
-    public LibraryRecord getLibraryRecord()
-    {
-        return libRecord;
-    }
-
 
     public void notifyFragmentOnDataChange()
     {
@@ -171,6 +161,8 @@ public class LibraryFragment extends Fragment{
                 dialogFm.show(fm,"addplaylistFragment");
             }
         });
+
+
     }
 
     public void reloadData()
@@ -185,5 +177,6 @@ public class LibraryFragment extends Fragment{
     public void setlastViewedFirstVisibleItemPos(int lastViewedFirstVisibleItemPos) {
         this.lastViewedFirstVisibleItemPos = lastViewedFirstVisibleItemPos;
     }
+
 
 }
