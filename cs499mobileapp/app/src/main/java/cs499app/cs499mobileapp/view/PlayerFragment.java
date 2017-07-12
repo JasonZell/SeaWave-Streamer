@@ -59,7 +59,6 @@ public class PlayerFragment extends Fragment {
     MediaControllerCallbackListener controllerCallbackListener;
     private View rootView;
     private ImageButton playPauseButton;
-    private ImageButton pauseButton;
     private ImageButton skipForwardButton;
     private ImageButton skipPrevButton;
     private playOrPause playOrPauseState;

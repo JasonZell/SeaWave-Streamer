@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity
         //updateMusicIcon();
         Log.e("MENU ACTIVITY","ACTIVITY RESUMED");
 
-        sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PLAY)), getString(R.string.BROADCAST_PRIVATE));
+        //sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PLAY)), getString(R.string.BROADCAST_PRIVATE));
         //isTransition = false;
 
     }
