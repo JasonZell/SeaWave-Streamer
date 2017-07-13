@@ -1,6 +1,7 @@
 package cs499app.cs499mobileapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,14 +43,15 @@ public class MainActivity extends AppCompatActivity
     private int currentFocusedTab;
     private PlayerFragment playerTabFragmentRef;
     private ContainerFragment containerTabFragmentRef;
-
-
     LibraryRecord libRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //initialize share preferences
+        initSharePref();
 
         //initialize library record
         setLibRecord(new LibraryRecord(this.getApplicationContext()));
@@ -149,6 +152,8 @@ public class MainActivity extends AppCompatActivity
 //             }
 //         };
 //         loadDataTask.execute();
+
+        //initialize and retrieve settings from shared preferences.
 
         //Start Music Service
         Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
@@ -458,5 +463,24 @@ public class MainActivity extends AppCompatActivity
     public void onSkipPrevButtonPressed() {
         Toast.makeText(this, "Skip Prev Button event Catch in Activity", Toast.LENGTH_SHORT).show();
 
+    }
+
+    private void initSharePref()
+    {
+        String appPackageName = getApplicationInfo().packageName;
+        String prefFileName = getString(R.string.SETTING_PREFERENCES);
+        File f = new File(
+                "/data/data/"+appPackageName+"/shared_prefs/"+prefFileName+".xml");
+        if (f.exists()) {
+
+            Log.d("TAG", "SharedPreferences "+prefFileName+" : exist");
+        }
+        else
+        {
+            Log.d("TAG", "Setup default preferences");
+            SharedPreferences settings = getSharedPreferences(prefFileName, MODE_PRIVATE);
+            settings.edit().commit();
+
+        }
     }
 }

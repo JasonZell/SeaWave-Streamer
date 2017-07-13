@@ -127,6 +127,11 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
                 Log.e("MUSIC RECEIVER IN MUSIC", "MUSIC PLAYING URL");
                 myPlayer.reset();
                 try {
+                    if(currentURL =="")
+                    {
+                        Toast.makeText(context, "Cannot Play Empty URL", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     myPlayer.setDataSource(getEncodedURL(currentURL));
                     //myPlayer.prepare();
                     myPlayer.prepareAsync();

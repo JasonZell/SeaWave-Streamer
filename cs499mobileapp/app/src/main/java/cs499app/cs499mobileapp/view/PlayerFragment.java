@@ -2,6 +2,7 @@ package cs499app.cs499mobileapp.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -76,6 +77,8 @@ public class PlayerFragment extends Fragment {
         rootView = inflater.inflate(R.layout.player_fragment, container, false);
         playlistTitleView = rootView.findViewById(R.id.controller_playlist_name);
         stationTitleView = rootView.findViewById(R.id.controller_station_name);
+
+        restoreSettings();
 
         //setup callback
         try {
@@ -251,5 +254,37 @@ public class PlayerFragment extends Fragment {
         controllerCallbackListener.onPlayButtonPressed();
         playPauseButton.setImageResource(R.drawable.pause_icon);
         playOrPauseState = playOrPause.PLAY_STATE;
+    }
+
+    private void restoreSettings()
+    {
+
+        Log.d("Restore player"," settings in player fragment");
+        SharedPreferences settings = getContext().getSharedPreferences(
+                getString(R.string.SETTING_PREFERENCES), 0);
+
+        currentPlaylistTitle = settings.getString(
+                getString(R.string.SETTING_LAST_PLAYLIST_TITLE),"No Playlist");
+
+        currentStationTitle = settings.getString(
+                getString(R.string.SETTING_LAST_STATION_TITLE),"No Station");
+
+        currentStationURL = settings.getString(
+                getString(R.string.SETTING_LAST_STATION_URL),"");
+        updateDisplayTitles();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        SharedPreferences settings = getContext().getSharedPreferences(
+                getString(R.string.SETTING_PREFERENCES), 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(getString(R.string.SETTING_LAST_PLAYLIST_TITLE), currentPlaylistTitle);
+        editor.putString(getString(R.string.SETTING_LAST_STATION_TITLE), currentStationTitle);
+        editor.putString(getString(R.string.SETTING_LAST_STATION_URL), currentStationURL);
+        editor.commit();
+        Log.d("Destoryed player ","Fragment, saving settings");
+
     }
 }
