@@ -32,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -40,6 +41,8 @@ import cs499app.cs499mobileapp.R;
 import cs499app.cs499mobileapp.helper.CircularSeekBar;
 import cs499app.cs499mobileapp.helper.RoundedBitmapDrawableUtility;
 import cs499app.cs499mobileapp.model.LibraryRecord;
+import cs499app.cs499mobileapp.model.PlayQueue;
+import cs499app.cs499mobileapp.model.StationRecord;
 
 /**
  * Created by centa on 6/27/2017.
@@ -49,10 +52,13 @@ public class PlayerFragment extends Fragment {
 
     enum playOrPause {PLAY_STATE, PAUSE_STATE};
 
+    private PlayQueue playQueue;
+    private boolean isShuffle;
     private LibraryRecord libRecord;
     private String currentStationTitle;
     private String currentPlaylistTitle;
     private String currentStationURL;
+    private int currentPlaylistViewID;
 
     private TextView stationTitleView;
     private TextView playlistTitleView;
@@ -62,7 +68,9 @@ public class PlayerFragment extends Fragment {
     private ImageButton playPauseButton;
     private ImageButton skipForwardButton;
     private ImageButton skipPrevButton;
+    private ImageButton shuffleButton;
     private playOrPause playOrPauseState;
+
 
 
 
@@ -77,6 +85,7 @@ public class PlayerFragment extends Fragment {
         rootView = inflater.inflate(R.layout.player_fragment, container, false);
         playlistTitleView = rootView.findViewById(R.id.controller_playlist_name);
         stationTitleView = rootView.findViewById(R.id.controller_station_name);
+        playQueue = new PlayQueue();
 
         restoreSettings();
 
@@ -88,7 +97,6 @@ public class PlayerFragment extends Fragment {
                     + " must implement MediaControllerCallbackListener Methods");
         }
         setupMediaControlButtons();
-
 
 
         final int max = 30;
@@ -203,6 +211,7 @@ public class PlayerFragment extends Fragment {
         public void onPauseButtonPressed();
         public void onSkipForwardButtonPressed();
         public void onSkipPrevButtonPressed();
+        public void onShuffleButtonPressed(boolean shuffleState);
     }
 
     public void setupMediaControlButtons()
@@ -210,6 +219,7 @@ public class PlayerFragment extends Fragment {
         playPauseButton = rootView.findViewById(R.id.controller_playpause_button);
         skipForwardButton = rootView.findViewById(R.id.controller_skipnext_button);
         skipPrevButton = rootView.findViewById(R.id.controller_skipprev_button);
+        shuffleButton = rootView.findViewById(R.id.controller_shuffle_button);
 
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,6 +257,14 @@ public class PlayerFragment extends Fragment {
 
             }
         });
+
+        shuffleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //controllerCallbackListener.onShuffleButtonPressed();
+
+            }
+        });
     }
 
     public void setStateToPlay()
@@ -263,15 +281,20 @@ public class PlayerFragment extends Fragment {
         SharedPreferences settings = getContext().getSharedPreferences(
                 getString(R.string.SETTING_PREFERENCES), 0);
 
-        currentPlaylistTitle = settings.getString(
-                getString(R.string.SETTING_LAST_PLAYLIST_TITLE),"No Playlist");
+//        currentPlaylistTitle = settings.getString(
+//                getString(R.string.SETTING_LAST_PLAYLIST_TITLE),"No Playlist");
+//
+//        currentStationTitle = settings.getString(
+//                getString(R.string.SETTING_LAST_STATION_TITLE),"No Station");
+//
+//        currentStationURL = settings.getString(
+//                getString(R.string.SETTING_LAST_STATION_URL),"");
+        //updateDisplayTitles();
 
-        currentStationTitle = settings.getString(
-                getString(R.string.SETTING_LAST_STATION_TITLE),"No Station");
 
-        currentStationURL = settings.getString(
-                getString(R.string.SETTING_LAST_STATION_URL),"");
-        updateDisplayTitles();
+        isShuffle = settings.getBoolean(
+                getString(R.string.SETTING_IS_SHUFFLE),false);
+
     }
 
     @Override
@@ -280,11 +303,39 @@ public class PlayerFragment extends Fragment {
         SharedPreferences settings = getContext().getSharedPreferences(
                 getString(R.string.SETTING_PREFERENCES), 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString(getString(R.string.SETTING_LAST_PLAYLIST_TITLE), currentPlaylistTitle);
-        editor.putString(getString(R.string.SETTING_LAST_STATION_TITLE), currentStationTitle);
-        editor.putString(getString(R.string.SETTING_LAST_STATION_URL), currentStationURL);
+//        editor.putString(getString(R.string.SETTING_LAST_PLAYLIST_TITLE), currentPlaylistTitle);
+//        editor.putString(getString(R.string.SETTING_LAST_STATION_TITLE), currentStationTitle);
+//        editor.putString(getString(R.string.SETTING_LAST_STATION_URL), currentStationURL);
+        editor.putBoolean(getString(R.string.SETTING_IS_SHUFFLE),isShuffle);
         editor.commit();
         Log.d("Destoryed player ","Fragment, saving settings");
 
+    }
+
+    public PlayQueue getPlayQueue() {
+        return playQueue;
+    }
+
+    public boolean isShuffle() {
+        return isShuffle;
+    }
+
+    public void setShuffle(boolean shuffle) {
+        isShuffle = shuffle;
+        playQueue.setShuffle(shuffle);
+    }
+
+    public void notifyPlayQueue(List<StationRecord> record, long currentPlaylistID,
+                                int currentStationViewID, boolean newShuffleState)
+    {
+        playQueue.notifyPlayQueue(record,currentPlaylistID,currentStationViewID,newShuffleState);
+    }
+
+    public int getCurrentPlaylistViewID() {
+        return currentPlaylistViewID;
+    }
+
+    public void setCurrentPlaylistViewID(int currentPlaylistViewID) {
+        this.currentPlaylistViewID = currentPlaylistViewID;
     }
 }

@@ -1,7 +1,6 @@
 package cs499app.cs499mobileapp.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,53 +10,66 @@ import java.util.List;
 
 public class PlayQueue {
 
-    private int lastPlayedPlaylistViewID;
+    private long currentPlaylistID;
     private List<StationRecord> stationQueue;
     private List<Integer> shuffleQueue;
-    private List<Integer> historyQueue;
-    private boolean shuffleOn;
-    private int currentStationViewID;
+    private boolean isShuffle;
+    private int currentStationIndex;
 
-    public PlayQueue(List<StationRecord> record, boolean shuffleState) {
-        stationQueue = record;
-        shuffleOn = shuffleState;
-        lastPlayedPlaylistViewID = -1;
-        currentStationViewID = -1;
+    public PlayQueue() {
+        currentPlaylistID = -1;
+        currentStationIndex = -1;
         shuffleQueue = new ArrayList<>();
-        historyQueue = new ArrayList<>();
     }
 
+    public void notifyPlayQueue(List<StationRecord> record, long currentPlaylistID,
+                              int currentStationViewID, boolean newShuffleState)
+    {
+        if(!isSamePlaylist(currentPlaylistID)) {
+            this.currentPlaylistID = currentPlaylistID;
+            if(isShuffle == true && newShuffleState == true)
+            {
+                resetShuffleQueue();
+                initShuffleQueue();
+            }
+        }
+        if(stationQueue ==  null)
+            stationQueue = record;
+        this.currentStationIndex = currentStationViewID;
+        setShuffle(newShuffleState);
+    }
 
     // set it on will create shuffle list.
     // set it off will reset shuffle list
-    public void setShuffleOn(boolean shuffleOn) {
-        this.shuffleOn = shuffleOn;
-
-        if(shuffleOn == true)
-        {
-            initShuffleQueue();
-        }
-        else
-        {
-            shuffleQueue.clear();
+    public void setShuffle(boolean shuffleOn) {
+        // if shuffle variable is changed
+        if( isShuffle != shuffleOn) {
+            if (shuffleOn == true) {
+                initShuffleQueue();
+            } else {
+                shuffleQueue.clear();
+            }
+            this.isShuffle = shuffleOn;
         }
     }
 
     public void initShuffleQueue()
     {
-        for(int i = 0; i < stationQueue.size();++i)
-        {
-            shuffleQueue.add(i);
+
+        if(stationQueue != null) {
+            for (int i = 0; i < stationQueue.size(); ++i) {
+                shuffleQueue.add(i);
+            }
+            Collections.shuffle(shuffleQueue);
         }
-        Collections.shuffle(shuffleQueue);
     }
 
-    public int getCurrentStationViewID() {
-        return currentStationViewID;
+    public int getCurrentStationIndex() {
+        return currentStationIndex;
     }
 
-    public void setCurrentStationViewID(int currentStationViewID) {
-        this.currentStationViewID = currentStationViewID;
+    public void setCurrentStationIndex(int currentStationIndex) {
+        this.currentStationIndex = currentStationIndex;
     }
 
     public List<StationRecord> getStationQueue() {
@@ -75,17 +87,17 @@ public class PlayQueue {
 
     public void resetPlayQueue()
     {
-        historyQueue.clear();
         resetShuffleQueue();
     }
 
 
     // For when the new song is added, this will increment number of songs in list by 1.
     // reshuffle the shuffle list
-    public void incrementIndexEntry()
+    public void incrementStationEntry()
     {
         int newSize = stationQueue.size();
         shuffleQueue.add(newSize);
+        Collections.shuffle(shuffleQueue);
     }
 
     // For when a song is removed, everything will reset and re-initialized.
@@ -94,37 +106,61 @@ public class PlayQueue {
     public void removeIndex(int i)
     {
         resetPlayQueue();
-        if(currentStationViewID != i)
-        {
-            historyQueue.add(i);
-        }
 
-        if(shuffleOn == true)
+        if(isShuffle == true)
         {
             initShuffleQueue();
         }
     }
 
-    public void setPlayListViewID(int viewID)
+    public void setPlayListViewID(long viewID)
     {
-
-        lastPlayedPlaylistViewID = viewID;
+        currentPlaylistID = viewID;
     }
 
+    public long getCurrentPlayListID() {
+        return currentPlaylistID;
+    }
+
+    // return -1 if no next song
     public int getNextStation()
     {
-        return 0;
+
+        int size = stationQueue.size();
+        int nextIndex = currentStationIndex + 1;
+        int result = -1;
+
+        // if nextIndex is within boundary of array
+        if( nextIndex < size)
+        {
+            result = isShuffle  ? (shuffleQueue.get(nextIndex))
+                                : (nextIndex);
+            currentStationIndex = nextIndex;
+        }
+        return result;
     }
 
+    // return -1 if no prev song
     public int getPrevStation()
     {
-        return 0;
+        int prevIndex = currentStationIndex - 1;
+        int result = -1;
+
+        // if nextIndex is within boundary of array
+        if( prevIndex >= 0)
+        {
+            result = isShuffle  ? (shuffleQueue.get(prevIndex))
+                    : (prevIndex);
+            currentStationIndex = prevIndex;
+
+        }
+        return result;
     }
 
-    public boolean isSamePlaylist(int playlistViewID)
+    public boolean isSamePlaylist(long currentPlaylistID)
     {
         boolean result = false;
-        if(playlistViewID != lastPlayedPlaylistViewID)
+        if(this.currentPlaylistID != currentPlaylistID)
         {
             result = false;
         }

@@ -57,58 +57,40 @@
         </cs499app.cs499mobileapp.helper.CircularSeekBar>
 
     </RelativeLayout>
-    <!--<android.support.v7.widget.LinearLayoutCompat-->
-        <!--android:id="@+id/seekbar_layout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_weight="90">-->
-
-        <!--<cs499app.cs499mobileapp.helper.CircularSeekBar-->
-
-            <!--android:id="@+id/circular_seek_bar"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-
-            <!--CircularSeekBar:progress="25"-->
-            <!--CircularSeekBar:max="100"-->
-            <!--CircularSeekBar:pointer_alpha_ontouch="100"-->
-            <!--CircularSeekBar:pointer_color="#0174DF"-->
-            <!--CircularSeekBar:pointer_halo_color="#880174DF">-->
-
-        <!--</cs499app.cs499mobileapp.helper.CircularSeekBar>-->
-
-        <!--<ImageView-->
-            <!--android:src="@drawable/radio_demo"-->
-            <!--android:id="@+id/seekbar_image"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent" />-->
-    <!--</android.support.v7.widget.LinearLayoutCompat>-->
-
-    <!--CircularSeekBar:start_angle="270"-->
-    <!--CircularSeekBar:end_angle="270"-->
-    <!--CircularSeekBar:circle_x_radius="100dp"-->
-    <!--CircularSeekBar:circle_y_radius="100dp"-->
-    <!--CircularSeekBar:use_custom_radii="true"-->
-
 
     <android.support.v7.widget.LinearLayoutCompat
-        android:id="@+id/controller_titles_layouts"
+        android:id="@+id/controller_layouts"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="20"
         android:orientation="vertical">
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"></LinearLayout>-->
         <LinearLayout
+            android:id="@+id/controller_title_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="50"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="15"></LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="70"
+                android:orientation="vertical">
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/controller_station_name"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="50"
-                android:text="BEST STATION"
+                android:text="No Station Selected"
                 android:textStyle="bold"
                 android:gravity="center_horizontal|fill_vertical"/>
 
@@ -117,8 +99,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="50"
-                android:text="BEST PLAYLIST"
+                android:text="No Playlist Selected"
                 android:gravity="center_vertical|center_horizontal"/>
+            </LinearLayout>
+
+            <ImageButton
+                android:src="@drawable/shuffle_icon"
+                android:id="@+id/controller_shuffle_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="15"/>
 
 
         </LinearLayout>

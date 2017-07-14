@@ -212,4 +212,12 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
     }
 
 
+    public interface ConntextMenuCallbackListener {
+        public void onStationAdded(
+                long parentPlayListID, int parentPlaylistViewID,int stationViewID);
+        public void onStationDeleted(
+                long parentPlayListID, int parentPlaylistViewID,int stationViewID);
+        public void onPlaylistDeleted(long parentPlayListID, int parentPlaylistViewID);
+    }
+
 }

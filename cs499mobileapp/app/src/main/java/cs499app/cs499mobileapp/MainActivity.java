@@ -29,13 +29,15 @@ import cs499app.cs499mobileapp.model.LibraryRecord;
 import cs499app.cs499mobileapp.model.StationRecord;
 import cs499app.cs499mobileapp.service.MusicService;
 import cs499app.cs499mobileapp.view.ContainerFragment;
+import cs499app.cs499mobileapp.view.ContextMenuDialogFragment;
 import cs499app.cs499mobileapp.view.PlayerFragment;
 import cs499app.cs499mobileapp.view.StationListFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         StationListFragment.StationListCallbackListener,
-        PlayerFragment.MediaControllerCallbackListener{
+        PlayerFragment.MediaControllerCallbackListener,
+        ContextMenuDialogFragment.ConntextMenuCallbackListener{
 
     public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     private DrawerLayout navigationDrawerLayout;
@@ -392,34 +394,6 @@ public class MainActivity extends AppCompatActivity
         this.libRecord = libRecord;
     }
 
-
-    @Override
-    public void onPlayStationButtonPressed(long parentPlaylistID, int parentPlaylistViewID,int stationViewID) {
-        Log.i("StationClicked","Playlistviewid: "+parentPlaylistID+" stationviewID: "+stationViewID);
-
-        StationRecord record = libRecord.getStationListRecordsMap()
-                .get(parentPlaylistID)
-                .get(stationViewID);
-
-        Log.i("callback","received URL:" +record.getStationURL());
-
-        Intent intent = new Intent(getString(R.string.MUSIC_ACTION_PLAY_URL));
-        intent.putExtra(getString(R.string.MUSIC_URL_TO_PLAY),record.getStationURL());
-        sendBroadcast(intent,getString(R.string.BROADCAST_PRIVATE));
-
-        playerTabFragmentRef.setCurrentPlaylistTItle(
-                libRecord.getPlaylistRecords().get(parentPlaylistViewID).getPlaylistName());
-        playerTabFragmentRef.setCurrentStationTitle(record.getStationTitle());
-        playerTabFragmentRef.updateDisplayTitles();
-        playerTabFragmentRef.setStateToPlay();
-
-    }
-
-    @Override
-    public void onPlayAllStationButtonPressed(long playListViewID) {
-
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -456,13 +430,57 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSkipForwardButtonPressed() {
         Toast.makeText(this, "Skip Forward Button event Catch in Activity", Toast.LENGTH_SHORT).show();
+        int nextStationIndex = playerTabFragmentRef.getPlayQueue().getNextStation();
+        Log.d("curPlaylistIndex",playerTabFragmentRef.getPlayQueue().getCurrentPlayListID()+"");
+
+        Log.d("NextStationIndex",nextStationIndex+"");
+        if(nextStationIndex != -1) {
+            long curPlaylistID = playerTabFragmentRef.getPlayQueue().getCurrentPlayListID();
+            List<StationRecord> srl = libRecord.getStationListRecordsMap()
+                    .get(curPlaylistID);
+            StationRecord record = srl.get(nextStationIndex);
+            int CurPlaylistViewID = playerTabFragmentRef.getCurrentPlaylistViewID();
+
+
+            Intent intent = new Intent(getString(R.string.MUSIC_ACTION_PLAY_URL));
+            intent.putExtra(getString(R.string.MUSIC_URL_TO_PLAY), record.getStationURL());
+            sendBroadcast(intent, getString(R.string.BROADCAST_PRIVATE));
+
+            playerTabFragmentRef.setCurrentPlaylistTItle(
+                    libRecord.getPlaylistRecords().get(CurPlaylistViewID).getPlaylistName());
+            playerTabFragmentRef.setCurrentStationTitle(record.getStationTitle());
+            playerTabFragmentRef.updateDisplayTitles();
+        }
 
     }
 
     @Override
     public void onSkipPrevButtonPressed() {
         Toast.makeText(this, "Skip Prev Button event Catch in Activity", Toast.LENGTH_SHORT).show();
+        int prevStationIndex = playerTabFragmentRef.getPlayQueue().getPrevStation();
 
+        Log.d("curPlaylistIndex",playerTabFragmentRef.getPlayQueue().getCurrentPlayListID()+"");
+
+        Log.d("PrevStationIndex",prevStationIndex+"");
+        if(prevStationIndex != -1) {
+
+            int curPlaylistViewID = playerTabFragmentRef.getCurrentPlaylistViewID();
+            long curPlaylistID = playerTabFragmentRef.getPlayQueue().getCurrentPlayListID();
+            List<StationRecord> srl = libRecord.getStationListRecordsMap()
+                    .get(curPlaylistID);
+            StationRecord record = srl.get(prevStationIndex);
+
+
+            Intent intent = new Intent(getString(R.string.MUSIC_ACTION_PLAY_URL));
+            intent.putExtra(getString(R.string.MUSIC_URL_TO_PLAY), record.getStationURL());
+            sendBroadcast(intent, getString(R.string.BROADCAST_PRIVATE));
+
+            playerTabFragmentRef.setCurrentPlaylistTItle(
+                    libRecord.getPlaylistRecords().get(curPlaylistViewID).getPlaylistName());
+            playerTabFragmentRef.setCurrentStationTitle(record.getStationTitle());
+            playerTabFragmentRef.updateDisplayTitles();
+
+        }
     }
 
     private void initSharePref()
@@ -482,5 +500,55 @@ public class MainActivity extends AppCompatActivity
             settings.edit().commit();
 
         }
+    }
+
+    @Override
+    public void onPlayStationButtonPressed(long parentPlaylistID, int parentPlaylistViewID,int stationViewID) {
+        Log.i("StationClicked","Playlistviewid: "+parentPlaylistID+" stationviewID: "+stationViewID);
+
+        List<StationRecord> srl= libRecord.getStationListRecordsMap()
+                .get(parentPlaylistID);
+        StationRecord record = srl.get(stationViewID);
+
+        Log.i("callback","received URL:" +record.getStationURL());
+
+        Intent intent = new Intent(getString(R.string.MUSIC_ACTION_PLAY_URL));
+        intent.putExtra(getString(R.string.MUSIC_URL_TO_PLAY),record.getStationURL());
+        sendBroadcast(intent,getString(R.string.BROADCAST_PRIVATE));
+
+        playerTabFragmentRef.setCurrentPlaylistViewID(parentPlaylistViewID);
+        playerTabFragmentRef.setCurrentPlaylistTItle(
+                libRecord.getPlaylistRecords().get(parentPlaylistViewID).getPlaylistName());
+        playerTabFragmentRef.setCurrentStationTitle(record.getStationTitle());
+        playerTabFragmentRef.updateDisplayTitles();
+        playerTabFragmentRef.setStateToPlay();
+        playerTabFragmentRef.notifyPlayQueue(
+                srl,parentPlaylistID,stationViewID,playerTabFragmentRef.isShuffle());
+
+    }
+
+    @Override
+    public void onPlayAllStationButtonPressed(long playListViewID) {
+
+    }
+
+    @Override
+    public void onShuffleButtonPressed(boolean shuffleState) {
+        playerTabFragmentRef.setShuffle(shuffleState);
+    }
+
+    @Override
+    public void onStationAdded(long parentPlayListID, int parentPlaylistViewID, int stationViewID) {
+        
+    }
+
+    @Override
+    public void onStationDeleted(long parentPlayListID, int parentPlaylistViewID, int stationViewID) {
+
+    }
+
+    @Override
+    public void onPlaylistDeleted(long parentPlayListID, int parentPlaylistViewID) {
+
     }
 }

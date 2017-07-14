@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.os.IBinder;
@@ -24,8 +25,13 @@ import java.net.URL;
 
 import cs499app.cs499mobileapp.R;
 
+import static java.security.AccessController.getContext;
 
-public class MusicService extends Service implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnInfoListener{
+
+public class MusicService extends Service implements MediaPlayer.OnErrorListener,
+        MediaPlayer.OnPreparedListener,
+        MediaPlayer.OnInfoListener,
+        MediaPlayer.OnBufferingUpdateListener{
 
 
 
@@ -62,26 +68,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         }
     };
 
-    private BroadcastReceiver musicPlayReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(getString(R.string.MUSIC_ACTION_PLAY)))
-            {
-                Log.e("MUSIC RECEIVER IN MUSIC", "MUSIC PLAYED");
-                if(playerState == myPlayerState.Paused) {
 
-                    myPlayer.start();
-                    playerState = myPlayerState.Playing;
-                }
-                else if(playerState == myPlayerState.Stopped)
-                {
-                    myPlayer.start();
-                    playerState = myPlayerState.Playing;
-                }
-
-            }
-        }
-    };
 
     private BroadcastReceiver musicStopReceiver = new BroadcastReceiver() {
         @Override
@@ -111,6 +98,41 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
                     myPlayer.pause();
                     playerState = myPlayerState.Paused;
                 }
+
+            }
+        }
+    };
+
+    private BroadcastReceiver musicPlayReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(getString(R.string.MUSIC_ACTION_PLAY)))
+            {
+                Log.e("MUSIC RECEIVER IN MUSIC", "MUSIC PLAYED");
+//                if(playerState == myPlayerState.Paused) {
+//
+//                    myPlayer.start();
+//                    playerState = myPlayerState.Playing;
+//                }
+//                else //if(playerState == myPlayerState.Stopped)
+//                {
+
+                    try {
+                        myPlayer.reset();
+                        myPlayer.setDataSource(getEncodedURL(currentURL));
+                        //myPlayer.prepare();
+                        myPlayer.prepareAsync();
+                    } catch (IOException ex)
+                    {
+                        Toast.makeText(context, "MUSIC PREPARATION FAILED", Toast.LENGTH_SHORT).show();
+                        Log.e("MUSIC","PREPARATION FAILED");
+                        ex.printStackTrace();
+                    } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    //myPlayer.start();
+                   // playerState = myPlayerState.Playing;
+               // }
 
             }
         }
@@ -149,16 +171,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
                     e.printStackTrace();
                 }
 
-                if(playerState == myPlayerState.Paused) {
 
-                    myPlayer.start();
-                    playerState = myPlayerState.Playing;
-                }
-                else if(playerState == myPlayerState.Stopped)
-                {
-                    myPlayer.start();
-                    playerState = myPlayerState.Playing;
-                }
 
             }
         }
@@ -176,6 +189,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         registerReceiver(musicStopReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_STOP)),getString(R.string.BROADCAST_PRIVATE),null);
         registerReceiver(musicPauseReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_PAUSE)),getString(R.string.BROADCAST_PRIVATE),null);
         registerReceiver(musicPlayUrlReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_PLAY_URL)),getString(R.string.BROADCAST_PRIVATE),null);
+
 
         Log.d("INSISDE MUSIC SERVICE","MUSIC SERVICE");
         if (intent.getAction().equals(getString(R.string.MUSIC_ACTION_CREATE))) {
@@ -204,6 +218,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
                     myPlayer.setOnPreparedListener(this);
                     myPlayer.setOnErrorListener(this);
+
 
 
                     // myPlayer.prepareAsync();
@@ -304,7 +319,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     @Override
     public void onPrepared(MediaPlayer mp) {
         //myPlayer.setLooping(true);
-        Log.e("MUSIC SERVICE:", "PREPARATION FINISHED,PLAYING");
+        Log.e("MUSIC SERVICE:", "ON PREPARED LISTENER Called,PLAYING");
         playerState = myPlayerState.Playing;
         // myPlayer.start();
         mp.start();
@@ -328,5 +343,14 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         unregisterReceiver(musicStopReceiver);
         unregisterReceiver(musicPlayReceiver);
         unregisterReceiver(musicPlayUrlReceiver);
+
+
     }
+
+    @Override
+    public void onBufferingUpdate(MediaPlayer mediaPlayer, int i) {
+
+    }
+
+
 }
