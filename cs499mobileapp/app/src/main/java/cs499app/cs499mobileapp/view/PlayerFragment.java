@@ -131,12 +131,9 @@ public class PlayerFragment extends Fragment {
             }
             @Override
             public void onStopTrackingTouch(CircularSeekBar seekBar) {
-
             }
-
             @Override
             public void onStartTrackingTouch(CircularSeekBar seekBar) {
-
             }
         });
 //
@@ -231,14 +228,11 @@ public class PlayerFragment extends Fragment {
                     playPauseButton.setImageResource(R.drawable.pause_icon);
                     playOrPauseState = playOrPause.PLAY_STATE;
                 }
-                else
-                {
+                else {
                     controllerCallbackListener.onPauseButtonPressed();
                     playPauseButton.setImageResource(R.drawable.play_arrow);
                     playOrPauseState = playOrPause.PAUSE_STATE;
-
                 }
-
             }
         });
 
@@ -247,7 +241,6 @@ public class PlayerFragment extends Fragment {
             public void onClick(View view) {
                 if(currentPlaylistViewID != -1)
                     controllerCallbackListener.onSkipForwardButtonPressed();
-
             }
         });
 
@@ -256,7 +249,6 @@ public class PlayerFragment extends Fragment {
             public void onClick(View view) {
                 if(currentPlaylistViewID != -1)
                     controllerCallbackListener.onSkipPrevButtonPressed();
-
             }
         });
 
@@ -264,7 +256,6 @@ public class PlayerFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 controllerCallbackListener.onShuffleButtonPressed(isShuffle = !isShuffle);
-
             }
         });
     }
