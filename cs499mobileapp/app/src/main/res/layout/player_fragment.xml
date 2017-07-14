@@ -32,6 +32,7 @@
                 android:layout_gravity="bottom"
                 android:layout_centerHorizontal="true"
                 android:hapticFeedbackEnabled="true"
+                android:layout_margin="8dp"
                 android:scaleType="center"
                 app:pressedTranslationZ="2dp"/>
 
@@ -73,7 +74,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="50"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -119,7 +122,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="horizontal"
-            android:layout_weight="50">
+            android:layout_weight="50"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp">
 
 
                 <android.support.v7.widget.AppCompatImageButton

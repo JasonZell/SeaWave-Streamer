@@ -33,10 +33,12 @@ public class StationDialogFragment extends AppCompatDialogFragment {
 
 
     private Long parentPlaylistID;
+    private int parentPlaylistViewID;
     private LibraryRecord libRecord;
     private StationListAdapter stationListAdapter;
     private DialogActionMode DM;
     private String dialogTitle;
+    StationDialogCallbackListener dialogCallbackListener;
    // private int listItemPosition;
 
     @Nullable
@@ -47,6 +49,15 @@ public class StationDialogFragment extends AppCompatDialogFragment {
         final EditText StationUrlEditText = (EditText)rootView.findViewById(R.id.dialog_stationurl_edittext);
         final Button confirmButton = rootView.findViewById(R.id.dialog_station_confirm_button);
         parentPlaylistID = getArguments().getLong(getString(R.string.ParentPlaylistID));
+        parentPlaylistViewID = getArguments().getInt(getString(R.string.PlayListViewPos));
+
+        //setup callback
+        try {
+            dialogCallbackListener = (StationDialogCallbackListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement StationDialogCallbackListener Methods");
+        }
 
         TextView tv = rootView.findViewById(R.id.station_dialog_fragment_title);
         tv.setText(dialogTitle);
@@ -92,6 +103,8 @@ public class StationDialogFragment extends AppCompatDialogFragment {
                         srl.add(libRecord.insertStationRecord(sr));
                         stationListAdapter.notifyDataSetChanged();
                         Log.i("AddStation","station added at location ");
+
+                        dialogCallbackListener.onStationAdded(parentPlaylistID,parentPlaylistViewID);
 
 
                         //refreshLibraryRecordUpdateView();
@@ -208,6 +221,10 @@ public class StationDialogFragment extends AppCompatDialogFragment {
                     .getStationURL());
         }
 
+    }
+
+    public interface StationDialogCallbackListener {
+        public void onStationAdded(long parentPlayListID, int parentPlaylistViewID);
     }
 
 }

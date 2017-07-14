@@ -24,7 +24,7 @@ import cs499app.cs499mobileapp.model.StationRecord;
 
 public class StationListAdapter extends ArrayAdapter<StationRecord>{
 
-    LibraryCallbackListener callbackListener;
+    //LibraryCallbackListener callbackListener;
 
     private Context context;
     private List<StationRecord> playlistDataArray;
@@ -63,13 +63,13 @@ public class StationListAdapter extends ArrayAdapter<StationRecord>{
 
         return super.getItem(position);
     }
-
-    public interface LibraryCallbackListener {
-        public void onPlayStationButtonPressed(
-                long playListViewID, long stationViewID);
-        public void onPlayAllStationButtonPressed(
-                long playListViewID);
-    }
+//
+//    public interface LibraryCallbackListener {
+//        public void onPlayStationButtonPressed(
+//                long playListViewID, long stationViewID);
+//        public void onPlayAllStationButtonPressed(
+//                long playListViewID);
+//    }
 
 
 }

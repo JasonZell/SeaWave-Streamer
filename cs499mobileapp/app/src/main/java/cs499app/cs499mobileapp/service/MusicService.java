@@ -41,6 +41,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         Playing, //MediaPlayer is playing
         Paused, //MediaPlayer is paused
         PlayerPaused,
+        Resetted
     }
 
     MediaPlayer myPlayer = null;
@@ -86,6 +87,22 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         }
     };
 
+    private BroadcastReceiver musicResetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(getString(R.string.MUSIC_ACTION_RESET)))
+            {
+
+                if(playerState == myPlayerState.Playing) {
+                    Log.e("MUSIC RECEIVER IN MUSIC", "MUSIC RESETTED");
+                    myPlayer.reset();
+                    currentURL = "";
+                    playerState = myPlayerState.Resetted;
+                }
+            }
+        }
+    };
+
     private BroadcastReceiver musicPauseReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -119,6 +136,10 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
                     try {
                         myPlayer.reset();
+                        if(currentURL =="") {
+                            Toast.makeText(context, "Cannot Play Empty URL", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         myPlayer.setDataSource(getEncodedURL(currentURL));
                         //myPlayer.prepare();
                         myPlayer.prepareAsync();
@@ -189,9 +210,12 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         registerReceiver(musicStopReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_STOP)),getString(R.string.BROADCAST_PRIVATE),null);
         registerReceiver(musicPauseReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_PAUSE)),getString(R.string.BROADCAST_PRIVATE),null);
         registerReceiver(musicPlayUrlReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_PLAY_URL)),getString(R.string.BROADCAST_PRIVATE),null);
+        registerReceiver(musicResetReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_RESET)),getString(R.string.BROADCAST_PRIVATE),null);
+
 
 
         Log.d("INSISDE MUSIC SERVICE","MUSIC SERVICE");
+        currentURL ="";
         if (intent.getAction().equals(getString(R.string.MUSIC_ACTION_CREATE))) {
             Log.e("MUSIC","MUSIC_ACTION_CREATE FIRED");
 
@@ -300,7 +324,29 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        Log.e("MUSIC SERVICE:", "onERROR Triggered within service");
+
+        if(what == MediaPlayer.MEDIA_ERROR_UNKNOWN)
+        {
+            Toast.makeText(this, "MEDIA_ERROR_UNKNOWN", Toast.LENGTH_SHORT).show();
+        }
+        else if(what == MediaPlayer.MEDIA_ERROR_SERVER_DIED)
+        {
+            Toast.makeText(this, "MEDIA_ERROR_SERVER_DIED", Toast.LENGTH_SHORT).show();
+
+        }else if(what == MediaPlayer.MEDIA_ERROR_IO){
+            Toast.makeText(this, "MEDIA_ERROR_IO", Toast.LENGTH_SHORT).show();
+
+
+        }else if(what == MediaPlayer.MEDIA_ERROR_MALFORMED){
+            Toast.makeText(this, "MEDIA_ERROR_MALFORMED", Toast.LENGTH_SHORT).show();
+
+        }else if(what == MediaPlayer.MEDIA_ERROR_UNSUPPORTED){
+            Toast.makeText(this, "MEDIA_ERROR_UNSUPPORTED", Toast.LENGTH_SHORT).show();
+
+        }else if(what == MediaPlayer.MEDIA_ERROR_TIMED_OUT){
+            Toast.makeText(this, "MEDIA_ERROR_TIMED_OUT", Toast.LENGTH_SHORT).show();
+
+        }
         return false;
     }
 
@@ -343,6 +389,8 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         unregisterReceiver(musicStopReceiver);
         unregisterReceiver(musicPlayReceiver);
         unregisterReceiver(musicPlayUrlReceiver);
+        unregisterReceiver(musicResetReceiver);
+
 
 
     }

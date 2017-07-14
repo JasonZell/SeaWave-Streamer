@@ -43,6 +43,7 @@ public class PlaylistDialogFragment extends AppCompatDialogFragment {
         final EditText dialogPlaylistTitleEditText = (EditText)rootView.findViewById(R.id.dialog_playlist_title_edittext);
         final Button confirmButton = rootView.findViewById(R.id.dialog_playlist_confirm_button);
 
+
         TextView tv = rootView.findViewById(R.id.playlist_dialog_fragment_title);
         tv.setText(dialogTitle);
 
@@ -153,4 +154,6 @@ public class PlaylistDialogFragment extends AppCompatDialogFragment {
             ).getPlaylistName());
         }
     }
+
+
 }

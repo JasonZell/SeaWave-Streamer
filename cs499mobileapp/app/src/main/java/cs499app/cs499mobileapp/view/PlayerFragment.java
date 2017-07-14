@@ -97,6 +97,7 @@ public class PlayerFragment extends Fragment {
                     + " must implement MediaControllerCallbackListener Methods");
         }
         setupMediaControlButtons();
+        resetMediaPlayer();
 
 
         final int max = 30;
@@ -234,7 +235,6 @@ public class PlayerFragment extends Fragment {
                 {
                     controllerCallbackListener.onPauseButtonPressed();
                     playPauseButton.setImageResource(R.drawable.play_arrow);
-                    //view.setBackgroundResource(R.drawable.pause_icon);
                     playOrPauseState = playOrPause.PAUSE_STATE;
 
                 }
@@ -245,7 +245,8 @@ public class PlayerFragment extends Fragment {
         skipForwardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                controllerCallbackListener.onSkipForwardButtonPressed();
+                if(currentPlaylistViewID != -1)
+                    controllerCallbackListener.onSkipForwardButtonPressed();
 
             }
         });
@@ -253,7 +254,8 @@ public class PlayerFragment extends Fragment {
         skipPrevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                controllerCallbackListener.onSkipPrevButtonPressed();
+                if(currentPlaylistViewID != -1)
+                    controllerCallbackListener.onSkipPrevButtonPressed();
 
             }
         });
@@ -261,7 +263,7 @@ public class PlayerFragment extends Fragment {
         shuffleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //controllerCallbackListener.onShuffleButtonPressed();
+                controllerCallbackListener.onShuffleButtonPressed(isShuffle = !isShuffle);
 
             }
         });
@@ -280,6 +282,8 @@ public class PlayerFragment extends Fragment {
         Log.d("Restore player"," settings in player fragment");
         SharedPreferences settings = getContext().getSharedPreferences(
                 getString(R.string.SETTING_PREFERENCES), 0);
+        isShuffle = settings.getBoolean(
+                getString(R.string.SETTING_IS_SHUFFLE),false);
 
 //        currentPlaylistTitle = settings.getString(
 //                getString(R.string.SETTING_LAST_PLAYLIST_TITLE),"No Playlist");
@@ -292,8 +296,7 @@ public class PlayerFragment extends Fragment {
         //updateDisplayTitles();
 
 
-        isShuffle = settings.getBoolean(
-                getString(R.string.SETTING_IS_SHUFFLE),false);
+
 
     }
 
@@ -337,5 +340,17 @@ public class PlayerFragment extends Fragment {
 
     public void setCurrentPlaylistViewID(int currentPlaylistViewID) {
         this.currentPlaylistViewID = currentPlaylistViewID;
+    }
+
+    public void resetMediaPlayer()
+    {
+        currentPlaylistTitle = "No Playlist Selected";
+        currentStationTitle = "No Station Selected";
+        currentStationURL = "";
+        currentPlaylistViewID = -1;
+        updateDisplayTitles();
+        playPauseButton.setImageResource(R.drawable.play_arrow);
+        playOrPauseState = playOrPause.PAUSE_STATE;
+
     }
 }

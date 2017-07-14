@@ -22,7 +22,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 
 import cs499app.cs499mobileapp.model.LibraryRecord;
@@ -30,14 +29,17 @@ import cs499app.cs499mobileapp.model.StationRecord;
 import cs499app.cs499mobileapp.service.MusicService;
 import cs499app.cs499mobileapp.view.ContainerFragment;
 import cs499app.cs499mobileapp.view.ContextMenuDialogFragment;
+import cs499app.cs499mobileapp.view.LibraryFragment;
 import cs499app.cs499mobileapp.view.PlayerFragment;
+import cs499app.cs499mobileapp.view.StationDialogFragment;
 import cs499app.cs499mobileapp.view.StationListFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         StationListFragment.StationListCallbackListener,
         PlayerFragment.MediaControllerCallbackListener,
-        ContextMenuDialogFragment.ConntextMenuCallbackListener{
+        ContextMenuDialogFragment.ContextMenuCallbackListener,
+        StationDialogFragment.StationDialogCallbackListener{
 
     public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     private DrawerLayout navigationDrawerLayout;
@@ -429,7 +431,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSkipForwardButtonPressed() {
-        Toast.makeText(this, "Skip Forward Button event Catch in Activity", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, "Skip Forward Button event Catch in Activity", Toast.LENGTH_SHORT).show();
         int nextStationIndex = playerTabFragmentRef.getPlayQueue().getNextStation();
         Log.d("curPlaylistIndex",playerTabFragmentRef.getPlayQueue().getCurrentPlayListID()+"");
 
@@ -456,7 +458,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSkipPrevButtonPressed() {
-        Toast.makeText(this, "Skip Prev Button event Catch in Activity", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, "Skip Prev Button event Catch in Activity", Toast.LENGTH_SHORT).show();
         int prevStationIndex = playerTabFragmentRef.getPlayQueue().getPrevStation();
 
         Log.d("curPlaylistIndex",playerTabFragmentRef.getPlayQueue().getCurrentPlayListID()+"");
@@ -534,21 +536,53 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onShuffleButtonPressed(boolean shuffleState) {
+        Toast.makeText(this, "Callback: shuffle: "+ shuffleState, Toast.LENGTH_SHORT).show();
         playerTabFragmentRef.setShuffle(shuffleState);
     }
 
-    @Override
-    public void onStationAdded(long parentPlayListID, int parentPlaylistViewID, int stationViewID) {
-        
-    }
 
     @Override
     public void onStationDeleted(long parentPlayListID, int parentPlaylistViewID, int stationViewID) {
+        if(parentPlayListID == playerTabFragmentRef.getPlayQueue().getCurrentPlayListID())
+        {
+            if(playerTabFragmentRef.getPlayQueue().getCurrentStationIndex() == stationViewID)
+            {
+                resetMediaPlayer();
+            }
+            playerTabFragmentRef.getPlayQueue().removeIndex(stationViewID);
+        }
+    }
+
+    @Override
+    public void onPlaylistDeleted(long parentPlayListID) {
+        Log.e("PARENTPLAYID"," "+parentPlayListID);
+        Log.e("currentPLAYID"," "+playerTabFragmentRef.getPlayQueue().getCurrentPlayListID());
+
+        if(parentPlayListID == playerTabFragmentRef.getPlayQueue().getCurrentPlayListID())
+        {
+
+
+            playerTabFragmentRef.getPlayQueue().resetPlayQueue();
+            resetMediaPlayer();
+        }
+
 
     }
 
     @Override
-    public void onPlaylistDeleted(long parentPlayListID, int parentPlaylistViewID) {
+    public void onStationAdded(long parentPlayListID, int parentPlaylistViewID) {
+        if(parentPlayListID == playerTabFragmentRef.getPlayQueue().getCurrentPlayListID())
+            playerTabFragmentRef.getPlayQueue().incrementStationEntry();
+    }
+
+
+    public void resetMediaPlayer()
+    {
+        playerTabFragmentRef.resetMediaPlayer();
+
+        Intent intent = new Intent(getString(R.string.MUSIC_ACTION_RESET));
+        sendBroadcast(intent, getString(R.string.BROADCAST_PRIVATE));
+
 
     }
 }

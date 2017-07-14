@@ -161,6 +161,7 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
     public interface StationListCallbackListener {
         public void onPlayStationButtonPressed(
                 long parentPlayListID, int parentPlaylistViewID,int stationViewID);
+
         public void onPlayAllStationButtonPressed(
                 long parentPlayListViewID);
     }

@@ -1,5 +1,8 @@
 package cs499app.cs499mobileapp.model;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +28,12 @@ public class PlayQueue {
     public void notifyPlayQueue(List<StationRecord> record, long currentPlaylistID,
                               int currentStationViewID, boolean newShuffleState)
     {
+        Log.d("notifyPlayQueue","is Same playlist:"+ isSamePlaylist(currentPlaylistID));
+        Log.d("notifyPlayQueue","ishuffle:"+ isShuffle);
+        Log.d("notifyPlayQueue","newShuffleState:"+ newShuffleState);
+
+        stationQueue = record;
+
         if(!isSamePlaylist(currentPlaylistID)) {
             this.currentPlaylistID = currentPlaylistID;
             if(isShuffle == true && newShuffleState == true)
@@ -33,10 +42,9 @@ public class PlayQueue {
                 initShuffleQueue();
             }
         }
-        if(stationQueue ==  null)
-            stationQueue = record;
         this.currentStationIndex = currentStationViewID;
         setShuffle(newShuffleState);
+        Log.d("Station Size:",stationQueue.size()+"");
     }
 
     // set it on will create shuffle list.

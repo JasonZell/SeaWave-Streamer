@@ -128,6 +128,8 @@ public class LibraryFragment extends Fragment{
                 ContextMenuDialogFragment cmdf = new ContextMenuDialogFragment();
                 Bundle args = new Bundle();
                 args.putInt(getString(R.string.PlayListViewPos), i);
+                args.putLong(getString(R.string.ParentPlaylistID),
+                        libRecord.getPlaylistRecords().get(i).get_ID());
                 cmdf.setArguments(args);
 
                 cmdf.setLibRecord(libRecord);
@@ -177,6 +179,8 @@ public class LibraryFragment extends Fragment{
     public void setlastViewedFirstVisibleItemPos(int lastViewedFirstVisibleItemPos) {
         this.lastViewedFirstVisibleItemPos = lastViewedFirstVisibleItemPos;
     }
+
+
 
 
 }

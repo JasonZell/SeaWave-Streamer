@@ -1,10 +1,8 @@
 package cs499app.cs499mobileapp.view;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
@@ -13,11 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.io.IOException;
 import java.util.List;
 
 import cs499app.cs499mobileapp.R;
@@ -37,6 +31,7 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
 
     ContextMenuMode CMM;
     LibraryRecord libRecord;
+    ContextMenuCallbackListener activityCallbackListener;
     private PlaylistAdapter playlistAdapter;
     private StationListAdapter stationlistAdapter;
     private int stationViewPos;
@@ -53,6 +48,14 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
         TextView deleteActionTextView = rootView.findViewById(R.id.context_menu_delete_action);
         final FragmentManager fm = getFragmentManager();
         loadArguments();
+
+        //setup callback
+        try {
+            activityCallbackListener = (ContextMenuCallbackListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement ContextMenuCallbackListener Methods");
+        }
 
         modifyActionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,8 +143,6 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
             }
         });
 
-
-
         return rootView;
     }
 
@@ -189,6 +190,7 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
             prl.remove(PlaylistViewPos);
             libRecord.getStationListRecordsMap().remove(ParentPlaylistID);
             playlistAdapter.notifyDataSetChanged();
+            activityCallbackListener.onPlaylistDeleted(ParentPlaylistID);
         }
 
         else if(CMM == ContextMenuMode.STATION_MODE)
@@ -198,6 +200,7 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
             libRecord.deleteStationRecord(sr);
             srl.remove(stationViewPos);
             stationlistAdapter.notifyDataSetChanged();
+            activityCallbackListener.onStationDeleted(ParentPlaylistID,PlaylistViewPos,stationViewPos);
         }
 
         Log.i("Delete action","Finished Call, Returning");
@@ -212,12 +215,13 @@ public class ContextMenuDialogFragment extends AppCompatDialogFragment {
     }
 
 
-    public interface ConntextMenuCallbackListener {
-        public void onStationAdded(
-                long parentPlayListID, int parentPlaylistViewID,int stationViewID);
+    public interface ContextMenuCallbackListener {
         public void onStationDeleted(
                 long parentPlayListID, int parentPlaylistViewID,int stationViewID);
-        public void onPlaylistDeleted(long parentPlayListID, int parentPlaylistViewID);
+        public void onPlaylistDeleted(long parentPlayListID);
     }
+
+
+
 
 }
