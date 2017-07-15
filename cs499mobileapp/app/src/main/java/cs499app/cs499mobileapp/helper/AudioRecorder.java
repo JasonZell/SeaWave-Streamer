@@ -10,6 +10,7 @@ import android.renderscript.ScriptGroup;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,11 +30,7 @@ import cs499app.cs499mobileapp.R;
 
 import static cs499app.cs499mobileapp.service.MusicService.getEncodedURL;
 
-/**
- * Created by centa on 7/14/2017.
- */
-
-public class Recorder {
+public class AudioRecorder {
 
 
     private String currentUrl;
@@ -42,9 +39,10 @@ public class Recorder {
     private OutputStream outstream;
     private InputStream inStream;
     private CircularSeekBar seekbar;
+    private int maxFileSizeInBytes;
     AsyncTask<Void, Void, Void> recordAudioTask;
 
-    public Recorder(Context context, Activity activity, CircularSeekBar seekbar) {
+    public AudioRecorder(Context context, Activity activity, CircularSeekBar seekbar) {
         this.seekbar = seekbar;
         this.context = context;
         this.baseActivity = activity;
@@ -74,7 +72,7 @@ public class Recorder {
         }
         else {
             Log.d("externalstorage", "path:" + Environment.getExternalStorageDirectory());
-            Log.d("Recorder:", "setDestinationDirectory");
+            Log.d("AudioRecorder:", "setDestinationDirectory");
             String rootAudioDir = context.getString(R.string.SAVE_DIRECTORY_NAME);
             String baseDir = context.getString(R.string.ROOT_DIRECTORY_NAME);
             File f = new File(Environment.getExternalStorageDirectory() + "/" + baseDir, rootAudioDir);
@@ -109,6 +107,7 @@ public class Recorder {
 
     public void startRecording(final String playlistName, final String stationName, final String stationUrl)
     {
+
         recordAudioTask = new AsyncTask<Void, Void, Void>() {
 
              @Override
@@ -133,7 +132,7 @@ public class Recorder {
                       outstream = new FileOutputStream(outputSource);
 
                      while ((buffer = inStream.read()) != -1 && !isCancelled()) {
-                        // Log.d("AudioRecording", "bytesRead=" + bytesRead);
+                         //Log.d("AudioRecording", "bytesRead=" + bytesRead);
                          outstream.write(buffer);
                          bytesRead++;
                      }
@@ -156,12 +155,15 @@ public class Recorder {
 
              @Override
              protected void onPostExecute(Void aVoid) {
+                // seekbar.setProgress(0);
+
 
              }
 
             @Override
             protected void onCancelled(Void aVoid) {
                 Log.d("AudioRecording", "CANCELLED");
+              //  seekbar.setProgress(0);
 
                 try {
                     inStream.close();
@@ -171,6 +173,7 @@ public class Recorder {
                 }
             }
         };
+
         recordAudioTask.execute();
     }
 
@@ -181,4 +184,11 @@ public class Recorder {
                 recordAudioTask.cancel(true);
     }
 
+    public int getMaxFileSizeInBytes() {
+        return maxFileSizeInBytes;
+    }
+
+    public void setMaxFileSizeInBytes(int maxFileSizeInBytes) {
+        this.maxFileSizeInBytes = maxFileSizeInBytes;
+    }
 }

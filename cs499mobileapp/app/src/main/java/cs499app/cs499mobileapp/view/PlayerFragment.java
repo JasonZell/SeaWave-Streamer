@@ -1,49 +1,26 @@
 package cs499app.cs499mobileapp.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.TextViewCompat;
-import android.support.v7.graphics.drawable.DrawableWrapper;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import cs499app.cs499mobileapp.helper.CircularSeekBar.OnCircularSeekBarChangeListener;
 import cs499app.cs499mobileapp.R;
 import cs499app.cs499mobileapp.helper.CircularSeekBar;
 import cs499app.cs499mobileapp.helper.PlayProgressCountDownTimer;
-import cs499app.cs499mobileapp.helper.Recorder;
-import cs499app.cs499mobileapp.helper.RoundedBitmapDrawableUtility;
 import cs499app.cs499mobileapp.model.LibraryRecord;
 import cs499app.cs499mobileapp.model.PlayQueue;
 import cs499app.cs499mobileapp.model.StationRecord;
@@ -121,7 +98,7 @@ public class PlayerFragment extends Fragment {
 
 
         final int max = 30;
-         int progress = 20;
+        int progress = 20;
         seekBar = (CircularSeekBar) rootView.findViewById(R.id.circular_seek_bar);
         seekBar.setIsTouchEnabled(false);
         seekBar.setMax(max);

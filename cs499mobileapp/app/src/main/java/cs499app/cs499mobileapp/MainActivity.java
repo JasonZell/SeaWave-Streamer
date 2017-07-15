@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -29,14 +28,13 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.List;
 
-import cs499app.cs499mobileapp.helper.PlayProgressCountDownTimer;
-import cs499app.cs499mobileapp.helper.Recorder;
+import cs499app.cs499mobileapp.helper.AudioRecorder;
+import cs499app.cs499mobileapp.helper.CircularSeekBar;
 import cs499app.cs499mobileapp.model.LibraryRecord;
 import cs499app.cs499mobileapp.model.StationRecord;
 import cs499app.cs499mobileapp.service.MusicService;
 import cs499app.cs499mobileapp.view.ContainerFragment;
 import cs499app.cs499mobileapp.view.ContextMenuDialogFragment;
-import cs499app.cs499mobileapp.view.LibraryFragment;
 import cs499app.cs499mobileapp.view.PlayerFragment;
 import cs499app.cs499mobileapp.view.StationDialogFragment;
 import cs499app.cs499mobileapp.view.StationListFragment;
@@ -59,8 +57,10 @@ public class MainActivity extends AppCompatActivity
     private ContainerFragment containerTabFragmentRef;
     LibraryRecord libRecord;
     private boolean usePlayProgressTimer;
-    private Recorder recorder;
+    private AudioRecorder audioRecorder;
     private Switch playProgressSwitch;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -197,8 +197,8 @@ public class MainActivity extends AppCompatActivity
 
         //initialize and retrieve settings from shared preferences.
 
-        //initialize recorder
-        recorder = new Recorder(this.getApplicationContext(),MainActivity.this, playerTabFragmentRef.getSeekBar());
+        //initialize audioRecorder
+        audioRecorder = new AudioRecorder(this.getApplicationContext(),MainActivity.this,playerTabFragmentRef.getSeekBar());
 
         //Start Music Service
         Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
@@ -467,7 +467,7 @@ public class MainActivity extends AppCompatActivity
             case CREATE_BASE_DIR_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:{
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    recorder.setBaseDirectory();
+                    audioRecorder.setBaseDirectory();
                 else
                 {
                     Toast.makeText(this, "Write External Permission Required To Record Audio!", Toast.LENGTH_SHORT).show();
@@ -663,7 +663,7 @@ public class MainActivity extends AppCompatActivity
         if(recordState == true)
         {
             Toast.makeText(this, "START RECORDING", Toast.LENGTH_SHORT).show();
-            recorder.startRecording(
+            audioRecorder.startRecording(
                     playerTabFragmentRef.getCurrentPlaylistTitle(),
                     playerTabFragmentRef.getCurrentStationTitle(),
                     playerTabFragmentRef.getCurrentStationURL());
@@ -671,7 +671,7 @@ public class MainActivity extends AppCompatActivity
         else
         {
             Toast.makeText(this, "STOP RECORDING", Toast.LENGTH_SHORT).show();
-            recorder.stopRecording();
+            audioRecorder.stopRecording();
         }
     }
 
