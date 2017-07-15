@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity
         //initialize and retrieve settings from shared preferences.
 
         //initialize recorder
-        recorder = new Recorder(this.getApplicationContext(),MainActivity.this);
+        recorder = new Recorder(this.getApplicationContext(),MainActivity.this, playerTabFragmentRef.getSeekBar());
 
         //Start Music Service
         Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
@@ -594,13 +594,9 @@ public class MainActivity extends AppCompatActivity
 
         if(parentPlayListID == playerTabFragmentRef.getPlayQueue().getCurrentPlayListID())
         {
-
-
             playerTabFragmentRef.getPlayQueue().resetPlayQueue();
             resetMediaPlayer();
         }
-
-
     }
 
     @Override
@@ -618,12 +614,10 @@ public class MainActivity extends AppCompatActivity
                     playerTabFragmentRef.getCurrentPlaylistTitle(),
                     playerTabFragmentRef.getCurrentStationTitle(),
                     playerTabFragmentRef.getCurrentStationURL());
-
         }
         else
         {
             Toast.makeText(this, "STOP RECORDING", Toast.LENGTH_SHORT).show();
-
             recorder.stopRecording();
         }
     }
@@ -634,8 +628,6 @@ public class MainActivity extends AppCompatActivity
 
         Intent intent = new Intent(getString(R.string.MUSIC_ACTION_RESET));
         sendBroadcast(intent, getString(R.string.BROADCAST_PRIVATE));
-
-
     }
 
 

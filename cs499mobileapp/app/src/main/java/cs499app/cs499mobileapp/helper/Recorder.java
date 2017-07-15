@@ -41,9 +41,11 @@ public class Recorder {
     private Activity baseActivity;
     private OutputStream outstream;
     private InputStream inStream;
+    private CircularSeekBar seekbar;
     AsyncTask<Void, Void, Void> recordAudioTask;
 
-    public Recorder(Context context, Activity activity) {
+    public Recorder(Context context, Activity activity, CircularSeekBar seekbar) {
+        this.seekbar = seekbar;
         this.context = context;
         this.baseActivity = activity;
         currentUrl = "";
@@ -78,9 +80,7 @@ public class Recorder {
             File f = new File(Environment.getExternalStorageDirectory() + "/" + baseDir, rootAudioDir);
             if (!f.exists()) {
                 Log.d("create rootdir", "creating");
-
                 f.mkdirs();
-
             }
         }
     }

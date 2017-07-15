@@ -1,9 +1,5 @@
 package cs499app.cs499mobileapp.service;
 
-/**
- * Created by centa on 6/21/2017.
- */
-
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;

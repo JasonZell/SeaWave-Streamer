@@ -77,6 +77,7 @@ public class PlayerFragment extends Fragment {
     private playOrPause playOrPauseState;
     private ProgressBar playProgressBar;
     private int maxPlayDurationInSeconds;
+    private CircularSeekBar seekBar;
 
 
 
@@ -114,7 +115,7 @@ public class PlayerFragment extends Fragment {
 
         final int max = 30;
          int progress = 20;
-        final CircularSeekBar seekBar = (CircularSeekBar) rootView.findViewById(R.id.circular_seek_bar);
+        seekBar = (CircularSeekBar) rootView.findViewById(R.id.circular_seek_bar);
         seekBar.setIsTouchEnabled(false);
         seekBar.setMax(max);
         seekBar.setProgress(progress);
@@ -371,4 +372,7 @@ public class PlayerFragment extends Fragment {
         playProgressBar.setMax(maxPlayDurationInSeconds);
     }
 
+    public CircularSeekBar getSeekBar() {
+        return seekBar;
+    }
 }
