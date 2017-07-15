@@ -19,14 +19,20 @@ public class PlayProgressCountDownTimer {
     long totalCountDownMillis;
     long leftOverMillis;
     long tickIntervalMillis;
+    long updateIntervalMillis;
+    boolean isPaused;
 
 
     public PlayProgressCountDownTimer(PlayerFragment fragment, ProgressBar pB, long totalCountDownMillis) {
         this.fragment = fragment;
         this.pB = pB;
         this.totalCountDownMillis = totalCountDownMillis;
-        leftOverMillis = 0;
-        tickIntervalMillis = 1000;
+        leftOverMillis = totalCountDownMillis;
+        tickIntervalMillis = 15;
+        //updateIntervalMillis = 50;
+        isPaused = false;
+        pB.setMax((int)(totalCountDownMillis/tickIntervalMillis));
+
     }
 
 
@@ -42,11 +48,15 @@ public class PlayProgressCountDownTimer {
     public void start()
     {
         //if timer is still going from previous run
-        if(leftOverMillis > 0)
+        if(cd != null)
             cd.cancel();
-        leftOverMillis = 0;
-
-        pB.setMax((int)totalCountDownMillis/1000);
+        if(isPaused == true) {
+            isPaused = false;
+        }
+        else
+        {
+            leftOverMillis = totalCountDownMillis; //reset time
+        }
         getNewCountDownTimer();
         cd.start();
     }
@@ -54,14 +64,17 @@ public class PlayProgressCountDownTimer {
     public void pause()
     {
         cd.cancel();
+        isPaused = true;
 
     }
 
     public void resume()
     {
-        if(leftOverMillis > 0)
+        if(isPaused == true)
         {
             getNewCountDownTimer();
+            cd.start();
+            isPaused = false;
         }
     }
 
@@ -70,28 +83,23 @@ public class PlayProgressCountDownTimer {
         pB.setProgress(0);
         cd.cancel();
         leftOverMillis = 0;
+        isPaused = false;
     }
 
-    public void restart()
-    {
-        pB.setMax((int)totalCountDownMillis/1000);
-        getNewCountDownTimer();
-        cd.start();
-    }
 
     public void getNewCountDownTimer()
     {
-        long totalTimeMillis = totalCountDownMillis;
-        if( leftOverMillis > 0)
-            totalTimeMillis = leftOverMillis;
+        long totalTimeMillis = leftOverMillis;
 
         cd = new CountDownTimer(totalTimeMillis,tickIntervalMillis) {
             @Override
             public void onTick(long lefttime) {
-                pB.setProgress(((int)(lefttime/tickIntervalMillis)-1));
+                //pB.setProgress(((int)(lefttime/tickIntervalMillis)-1));
+                pB.setProgress((int)(leftOverMillis/tickIntervalMillis)-1);
                 //Log.i("timer:", String.valueOf(lefttime));
                 pB.invalidate();
-                leftOverMillis = lefttime;
+                leftOverMillis -= tickIntervalMillis;
+                //leftOverMillis = lefttime;
             }
 
             @Override

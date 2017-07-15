@@ -100,7 +100,7 @@ public class PlayerFragment extends Fragment {
 
 
         //DEBUG ONLY
-        maxPlayDurationInSeconds = 30;
+        maxPlayDurationInSeconds = 10;
         usePlayProgressTimer = true;
 
         restoreSettings();

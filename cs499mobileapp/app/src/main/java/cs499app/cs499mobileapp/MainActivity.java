@@ -524,6 +524,9 @@ public class MainActivity extends AppCompatActivity
             playerTabFragmentRef.setStateToPlay();
             playerTabFragmentRef.updateDisplayTitles();
 
+            playerTabFragmentRef.getPlayProgressTimer().start();
+
+
 
         }
         return returnVal;
