@@ -16,7 +16,7 @@
             android:id="@+id/nav_manage"
             android:title="Tools" />
 
-        <item android:id="@+id/playback_timer_toggle"
+        <item android:id="@+id/playback_timer_toggle_item"
             android:title="Use Playback Timer"
             app:actionLayout="@layout/setting_toggle_item"/>
 

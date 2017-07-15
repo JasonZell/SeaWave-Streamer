@@ -57,9 +57,10 @@ public class PlayerFragment extends Fragment {
     enum playOrPause {PLAY_STATE, PAUSE_STATE};
 
     private PlayQueue playQueue;
-    private boolean isShuffle;
-    private boolean isRepeat;
+    private boolean isShuffle; //value set by settings only
+    private boolean isRepeat; //value set by settings only
     private boolean isRecord;
+    private boolean usePlayProgressTimer;
     private LibraryRecord libRecord;
     private String currentStationTitle;
     private String currentPlaylistTitle;
@@ -82,7 +83,6 @@ public class PlayerFragment extends Fragment {
     private int maxPlayDurationInSeconds;
     private CircularSeekBar seekBar;
     private PlayProgressCountDownTimer playProgressTimer;
-    private boolean usePlayProgressTimer;
 
 
 
@@ -103,7 +103,7 @@ public class PlayerFragment extends Fragment {
 
         //DEBUG ONLY
         maxPlayDurationInSeconds = 10;
-        usePlayProgressTimer = true;
+        //usePlayProgressTimer = true;
 
         restoreSettings();
         setupProgressBar();
@@ -370,6 +370,9 @@ public class PlayerFragment extends Fragment {
                 getString(R.string.SETTING_IS_SHUFFLE),false);
 
         isRepeat = settings.getBoolean(getString(R.string.SETTING_IS_REPEAT),false);
+
+        usePlayProgressTimer = settings.getBoolean(
+                getString(R.string.SETTING_USE_PLAY_PROGRESS),false);
 //        currentPlaylistTitle = settings.getString(
 //                getString(R.string.SETTING_LAST_PLAYLIST_TITLE),"No Playlist");
 //
@@ -392,8 +395,8 @@ public class PlayerFragment extends Fragment {
 //        editor.putString(getString(R.string.SETTING_LAST_STATION_TITLE), currentStationTitle);
 //        editor.putString(getString(R.string.SETTING_LAST_STATION_URL), currentStationURL);
         editor.putBoolean(getString(R.string.SETTING_IS_REPEAT),isRepeat);
-
         editor.putBoolean(getString(R.string.SETTING_IS_SHUFFLE),isShuffle);
+        editor.putBoolean(getString(R.string.SETTING_USE_PLAY_PROGRESS),usePlayProgressTimer);
         editor.commit();
         Log.d("Destoryed player ","Fragment, saving settings");
 
@@ -407,15 +410,19 @@ public class PlayerFragment extends Fragment {
         return isShuffle;
     }
 
+    public boolean isRepeat() {
+        return isRepeat;
+    }
+
     public void setShuffle(boolean shuffle) {
         isShuffle = shuffle;
         playQueue.setShuffle(shuffle);
     }
 
     public void notifyPlayQueue(List<StationRecord> record, long currentPlaylistID,
-                                int currentStationViewID, boolean newShuffleState)
+                                int currentStationViewID, boolean newShuffleState, boolean newRepeatState)
     {
-        playQueue.notifyPlayQueue(record,currentPlaylistID,currentStationViewID,newShuffleState);
+        playQueue.notifyPlayQueue(record,currentPlaylistID,currentStationViewID,newShuffleState,newRepeatState);
     }
 
     public int getCurrentPlaylistViewID() {
@@ -444,7 +451,8 @@ public class PlayerFragment extends Fragment {
 
     public void setupProgressTimer()
     {
-        playProgressTimer = new PlayProgressCountDownTimer(this,playProgressBar,maxPlayDurationInSeconds*1000);
+        playProgressTimer = new PlayProgressCountDownTimer(
+                this,playProgressBar,maxPlayDurationInSeconds*1000,usePlayProgressTimer);
     }
 
     public CircularSeekBar getSeekBar() {
@@ -458,5 +466,14 @@ public class PlayerFragment extends Fragment {
 
     public ImageButton getSkipForwardButton() {
         return skipForwardButton;
+    }
+
+    public boolean isUsePlayProgressTimer() {
+        return usePlayProgressTimer;
+    }
+
+    public void setUsePlayProgressTimer(boolean usePlayProgressTimer) {
+        playProgressTimer.setEnabled(usePlayProgressTimer);
+        this.usePlayProgressTimer = usePlayProgressTimer;
     }
 }

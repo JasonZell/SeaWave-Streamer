@@ -22,6 +22,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import java.io.File;
@@ -56,9 +58,9 @@ public class MainActivity extends AppCompatActivity
     private PlayerFragment playerTabFragmentRef;
     private ContainerFragment containerTabFragmentRef;
     LibraryRecord libRecord;
-
+    private boolean usePlayProgressTimer;
     private Recorder recorder;
-
+    private Switch playProgressSwitch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,9 +68,8 @@ public class MainActivity extends AppCompatActivity
 
         //initialize share preferences
         initSharePref();
+        restoreSettings();
         checkReadWritePermission();
-
-
 
         //initialize library record
         setLibRecord(new LibraryRecord(this.getApplicationContext()));
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
 
 //
@@ -146,6 +148,29 @@ public class MainActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(viewPager); //layout will use PagerAdapter's page titles
         tabLayout.getTabAt(0).setIcon(R.drawable.player_icon_selector);
         tabLayout.getTabAt(1).setIcon(R.drawable.library_icon_selector);
+
+        //playbackToggle
+        Menu navMenu = navigationView.getMenu();
+        playProgressSwitch = navMenu.findItem(R.id.playback_timer_toggle_item).getActionView().findViewById(R.id.play_progress_toggle);
+        playProgressSwitch.setChecked(usePlayProgressTimer);
+        playProgressSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    usePlayProgressTimer = true;
+                    playerTabFragmentRef.setUsePlayProgressTimer(true);
+                    playerTabFragmentRef.getPlayProgressTimer().start();
+                }
+                else
+                {
+                    usePlayProgressTimer = false;
+                    playerTabFragmentRef.getPlayProgressTimer().stop();
+                    playerTabFragmentRef.setUsePlayProgressTimer(false);
+
+                    Toast.makeText(MainActivity.this, "SwitchOFF", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
 //         AsyncTask<Void, Void, Void> loadDataTask = new AsyncTask<Void, Void, Void>() {
@@ -264,6 +289,14 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy()
     {
         super.onDestroy();
+
+        super.onDestroy();
+        SharedPreferences settings = this.getSharedPreferences(
+                getString(R.string.SETTING_PREFERENCES), 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(getString(R.string.SETTING_USE_PLAY_PROGRESS),usePlayProgressTimer);
+        editor.commit();
+        Log.d("Destoryed Activity ",", Saving Settings");
         Log.e("MENU ACTIVITY","ACTIVITY DESTROYED");
 
     }
@@ -310,6 +343,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.navigation_drawer_layout);
+
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
@@ -319,7 +354,9 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.playback_timer_toggle) {
+        } else if (id == R.id.playback_timer_toggle_item) {
+            playProgressSwitch.setChecked(usePlayProgressTimer = !usePlayProgressTimer);
+
 
         } else if (id == R.id.nav_share) {
 
@@ -328,8 +365,7 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.navigation_drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        //drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -573,7 +609,8 @@ public class MainActivity extends AppCompatActivity
         playerTabFragmentRef.updateDisplayTitles();
         playerTabFragmentRef.setStateToPlay();
         playerTabFragmentRef.notifyPlayQueue(
-                srl,parentPlaylistID,stationViewID,playerTabFragmentRef.isShuffle());
+                srl,parentPlaylistID,stationViewID,playerTabFragmentRef.isShuffle(),
+                playerTabFragmentRef.isRepeat());
 
         playerTabFragmentRef.getPlayProgressTimer().start();
 
@@ -640,9 +677,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRepeatButtonPressed(boolean repeatState) {
-        Toast.makeText(this, "Repeat"+repeatState, Toast.LENGTH_SHORT).show();
-
-
+        Toast.makeText(this, "Repeat "+repeatState, Toast.LENGTH_SHORT).show();
+        playerTabFragmentRef.getPlayQueue().setRepeat(repeatState);
     }
 
     public void resetMediaPlayer()
@@ -664,6 +700,26 @@ public class MainActivity extends AppCompatActivity
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     MainActivity.INITIAL_REQUEST_WRITE_EXTERNAL_STORAGE);
         }
+    }
+
+    private void restoreSettings()
+    {
+        Log.d("Restore player"," settings in player fragment");
+        SharedPreferences settings = this.getSharedPreferences(
+                getString(R.string.SETTING_PREFERENCES), 0);
+        usePlayProgressTimer = settings.getBoolean(
+                getString(R.string.SETTING_USE_PLAY_PROGRESS),false);
+
+//        currentPlaylistTitle = settings.getString(
+//                getString(R.string.SETTING_LAST_PLAYLIST_TITLE),"No Playlist");
+//
+//        currentStationTitle = settings.getString(
+//                getString(R.string.SETTING_LAST_STATION_TITLE),"No Station");
+//
+//        currentStationURL = settings.getString(
+//                getString(R.string.SETTING_LAST_STATION_URL),"");
+        //updateDisplayTitles();
+
     }
 
 }

@@ -17,6 +17,7 @@ public class PlayQueue {
     private List<StationRecord> stationQueue;
     private List<Integer> shuffleQueue;
     private boolean isShuffle;
+    private boolean isRepeat;
     private int currentStationIndex;
 
     public PlayQueue() {
@@ -26,12 +27,13 @@ public class PlayQueue {
     }
 
     public void notifyPlayQueue(List<StationRecord> record, long currentPlaylistID,
-                              int currentStationViewID, boolean newShuffleState)
+                              int currentStationViewID, boolean newShuffleState,boolean newRepeatState)
     {
         Log.d("notifyPlayQueue","is Same playlist:"+ isSamePlaylist(currentPlaylistID));
         Log.d("notifyPlayQueue","ishuffle:"+ isShuffle);
         Log.d("notifyPlayQueue","newShuffleState:"+ newShuffleState);
 
+        isRepeat = newRepeatState;
         stationQueue = record;
 
         if(!isSamePlaylist(currentPlaylistID)) {
@@ -138,6 +140,9 @@ public class PlayQueue {
         int nextIndex = currentStationIndex + 1;
         int result = -1;
 
+        if(isRepeat && nextIndex >= size)
+            nextIndex = 0;
+
         // if nextIndex is within boundary of array
         if( nextIndex < size)
         {
@@ -154,13 +159,15 @@ public class PlayQueue {
         int prevIndex = currentStationIndex - 1;
         int result = -1;
 
+        if(isRepeat && prevIndex < 0)
+            prevIndex = stationQueue.size()-1;
+
         // if nextIndex is within boundary of array
         if( prevIndex >= 0)
         {
             result = isShuffle  ? (shuffleQueue.get(prevIndex))
                     : (prevIndex);
             currentStationIndex = prevIndex;
-
         }
         return result;
     }
@@ -177,5 +184,13 @@ public class PlayQueue {
             result = true;
         }
          return result;
+    }
+
+    public boolean isRepeat() {
+        return isRepeat;
+    }
+
+    public void setRepeat(boolean repeat) {
+        isRepeat = repeat;
     }
 }

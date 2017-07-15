@@ -19,20 +19,19 @@ public class PlayProgressCountDownTimer {
     long totalCountDownMillis;
     long leftOverMillis;
     long tickIntervalMillis;
-    long updateIntervalMillis;
     boolean isPaused;
+    boolean isEnabled;
 
 
-    public PlayProgressCountDownTimer(PlayerFragment fragment, ProgressBar pB, long totalCountDownMillis) {
+    public PlayProgressCountDownTimer(PlayerFragment fragment, ProgressBar pB, long totalCountDownMillis, boolean isEnabled) {
         this.fragment = fragment;
         this.pB = pB;
         this.totalCountDownMillis = totalCountDownMillis;
         leftOverMillis = totalCountDownMillis;
         tickIntervalMillis = 15;
-        //updateIntervalMillis = 50;
         isPaused = false;
+        this.isEnabled = isEnabled;
         pB.setMax((int)((totalCountDownMillis)/tickIntervalMillis));
-
     }
 
 
@@ -47,30 +46,32 @@ public class PlayProgressCountDownTimer {
 
     public void start()
     {
-        //if timer is still going from previous run
-        if(cd != null)
-            cd.cancel();
-        if(isPaused == true) {
-            isPaused = false;
+        if(isEnabled) {
+            //if timer is still going from previous run
+            if (cd != null)
+                cd.cancel();
+            if (isPaused == true) {
+                isPaused = false;
+            } else {
+                leftOverMillis = totalCountDownMillis; //reset time
+            }
+            getNewCountDownTimer();
+            cd.start();
         }
-        else
-        {
-            leftOverMillis = totalCountDownMillis; //reset time
-        }
-        getNewCountDownTimer();
-        cd.start();
     }
 
     public void pause()
     {
-        cd.cancel();
-        isPaused = true;
+        if(isEnabled) {
+            cd.cancel();
+            isPaused = true;
+        }
 
     }
 
     public void resume()
     {
-        if(isPaused == true)
+        if(isEnabled && isPaused == true)
         {
             getNewCountDownTimer();
             cd.start();
@@ -80,16 +81,19 @@ public class PlayProgressCountDownTimer {
 
     public void stop()
     {
-        pB.setProgress(0);
-        cd.cancel();
-        leftOverMillis = 0;
-        isPaused = false;
+        if(isEnabled) {
+            pB.setProgress(0);
+            if (cd != null)
+                cd.cancel();
+            leftOverMillis = 0;
+            isPaused = false;
+        }
     }
 
 
-    public void getNewCountDownTimer()
+    private void getNewCountDownTimer()
     {
-        long totalTimeMillis = leftOverMillis+1000;
+        long totalTimeMillis = leftOverMillis+1000; //padding
 
         cd = new CountDownTimer(totalTimeMillis,tickIntervalMillis) {
             @Override
@@ -110,4 +114,12 @@ public class PlayProgressCountDownTimer {
         };
     }
 
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
 }
