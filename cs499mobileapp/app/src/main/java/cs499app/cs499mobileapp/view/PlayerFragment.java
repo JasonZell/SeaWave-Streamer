@@ -276,7 +276,8 @@ public class PlayerFragment extends Fragment {
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                controllerCallbackListener.onRecordButtonPressed(isRecord = !isRecord);
+                if(currentStationURL != "")
+                    controllerCallbackListener.onRecordButtonPressed(isRecord = !isRecord);
             }
         });
     }

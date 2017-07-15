@@ -90,7 +90,7 @@ public class Recorder {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         sdf.setTimeZone(TimeZone.getDefault());
         String currentDateandTime = sdf.format(new Date());
-        return stationName + currentDateandTime+".mp3";
+        return stationName +"_"+ currentDateandTime+".mp3";
     }
 
     public File setDestinationDirectory(String playlistName, String stationName)

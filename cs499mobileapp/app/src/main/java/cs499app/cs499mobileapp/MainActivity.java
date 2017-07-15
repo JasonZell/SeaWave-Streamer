@@ -443,13 +443,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onPlayButtonPressed() {
-        Toast.makeText(this, "PlayButton event Catch in Activity", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "PlayButton event Catch in Activity", Toast.LENGTH_SHORT).show();
         sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PLAY)), getString(R.string.BROADCAST_PRIVATE));
     }
 
     @Override
     public void onPauseButtonPressed() {
-        Toast.makeText(this, "PauseButton event Catch in Activity", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "PauseButton event Catch in Activity", Toast.LENGTH_SHORT).show();
         sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PAUSE)), getString(R.string.BROADCAST_PRIVATE));
 
 
@@ -479,6 +479,7 @@ public class MainActivity extends AppCompatActivity
                     libRecord.getPlaylistRecords().get(CurPlaylistViewID).getPlaylistName());
             playerTabFragmentRef.setCurrentStationTitle(record.getStationTitle());
             playerTabFragmentRef.setCurrentStationURL(record.getStationURL());
+            playerTabFragmentRef.setStateToPlay();
             playerTabFragmentRef.updateDisplayTitles();
         }
 
@@ -509,6 +510,7 @@ public class MainActivity extends AppCompatActivity
                     libRecord.getPlaylistRecords().get(curPlaylistViewID).getPlaylistName());
             playerTabFragmentRef.setCurrentStationTitle(record.getStationTitle());
             playerTabFragmentRef.setCurrentStationURL(record.getStationURL());
+            playerTabFragmentRef.setStateToPlay();
             playerTabFragmentRef.updateDisplayTitles();
 
         }
