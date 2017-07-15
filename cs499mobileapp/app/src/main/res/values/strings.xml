@@ -35,4 +35,6 @@
     <string name="SETTING_LAST_STATION_URL">SHARED_PREFERENCES_SETTINGS_LAST_STATION_URL</string>
     <string name="SETTING_IS_SHUFFLE">SHARED_PREFERENCES_SETTINGS_IS_SHUFFLE</string>
 
+    <string name="ROOT_DIRECTORY_NAME">XStreamer</string>
+    <string name="SAVE_DIRECTORY_NAME">XstreamerAudios</string>
 </resources>

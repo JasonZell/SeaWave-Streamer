@@ -309,7 +309,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         return START_NOT_STICKY; // service started but will not restart when it is destroyed
     }
 
-    public String getEncodedURL(String urlStr) throws Exception
+    static public String getEncodedURL(String urlStr) throws Exception
     {
         URL url = new URL(urlStr);
         URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());

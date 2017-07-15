@@ -10,6 +10,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -28,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +41,7 @@ import java.util.TimerTask;
 import cs499app.cs499mobileapp.helper.CircularSeekBar.OnCircularSeekBarChangeListener;
 import cs499app.cs499mobileapp.R;
 import cs499app.cs499mobileapp.helper.CircularSeekBar;
+import cs499app.cs499mobileapp.helper.Recorder;
 import cs499app.cs499mobileapp.helper.RoundedBitmapDrawableUtility;
 import cs499app.cs499mobileapp.model.LibraryRecord;
 import cs499app.cs499mobileapp.model.PlayQueue;
@@ -54,6 +57,7 @@ public class PlayerFragment extends Fragment {
 
     private PlayQueue playQueue;
     private boolean isShuffle;
+    private boolean isRecord;
     private LibraryRecord libRecord;
     private String currentStationTitle;
     private String currentPlaylistTitle;
@@ -69,8 +73,10 @@ public class PlayerFragment extends Fragment {
     private ImageButton skipForwardButton;
     private ImageButton skipPrevButton;
     private ImageButton shuffleButton;
+    private FloatingActionButton recordButton;
     private playOrPause playOrPauseState;
-
+    private ProgressBar playProgressBar;
+    private int maxPlayDurationInSeconds;
 
 
 
@@ -85,10 +91,15 @@ public class PlayerFragment extends Fragment {
         rootView = inflater.inflate(R.layout.player_fragment, container, false);
         playlistTitleView = rootView.findViewById(R.id.controller_playlist_name);
         stationTitleView = rootView.findViewById(R.id.controller_station_name);
+        playProgressBar = rootView.findViewById(R.id.controller_progress_bar);
         playQueue = new PlayQueue();
 
-        restoreSettings();
 
+        //DEBUG ONLY
+        maxPlayDurationInSeconds = 30;
+
+        restoreSettings();
+        setupProgressBar();
         //setup callback
         try {
             controllerCallbackListener = (PlayerFragment.MediaControllerCallbackListener) getActivity();
@@ -96,6 +107,7 @@ public class PlayerFragment extends Fragment {
             throw new ClassCastException(getActivity().toString()
                     + " must implement MediaControllerCallbackListener Methods");
         }
+
         setupMediaControlButtons();
         resetMediaPlayer();
 
@@ -210,6 +222,7 @@ public class PlayerFragment extends Fragment {
         public void onSkipForwardButtonPressed();
         public void onSkipPrevButtonPressed();
         public void onShuffleButtonPressed(boolean shuffleState);
+        public void onRecordButtonPressed(boolean recordState);
     }
 
     public void setupMediaControlButtons()
@@ -218,6 +231,7 @@ public class PlayerFragment extends Fragment {
         skipForwardButton = rootView.findViewById(R.id.controller_skipnext_button);
         skipPrevButton = rootView.findViewById(R.id.controller_skipprev_button);
         shuffleButton = rootView.findViewById(R.id.controller_shuffle_button);
+        recordButton  = rootView.findViewById(R.id.controller_record_floatingButton);
 
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -256,6 +270,13 @@ public class PlayerFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 controllerCallbackListener.onShuffleButtonPressed(isShuffle = !isShuffle);
+            }
+        });
+
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                controllerCallbackListener.onRecordButtonPressed(isRecord = !isRecord);
             }
         });
     }
@@ -344,4 +365,9 @@ public class PlayerFragment extends Fragment {
         playOrPauseState = playOrPause.PAUSE_STATE;
 
     }
+    public void setupProgressBar()
+    {
+        playProgressBar.setMax(maxPlayDurationInSeconds);
+    }
+
 }

@@ -328,9 +328,7 @@ public class LibraryRecord implements LibraryRecordInterface{
         {
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    MainActivity.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-
-
+                    MainActivity.EXPORT_DB_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
         }
         else {
 
@@ -339,7 +337,13 @@ public class LibraryRecord implements LibraryRecordInterface{
                 File dbFile = new File(inFileName);
                 FileInputStream fis = new FileInputStream(dbFile);
 
-                String outFileName = Environment.getExternalStorageDirectory()
+                File f = new File(Environment.getExternalStorageDirectory(), context.getString(R.string.ROOT_DIRECTORY_NAME));
+                if (!f.exists()) {
+                    f.mkdirs();
+                }
+
+                String outFileName = Environment.getExternalStorageDirectory()+"/"
+                        + context.getString(R.string.ROOT_DIRECTORY_NAME)
                         + "/" + context.getString(R.string.app_name_no_space) + ".db";
 
                 OutputStream output = new FileOutputStream(outFileName);

@@ -12,7 +12,7 @@
         android:id="@+id/seekbar_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="80"
+        android:layout_weight="70"
         android:background="@color/gray">
 
 
@@ -24,7 +24,7 @@
             >
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/record_floatingButton"
+                android:id="@+id/controller_record_floatingButton"
                 android:src="@drawable/record_word_icon"
                 android:background="@color/gray"
                 android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            CircularSeekBar:circle_stroke_width="10dp"
+            CircularSeekBar:circle_stroke_width="6dp"
             CircularSeekBar:circle_color="@color/LightGray"
             CircularSeekBar:circle_progress_color="@color/OrangeRed"
             CircularSeekBar:progress="25"
@@ -53,7 +53,8 @@
             CircularSeekBar:pointer_color="#0174DF"
             CircularSeekBar:pointer_halo_color="@color/CornflowerBlue"
             CircularSeekBar:pointer_radius="0dp"
-            CircularSeekBar:pointer_halo_width="0dp">
+            CircularSeekBar:pointer_halo_width="0dp"
+            >
 
         </cs499app.cs499mobileapp.helper.CircularSeekBar>
 
@@ -63,8 +64,15 @@
         android:id="@+id/controller_layouts"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="20"
+        android:layout_weight="30"
         android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/controller_progress_bar"
+            style="?android:progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"/>
 
         <!--<LinearLayout-->
             <!--android:layout_width="0dp"-->
@@ -73,7 +81,7 @@
             android:id="@+id/controller_title_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="50"
+            android:layout_weight="40"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
             android:paddingRight="5dp">
@@ -122,7 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="horizontal"
-            android:layout_weight="50"
+            android:layout_weight="40"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:paddingBottom="5dp">

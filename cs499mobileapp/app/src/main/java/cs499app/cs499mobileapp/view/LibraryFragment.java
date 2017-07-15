@@ -167,15 +167,6 @@ public class LibraryFragment extends Fragment{
 
     }
 
-//    public void reloadData()
-//    {
-//        libRecord.importlPlaylistRecordList();
-//    }
-//
-//    public int getlastViewedFirstVisibleItemPos() {
-//        return lastViewedFirstVisibleItemPos;
-//    }
-
     public void setlastViewedFirstVisibleItemPos(int lastViewedFirstVisibleItemPos) {
         this.lastViewedFirstVisibleItemPos = lastViewedFirstVisibleItemPos;
     }

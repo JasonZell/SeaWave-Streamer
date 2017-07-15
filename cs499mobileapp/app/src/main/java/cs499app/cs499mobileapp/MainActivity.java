@@ -5,11 +5,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -24,6 +27,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.List;
 
+import cs499app.cs499mobileapp.helper.Recorder;
 import cs499app.cs499mobileapp.model.LibraryRecord;
 import cs499app.cs499mobileapp.model.StationRecord;
 import cs499app.cs499mobileapp.service.MusicService;
@@ -41,13 +45,18 @@ public class MainActivity extends AppCompatActivity
         ContextMenuDialogFragment.ContextMenuCallbackListener,
         StationDialogFragment.StationDialogCallbackListener{
 
-    public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+    public static final int EXPORT_DB_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+    public static final int INITIAL_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
+    public static final int CREATE_BASE_DIR_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 3;
+
     private DrawerLayout navigationDrawerLayout;
     private ActionBarDrawerToggle navigationDrawerToggle;
     private int currentFocusedTab;
     private PlayerFragment playerTabFragmentRef;
     private ContainerFragment containerTabFragmentRef;
     LibraryRecord libRecord;
+
+    private Recorder recorder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +65,9 @@ public class MainActivity extends AppCompatActivity
 
         //initialize share preferences
         initSharePref();
+        checkReadWritePermission();
+
+
 
         //initialize library record
         setLibRecord(new LibraryRecord(this.getApplicationContext()));
@@ -158,6 +170,9 @@ public class MainActivity extends AppCompatActivity
 //         loadDataTask.execute();
 
         //initialize and retrieve settings from shared preferences.
+
+        //initialize recorder
+        recorder = new Recorder(this.getApplicationContext(),MainActivity.this);
 
         //Start Music Service
         Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
@@ -399,7 +414,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+            case EXPORT_DB_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -407,6 +422,16 @@ public class MainActivity extends AppCompatActivity
 
                 } else {
                     Toast.makeText(this, "Write External Permission Required To Export Database!", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+            case CREATE_BASE_DIR_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:{
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    recorder.setBaseDirectory();
+                else
+                {
+                    Toast.makeText(this, "Write External Permission Required To Record Audio!", Toast.LENGTH_SHORT).show();
                 }
                 return;
             }
@@ -426,6 +451,8 @@ public class MainActivity extends AppCompatActivity
     public void onPauseButtonPressed() {
         Toast.makeText(this, "PauseButton event Catch in Activity", Toast.LENGTH_SHORT).show();
         sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PAUSE)), getString(R.string.BROADCAST_PRIVATE));
+
+
 
     }
 
@@ -451,6 +478,7 @@ public class MainActivity extends AppCompatActivity
             playerTabFragmentRef.setCurrentPlaylistTItle(
                     libRecord.getPlaylistRecords().get(CurPlaylistViewID).getPlaylistName());
             playerTabFragmentRef.setCurrentStationTitle(record.getStationTitle());
+            playerTabFragmentRef.setCurrentStationURL(record.getStationURL());
             playerTabFragmentRef.updateDisplayTitles();
         }
 
@@ -480,6 +508,7 @@ public class MainActivity extends AppCompatActivity
             playerTabFragmentRef.setCurrentPlaylistTItle(
                     libRecord.getPlaylistRecords().get(curPlaylistViewID).getPlaylistName());
             playerTabFragmentRef.setCurrentStationTitle(record.getStationTitle());
+            playerTabFragmentRef.setCurrentStationURL(record.getStationURL());
             playerTabFragmentRef.updateDisplayTitles();
 
         }
@@ -522,10 +551,13 @@ public class MainActivity extends AppCompatActivity
         playerTabFragmentRef.setCurrentPlaylistTItle(
                 libRecord.getPlaylistRecords().get(parentPlaylistViewID).getPlaylistName());
         playerTabFragmentRef.setCurrentStationTitle(record.getStationTitle());
+        playerTabFragmentRef.setCurrentStationURL(record.getStationURL());
         playerTabFragmentRef.updateDisplayTitles();
         playerTabFragmentRef.setStateToPlay();
         playerTabFragmentRef.notifyPlayQueue(
                 srl,parentPlaylistID,stationViewID,playerTabFragmentRef.isShuffle());
+
+
 
     }
 
@@ -575,6 +607,24 @@ public class MainActivity extends AppCompatActivity
             playerTabFragmentRef.getPlayQueue().incrementStationEntry();
     }
 
+    @Override
+    public void onRecordButtonPressed(boolean recordState) {
+        if(recordState == true)
+        {
+            Toast.makeText(this, "START RECORDING", Toast.LENGTH_SHORT).show();
+            recorder.startRecording(
+                    playerTabFragmentRef.getCurrentPlaylistTitle(),
+                    playerTabFragmentRef.getCurrentStationTitle(),
+                    playerTabFragmentRef.getCurrentStationURL());
+
+        }
+        else
+        {
+            Toast.makeText(this, "STOP RECORDING", Toast.LENGTH_SHORT).show();
+
+            recorder.stopRecording();
+        }
+    }
 
     public void resetMediaPlayer()
     {
@@ -584,5 +634,18 @@ public class MainActivity extends AppCompatActivity
         sendBroadcast(intent, getString(R.string.BROADCAST_PRIVATE));
 
 
+    }
+
+
+    public void checkReadWritePermission()
+    {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MainActivity.INITIAL_REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
     }
 }
