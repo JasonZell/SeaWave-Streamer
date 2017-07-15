@@ -155,7 +155,7 @@ public class AudioRecorder {
 
              @Override
              protected void onPostExecute(Void aVoid) {
-                // seekbar.setProgress(0);
+                 //seekbar.setProgress(0);
 
 
              }
@@ -163,7 +163,7 @@ public class AudioRecorder {
             @Override
             protected void onCancelled(Void aVoid) {
                 Log.d("AudioRecording", "CANCELLED");
-              //  seekbar.setProgress(0);
+                seekbar.setProgress(0);
 
                 try {
                     inStream.close();
@@ -190,5 +190,9 @@ public class AudioRecorder {
 
     public void setMaxFileSizeInBytes(int maxFileSizeInBytes) {
         this.maxFileSizeInBytes = maxFileSizeInBytes;
+    }
+
+    public void setSeekbar(CircularSeekBar seekbar) {
+        this.seekbar = seekbar;
     }
 }

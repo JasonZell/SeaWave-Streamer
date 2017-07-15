@@ -3,6 +3,8 @@ package cs499app.cs499mobileapp.view;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -14,9 +16,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
+import cs499app.cs499mobileapp.MainActivity;
+import cs499app.cs499mobileapp.helper.AudioRecorder;
 import cs499app.cs499mobileapp.helper.CircularSeekBar.OnCircularSeekBarChangeListener;
 import cs499app.cs499mobileapp.R;
 import cs499app.cs499mobileapp.helper.CircularSeekBar;
@@ -24,6 +29,8 @@ import cs499app.cs499mobileapp.helper.PlayProgressCountDownTimer;
 import cs499app.cs499mobileapp.model.LibraryRecord;
 import cs499app.cs499mobileapp.model.PlayQueue;
 import cs499app.cs499mobileapp.model.StationRecord;
+
+import static cs499app.cs499mobileapp.MainActivity.connectiveManager;
 
 /**
  * Created by centa on 6/27/2017.
@@ -37,6 +44,7 @@ public class PlayerFragment extends Fragment {
     private boolean isShuffle; //value set by settings only
     private boolean isRepeat; //value set by settings only
     private boolean isRecord;
+    private boolean isWifiOnly; // value set by settings only
     private boolean usePlayProgressTimer;
     private LibraryRecord libRecord;
     private String currentStationTitle;
@@ -60,6 +68,8 @@ public class PlayerFragment extends Fragment {
     private int maxPlayDurationInSeconds;
     private CircularSeekBar seekBar;
     private PlayProgressCountDownTimer playProgressTimer;
+    private AudioRecorder recorderRef;
+
 
 
 
@@ -117,6 +127,8 @@ public class PlayerFragment extends Fragment {
             public void onStartTrackingTouch(CircularSeekBar seekBar) {
             }
         });
+
+        recorderRef.setSeekbar(seekBar);
 //
 //        //fitting image inside circular seekbar
 //
@@ -217,9 +229,16 @@ public class PlayerFragment extends Fragment {
             public void onClick(View view) {
 
                 if(playOrPauseState == playOrPause.PAUSE_STATE) {
-                    controllerCallbackListener.onPlayButtonPressed();
-                    playPauseButton.setImageResource(R.drawable.pause_icon);
-                    playOrPauseState = playOrPause.PLAY_STATE;
+
+                    if(isWifiOnly && !isOnWifiNetwork())
+                    {
+                        Toast.makeText(getContext(), getString(R.string.WIFI_WARNING_TEXT), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        controllerCallbackListener.onPlayButtonPressed();
+                        playPauseButton.setImageResource(R.drawable.pause_icon);
+                        playOrPauseState = playOrPause.PLAY_STATE;
+                    }
                 }
                 else {
                     controllerCallbackListener.onPauseButtonPressed();
@@ -232,16 +251,28 @@ public class PlayerFragment extends Fragment {
         skipForwardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentPlaylistViewID != -1)
-                    controllerCallbackListener.onSkipForwardButtonPressed();
+                if(isWifiOnly && !isOnWifiNetwork())
+                {
+                    Toast.makeText(getContext(), getString(R.string.WIFI_WARNING_TEXT), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if (currentPlaylistViewID != -1)
+                        controllerCallbackListener.onSkipForwardButtonPressed();
+                }
             }
         });
 
         skipPrevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentPlaylistViewID != -1)
-                    controllerCallbackListener.onSkipPrevButtonPressed();
+                if(isWifiOnly && !isOnWifiNetwork())
+                {
+                    Toast.makeText(getContext(), getString(R.string.WIFI_WARNING_TEXT), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if (currentPlaylistViewID != -1)
+                        controllerCallbackListener.onSkipPrevButtonPressed();
+                }
             }
         });
 
@@ -350,6 +381,8 @@ public class PlayerFragment extends Fragment {
 
         usePlayProgressTimer = settings.getBoolean(
                 getString(R.string.SETTING_USE_PLAY_PROGRESS),false);
+
+        isWifiOnly = settings.getBoolean(getString(R.string.SETTING_USE_WIFI_ONLY),false);
 //        currentPlaylistTitle = settings.getString(
 //                getString(R.string.SETTING_LAST_PLAYLIST_TITLE),"No Playlist");
 //
@@ -374,6 +407,8 @@ public class PlayerFragment extends Fragment {
         editor.putBoolean(getString(R.string.SETTING_IS_REPEAT),isRepeat);
         editor.putBoolean(getString(R.string.SETTING_IS_SHUFFLE),isShuffle);
         editor.putBoolean(getString(R.string.SETTING_USE_PLAY_PROGRESS),usePlayProgressTimer);
+        editor.putBoolean(getString(R.string.SETTING_USE_WIFI_ONLY),isWifiOnly);
+
         editor.commit();
         Log.d("Destoryed player ","Fragment, saving settings");
 
@@ -394,6 +429,10 @@ public class PlayerFragment extends Fragment {
     public void setShuffle(boolean shuffle) {
         isShuffle = shuffle;
         playQueue.setShuffle(shuffle);
+    }
+
+    public void setWifiOnly(boolean wifiOnly) {
+        isWifiOnly = wifiOnly;
     }
 
     public void notifyPlayQueue(List<StationRecord> record, long currentPlaylistID,
@@ -452,5 +491,18 @@ public class PlayerFragment extends Fragment {
     public void setUsePlayProgressTimer(boolean usePlayProgressTimer) {
         playProgressTimer.setEnabled(usePlayProgressTimer);
         this.usePlayProgressTimer = usePlayProgressTimer;
+    }
+
+    public void setRecorderRef(AudioRecorder recorderRef) {
+        this.recorderRef = recorderRef;
+    }
+
+
+    public  boolean isOnWifiNetwork()
+    {
+
+        NetworkInfo activeNetwork = connectiveManager.getActiveNetworkInfo();
+        boolean isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+        return isWiFi;
     }
 }

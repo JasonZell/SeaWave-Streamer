@@ -1,9 +1,13 @@
 package cs499app.cs499mobileapp;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -49,16 +53,24 @@ public class MainActivity extends AppCompatActivity
     public static final int EXPORT_DB_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     public static final int INITIAL_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
     public static final int CREATE_BASE_DIR_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 3;
+    public static final int REQUEST_ACCESS_NETWORK_STATE = 4;
+    public Activity mainActivityReference;
+    public static  ConnectivityManager connectiveManager;
 
     private DrawerLayout navigationDrawerLayout;
+    private Toolbar toolbar;
     private ActionBarDrawerToggle navigationDrawerToggle;
     private int currentFocusedTab;
     private PlayerFragment playerTabFragmentRef;
     private ContainerFragment containerTabFragmentRef;
     LibraryRecord libRecord;
     private boolean usePlayProgressTimer;
+    private boolean useWifiOnly;
     private AudioRecorder audioRecorder;
     private Switch playProgressSwitch;
+    private Switch wifiOnlySwitch;
+   // private ConnectivityManager connectiveManager;
+
 
 
     @Override
@@ -66,28 +78,19 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mainActivityReference = this;
         //initialize share preferences
         initSharePref();
         restoreSettings();
-        checkReadWritePermission();
+        checkAndRequestPermission();
 
         //initialize library record
         setLibRecord(new LibraryRecord(this.getApplicationContext()));
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.customized_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.customized_toolbar);
         setSupportActionBar(toolbar);
        // this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        navigationDrawerLayout = (DrawerLayout) findViewById(R.id.navigation_drawer_layout);
-        navigationDrawerToggle = new ActionBarDrawerToggle(
-                this, navigationDrawerLayout, toolbar, R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        navigationDrawerLayout.addDrawerListener(navigationDrawerToggle);
-        navigationDrawerToggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-
+        connectiveManager = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
 //
 
@@ -149,28 +152,7 @@ public class MainActivity extends AppCompatActivity
         tabLayout.getTabAt(0).setIcon(R.drawable.player_icon_selector);
         tabLayout.getTabAt(1).setIcon(R.drawable.library_icon_selector);
 
-        //playbackToggle
-        Menu navMenu = navigationView.getMenu();
-        playProgressSwitch = navMenu.findItem(R.id.playback_timer_toggle_item).getActionView().findViewById(R.id.play_progress_toggle);
-        playProgressSwitch.setChecked(usePlayProgressTimer);
-        playProgressSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if(isChecked){
-                    usePlayProgressTimer = true;
-                    playerTabFragmentRef.setUsePlayProgressTimer(true);
-                    playerTabFragmentRef.getPlayProgressTimer().start();
-                }
-                else
-                {
-                    usePlayProgressTimer = false;
-                    playerTabFragmentRef.getPlayProgressTimer().stop();
-                    playerTabFragmentRef.setUsePlayProgressTimer(false);
-
-                    Toast.makeText(MainActivity.this, "SwitchOFF", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        setupNavigationDrawerViews();
 
 
 //         AsyncTask<Void, Void, Void> loadDataTask = new AsyncTask<Void, Void, Void>() {
@@ -198,12 +180,82 @@ public class MainActivity extends AppCompatActivity
         //initialize and retrieve settings from shared preferences.
 
         //initialize audioRecorder
-        audioRecorder = new AudioRecorder(this.getApplicationContext(),MainActivity.this,playerTabFragmentRef.getSeekBar());
-
+        audioRecorder = new AudioRecorder(this.getApplicationContext(),MainActivity.this,null);
+        playerTabFragmentRef.setRecorderRef(audioRecorder);
         //Start Music Service
         Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
         startServiceIntent.setAction("MUSIC_ACTION_CREATE");
         startService(startServiceIntent);
+
+    }
+
+    public void setupNavigationDrawerViews()
+    {
+        navigationDrawerLayout = (DrawerLayout) findViewById(R.id.navigation_drawer_layout);
+        navigationDrawerToggle = new ActionBarDrawerToggle(
+                this, navigationDrawerLayout, toolbar, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+        navigationDrawerLayout.addDrawerListener(navigationDrawerToggle);
+        navigationDrawerToggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        //playbackToggle
+        Menu navMenu = navigationView.getMenu();
+        playProgressSwitch = navMenu.findItem(R.id.playback_timer_toggle_item).getActionView().findViewById(R.id.play_progress_toggle);
+        playProgressSwitch.setChecked(usePlayProgressTimer);
+        playProgressSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    usePlayProgressTimer = true;
+                    playerTabFragmentRef.setUsePlayProgressTimer(true);
+                    playerTabFragmentRef.getPlayProgressTimer().start();
+                }
+                else
+                {
+                    usePlayProgressTimer = false;
+                    playerTabFragmentRef.getPlayProgressTimer().stop();
+                    playerTabFragmentRef.setUsePlayProgressTimer(false);
+
+                    Toast.makeText(MainActivity.this, "SwitchOFF", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        wifiOnlySwitch = navMenu.findItem(R.id.wifi_only_toggle_item).getActionView().findViewById(R.id.wifi_only_toggle_switch);
+        wifiOnlySwitch.setChecked(useWifiOnly);
+        wifiOnlySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
+                if(isChecked){
+
+                    if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                            Manifest.permission.ACCESS_NETWORK_STATE)
+                            != PackageManager.PERMISSION_GRANTED)
+                    {
+                        ActivityCompat.requestPermissions(mainActivityReference,
+                                new String[]{Manifest.permission.ACCESS_NETWORK_STATE},
+                                MainActivity.REQUEST_ACCESS_NETWORK_STATE);
+                    }
+                    else {
+                        useWifiOnly = true;
+                        playerTabFragmentRef.setWifiOnly(true);
+                        Toast.makeText(MainActivity.this, "WIFISwitchON", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+                else
+                {
+                    useWifiOnly = false;
+                    playerTabFragmentRef.setWifiOnly(false);
+
+                    Toast.makeText(MainActivity.this, "WIFISwitchOFF", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 
@@ -245,6 +297,23 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.navigation_drawer_layout);
+
+        if (id == R.id.playback_timer_toggle_item) {
+            playProgressSwitch.setChecked(usePlayProgressTimer = !usePlayProgressTimer);
+        } else if(id == R.id.wifi_only_toggle_item) {
+            wifiOnlySwitch.setChecked(useWifiOnly = !useWifiOnly);
+        }
+
+
+
+        //drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
     //Method: onPause
     //Purpose: calls when the activity is paused
     @Override
@@ -289,12 +358,11 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy()
     {
         super.onDestroy();
-
-        super.onDestroy();
         SharedPreferences settings = this.getSharedPreferences(
                 getString(R.string.SETTING_PREFERENCES), 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(getString(R.string.SETTING_USE_PLAY_PROGRESS),usePlayProgressTimer);
+        editor.putBoolean(getString(R.string.SETTING_USE_WIFI_ONLY),useWifiOnly);
         editor.commit();
         Log.d("Destoryed Activity ",", Saving Settings");
         Log.e("MENU ACTIVITY","ACTIVITY DESTROYED");
@@ -339,35 +407,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.navigation_drawer_layout);
 
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.playback_timer_toggle_item) {
-            playProgressSwitch.setChecked(usePlayProgressTimer = !usePlayProgressTimer);
-
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-
-        //drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
 //    private class DrawerItemClickListener implements ListView.OnItemClickListener {
 //        @Override
@@ -471,6 +511,19 @@ public class MainActivity extends AppCompatActivity
                 else
                 {
                     Toast.makeText(this, "Write External Permission Required To Record Audio!", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            case REQUEST_ACCESS_NETWORK_STATE:{
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+
+                }
+                else
+                {
+                    Toast.makeText(this, "Access Network State Required To use WIFI Only Mode!", Toast.LENGTH_SHORT).show();
                 }
                 return;
             }
@@ -591,29 +644,34 @@ public class MainActivity extends AppCompatActivity
     public void onPlayStationButtonPressed(long parentPlaylistID, int parentPlaylistViewID,int stationViewID) {
         Log.i("StationClicked","Playlistviewid: "+parentPlaylistID+" stationviewID: "+stationViewID);
 
-        List<StationRecord> srl= libRecord.getStationListRecordsMap()
-                .get(parentPlaylistID);
-        StationRecord record = srl.get(stationViewID);
+        if(useWifiOnly && !isOnWifiNetwork())
+        {
+            Toast.makeText(this, getString(R.string.WIFI_WARNING_TEXT), Toast.LENGTH_SHORT).show();
+        }
+        else {
+            List<StationRecord> srl = libRecord.getStationListRecordsMap()
+                    .get(parentPlaylistID);
+            StationRecord record = srl.get(stationViewID);
 
-        Log.i("callback","received URL:" +record.getStationURL());
+            Log.i("callback", "received URL:" + record.getStationURL());
 
-        Intent intent = new Intent(getString(R.string.MUSIC_ACTION_PLAY_URL));
-        intent.putExtra(getString(R.string.MUSIC_URL_TO_PLAY),record.getStationURL());
-        sendBroadcast(intent,getString(R.string.BROADCAST_PRIVATE));
+            Intent intent = new Intent(getString(R.string.MUSIC_ACTION_PLAY_URL));
+            intent.putExtra(getString(R.string.MUSIC_URL_TO_PLAY), record.getStationURL());
+            sendBroadcast(intent, getString(R.string.BROADCAST_PRIVATE));
 
-        playerTabFragmentRef.setCurrentPlaylistViewID(parentPlaylistViewID);
-        playerTabFragmentRef.setCurrentPlaylistTItle(
-                libRecord.getPlaylistRecords().get(parentPlaylistViewID).getPlaylistName());
-        playerTabFragmentRef.setCurrentStationTitle(record.getStationTitle());
-        playerTabFragmentRef.setCurrentStationURL(record.getStationURL());
-        playerTabFragmentRef.updateDisplayTitles();
-        playerTabFragmentRef.setStateToPlay();
-        playerTabFragmentRef.notifyPlayQueue(
-                srl,parentPlaylistID,stationViewID,playerTabFragmentRef.isShuffle(),
-                playerTabFragmentRef.isRepeat());
+            playerTabFragmentRef.setCurrentPlaylistViewID(parentPlaylistViewID);
+            playerTabFragmentRef.setCurrentPlaylistTItle(
+                    libRecord.getPlaylistRecords().get(parentPlaylistViewID).getPlaylistName());
+            playerTabFragmentRef.setCurrentStationTitle(record.getStationTitle());
+            playerTabFragmentRef.setCurrentStationURL(record.getStationURL());
+            playerTabFragmentRef.updateDisplayTitles();
+            playerTabFragmentRef.setStateToPlay();
+            playerTabFragmentRef.notifyPlayQueue(
+                    srl, parentPlaylistID, stationViewID, playerTabFragmentRef.isShuffle(),
+                    playerTabFragmentRef.isRepeat());
 
-        playerTabFragmentRef.getPlayProgressTimer().start();
-
+            playerTabFragmentRef.getPlayProgressTimer().start();
+        }
     }
 
     @Override
@@ -690,7 +748,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void checkReadWritePermission()
+    public void checkAndRequestPermission()
     {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -699,6 +757,15 @@ public class MainActivity extends AppCompatActivity
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     MainActivity.INITIAL_REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_NETWORK_STATE)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_NETWORK_STATE},
+                    MainActivity.REQUEST_ACCESS_NETWORK_STATE);
         }
     }
 
@@ -709,6 +776,9 @@ public class MainActivity extends AppCompatActivity
                 getString(R.string.SETTING_PREFERENCES), 0);
         usePlayProgressTimer = settings.getBoolean(
                 getString(R.string.SETTING_USE_PLAY_PROGRESS),false);
+
+        useWifiOnly = settings.getBoolean(
+                getString(R.string.SETTING_USE_WIFI_ONLY),false);
 
 //        currentPlaylistTitle = settings.getString(
 //                getString(R.string.SETTING_LAST_PLAYLIST_TITLE),"No Playlist");
@@ -722,4 +792,27 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
+    public  static boolean checkNetworkStatus()
+    {
+        NetworkInfo activeNetwork = connectiveManager.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
+    }
+
+    public  boolean isOnWifiNetwork()
+    {
+        NetworkInfo activeNetwork = connectiveManager.getActiveNetworkInfo();
+        return (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI);
+    }
+
+
+    public boolean isUseWifiOnly() {
+        return useWifiOnly;
+    }
+
+    public void setUseWifiOnly(boolean useWifiOnly) {
+        this.useWifiOnly = useWifiOnly;
+    }
 }

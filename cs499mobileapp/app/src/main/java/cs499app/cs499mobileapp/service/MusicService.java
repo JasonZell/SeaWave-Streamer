@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -43,6 +44,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     MediaPlayer myPlayer = null;
     myPlayerState playerState;
     String currentURL;
+
 
     private BroadcastReceiver musicToggleReceiver = new BroadcastReceiver() {
         @Override
@@ -393,6 +395,9 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     public void onBufferingUpdate(MediaPlayer mediaPlayer, int i) {
 
     }
+
+
+
 
 
 }
