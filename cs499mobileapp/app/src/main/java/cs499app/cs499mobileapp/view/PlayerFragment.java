@@ -41,6 +41,7 @@ import java.util.TimerTask;
 import cs499app.cs499mobileapp.helper.CircularSeekBar.OnCircularSeekBarChangeListener;
 import cs499app.cs499mobileapp.R;
 import cs499app.cs499mobileapp.helper.CircularSeekBar;
+import cs499app.cs499mobileapp.helper.PlayProgressCountDownTimer;
 import cs499app.cs499mobileapp.helper.Recorder;
 import cs499app.cs499mobileapp.helper.RoundedBitmapDrawableUtility;
 import cs499app.cs499mobileapp.model.LibraryRecord;
@@ -78,6 +79,8 @@ public class PlayerFragment extends Fragment {
     private ProgressBar playProgressBar;
     private int maxPlayDurationInSeconds;
     private CircularSeekBar seekBar;
+    private PlayProgressCountDownTimer playProgressTimer;
+    private boolean usePlayProgressTimer;
 
 
 
@@ -98,9 +101,11 @@ public class PlayerFragment extends Fragment {
 
         //DEBUG ONLY
         maxPlayDurationInSeconds = 30;
+        usePlayProgressTimer = true;
 
         restoreSettings();
         setupProgressBar();
+        setupProgressTimer();
         //setup callback
         try {
             controllerCallbackListener = (PlayerFragment.MediaControllerCallbackListener) getActivity();
@@ -119,22 +124,6 @@ public class PlayerFragment extends Fragment {
         seekBar.setIsTouchEnabled(false);
         seekBar.setMax(max);
         seekBar.setProgress(progress);
-
-//        CountDownTimer cd= new CountDownTimer(max*1000,1000){
-//            @Override
-//            public void onTick(long lefttime) {
-//            seekBar.setProgress(((int)lefttime/1000)-1);
-//                Log.i("timer:", String.valueOf(lefttime));
-//            seekBar.invalidate();
-//
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                //seekBar.setProgress(0);
-//
-//            }
-//        }.start();
 
         seekBar.setOnSeekBarChangeListener(new OnCircularSeekBarChangeListener() {
             @Override
@@ -220,8 +209,8 @@ public class PlayerFragment extends Fragment {
     public interface MediaControllerCallbackListener {
         public void onPlayButtonPressed();
         public void onPauseButtonPressed();
-        public void onSkipForwardButtonPressed();
-        public void onSkipPrevButtonPressed();
+        public boolean onSkipForwardButtonPressed();
+        public boolean onSkipPrevButtonPressed();
         public void onShuffleButtonPressed(boolean shuffleState);
         public void onRecordButtonPressed(boolean recordState);
     }
@@ -372,7 +361,21 @@ public class PlayerFragment extends Fragment {
         playProgressBar.setMax(maxPlayDurationInSeconds);
     }
 
+    public void setupProgressTimer()
+    {
+        playProgressTimer = new PlayProgressCountDownTimer(this,playProgressBar,maxPlayDurationInSeconds*1000);
+    }
+
     public CircularSeekBar getSeekBar() {
         return seekBar;
+    }
+
+    public PlayProgressCountDownTimer getPlayProgressTimer()
+    {
+        return playProgressTimer;
+    }
+
+    public ImageButton getSkipForwardButton() {
+        return skipForwardButton;
     }
 }

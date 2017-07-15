@@ -6,9 +6,9 @@
     <string name="MUSIC_ACTION_PLAY">MUSIC_ACTION_PLAY</string>
     <string name="MUSIC_ACTION_STOP">MUSIC_ACTION_STOP</string>
     <string name="MUSIC_ACTION_RESET">MUSIC_ACTION_RESET</string>
-
     <string name="MUSIC_ACTION_PAUSE">MUSIC_ACTION_PAUSE</string>
     <string name="MUSIC_PLAY_PAUSE_TOGGLE">MUSIC_PLAY_PAUSE_TOGGLE</string>
+    <string name="MUSIC_CALLBACK_PLAYING">MUSIC_CALLBACK_PREPARED_AND_PLAYING</string>
     <string name="MUSIC_URL_TO_PLAY">STATION_URL_TO_PLAY</string>
     <string name="BROADCAST_PRIVATE">AndroidApp.IN_APP_BROADCAST</string>
 
@@ -34,7 +34,7 @@
     <string name="SETTING_LAST_PLAYLIST_TITLE">SHARED_PREFERENCES_SETTINGS_LAST_PLAYLIST_TITLE</string>
     <string name="SETTING_LAST_STATION_URL">SHARED_PREFERENCES_SETTINGS_LAST_STATION_URL</string>
     <string name="SETTING_IS_SHUFFLE">SHARED_PREFERENCES_SETTINGS_IS_SHUFFLE</string>
-
+    <string name="SETTING_USE_PLAY_PROGRESS_BAR">SHARED_PREFERENCES_SETTING_USE_PLAY_PROGRESS_BAR</string>
     <string name="ROOT_DIRECTORY_NAME">XStreamer</string>
     <string name="SAVE_DIRECTORY_NAME">XstreamerAudios</string>
 </resources>

@@ -208,8 +208,6 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         registerReceiver(musicPlayUrlReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_PLAY_URL)),getString(R.string.BROADCAST_PRIVATE),null);
         registerReceiver(musicResetReceiver,new IntentFilter(getString(R.string.MUSIC_ACTION_RESET)),getString(R.string.BROADCAST_PRIVATE),null);
 
-
-
         Log.d("INSISDE MUSIC SERVICE","MUSIC SERVICE");
         currentURL ="";
         if (intent.getAction().equals(getString(R.string.MUSIC_ACTION_CREATE))) {

@@ -27,6 +27,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.List;
 
+import cs499app.cs499mobileapp.helper.PlayProgressCountDownTimer;
 import cs499app.cs499mobileapp.helper.Recorder;
 import cs499app.cs499mobileapp.model.LibraryRecord;
 import cs499app.cs499mobileapp.model.StationRecord;
@@ -318,6 +319,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_manage) {
 
+        } else if (id == R.id.playback_timer_toggle) {
+
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -445,25 +448,28 @@ public class MainActivity extends AppCompatActivity
     public void onPlayButtonPressed() {
         //Toast.makeText(this, "PlayButton event Catch in Activity", Toast.LENGTH_SHORT).show();
         sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PLAY)), getString(R.string.BROADCAST_PRIVATE));
+        playerTabFragmentRef.getPlayProgressTimer().resume();
     }
 
     @Override
     public void onPauseButtonPressed() {
         //Toast.makeText(this, "PauseButton event Catch in Activity", Toast.LENGTH_SHORT).show();
         sendBroadcast(new Intent(getString(R.string.MUSIC_ACTION_PAUSE)), getString(R.string.BROADCAST_PRIVATE));
-
+        playerTabFragmentRef.getPlayProgressTimer().pause();
 
 
     }
 
+    //return true if there is next station to go to, otherwise, return false;
     @Override
-    public void onSkipForwardButtonPressed() {
-       // Toast.makeText(this, "Skip Forward Button event Catch in Activity", Toast.LENGTH_SHORT).show();
+    public boolean onSkipForwardButtonPressed() {
+        boolean returnVal = false;
+        // Toast.makeText(this, "Skip Forward Button event Catch in Activity", Toast.LENGTH_SHORT).show();
         int nextStationIndex = playerTabFragmentRef.getPlayQueue().getNextStation();
         Log.d("curPlaylistIndex",playerTabFragmentRef.getPlayQueue().getCurrentPlayListID()+"");
-
         Log.d("NextStationIndex",nextStationIndex+"");
         if(nextStationIndex != -1) {
+            returnVal = true;
             long curPlaylistID = playerTabFragmentRef.getPlayQueue().getCurrentPlayListID();
             List<StationRecord> srl = libRecord.getStationListRecordsMap()
                     .get(curPlaylistID);
@@ -481,19 +487,24 @@ public class MainActivity extends AppCompatActivity
             playerTabFragmentRef.setCurrentStationURL(record.getStationURL());
             playerTabFragmentRef.setStateToPlay();
             playerTabFragmentRef.updateDisplayTitles();
+
+            playerTabFragmentRef.getPlayProgressTimer().start();
+
         }
 
+        return returnVal;
     }
 
+    //return true if there is previous station to go to, otherwise, return false;
     @Override
-    public void onSkipPrevButtonPressed() {
+    public boolean onSkipPrevButtonPressed() {
        // Toast.makeText(this, "Skip Prev Button event Catch in Activity", Toast.LENGTH_SHORT).show();
+        boolean returnVal = false;
         int prevStationIndex = playerTabFragmentRef.getPlayQueue().getPrevStation();
-
         Log.d("curPlaylistIndex",playerTabFragmentRef.getPlayQueue().getCurrentPlayListID()+"");
-
         Log.d("PrevStationIndex",prevStationIndex+"");
         if(prevStationIndex != -1) {
+            returnVal = true;
 
             int curPlaylistViewID = playerTabFragmentRef.getCurrentPlaylistViewID();
             long curPlaylistID = playerTabFragmentRef.getPlayQueue().getCurrentPlayListID();
@@ -513,7 +524,9 @@ public class MainActivity extends AppCompatActivity
             playerTabFragmentRef.setStateToPlay();
             playerTabFragmentRef.updateDisplayTitles();
 
+
         }
+        return returnVal;
     }
 
     private void initSharePref()
@@ -559,7 +572,7 @@ public class MainActivity extends AppCompatActivity
         playerTabFragmentRef.notifyPlayQueue(
                 srl,parentPlaylistID,stationViewID,playerTabFragmentRef.isShuffle());
 
-
+        playerTabFragmentRef.getPlayProgressTimer().start();
 
     }
 
@@ -642,4 +655,5 @@ public class MainActivity extends AppCompatActivity
                     MainActivity.INITIAL_REQUEST_WRITE_EXTERNAL_STORAGE);
         }
     }
+
 }
