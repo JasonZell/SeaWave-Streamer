@@ -90,10 +90,14 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp">
 
-            <LinearLayout
+            <ImageButton
+                android:src="@drawable/repeat_off_icon"
+                style="?android:borderlessButtonStyle"
+
+                android:id="@+id/controller_repeat_button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="15"></LinearLayout>
+                android:layout_weight="15"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -119,9 +123,8 @@
             </LinearLayout>
 
             <ImageButton
-                android:src="@drawable/shuffle_icon"
+                android:src="@drawable/shuffle_off_icon"
                 style="?android:borderlessButtonStyle"
-
                 android:id="@+id/controller_shuffle_button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

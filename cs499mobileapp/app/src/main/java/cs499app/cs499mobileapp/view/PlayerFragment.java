@@ -58,6 +58,7 @@ public class PlayerFragment extends Fragment {
 
     private PlayQueue playQueue;
     private boolean isShuffle;
+    private boolean isRepeat;
     private boolean isRecord;
     private LibraryRecord libRecord;
     private String currentStationTitle;
@@ -74,6 +75,7 @@ public class PlayerFragment extends Fragment {
     private ImageButton skipForwardButton;
     private ImageButton skipPrevButton;
     private ImageButton shuffleButton;
+    private ImageButton repeatButton;
     private FloatingActionButton recordButton;
     private playOrPause playOrPauseState;
     private ProgressBar playProgressBar;
@@ -213,16 +215,26 @@ public class PlayerFragment extends Fragment {
         public boolean onSkipPrevButtonPressed();
         public void onShuffleButtonPressed(boolean shuffleState);
         public void onRecordButtonPressed(boolean recordState);
+        public void onRepeatButtonPressed(boolean repeatState);
+
     }
 
     public void setupMediaControlButtons()
     {
+        //get references
         playPauseButton = rootView.findViewById(R.id.controller_playpause_button);
         skipForwardButton = rootView.findViewById(R.id.controller_skipnext_button);
         skipPrevButton = rootView.findViewById(R.id.controller_skipprev_button);
         shuffleButton = rootView.findViewById(R.id.controller_shuffle_button);
         recordButton  = rootView.findViewById(R.id.controller_record_floatingButton);
+        repeatButton = rootView.findViewById(R.id.controller_repeat_button);
 
+        //base on the state, choose icon image
+        refreshRecordIconState();
+        refreshShuffleIconState();
+        refreshRepeatIconState();
+
+        //setup button listeners
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -260,6 +272,7 @@ public class PlayerFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 controllerCallbackListener.onShuffleButtonPressed(isShuffle = !isShuffle);
+                refreshShuffleIconState();
             }
         });
 
@@ -268,6 +281,18 @@ public class PlayerFragment extends Fragment {
             public void onClick(View view) {
                 if(currentStationURL != "")
                     controllerCallbackListener.onRecordButtonPressed(isRecord = !isRecord);
+                refreshRecordIconState();
+
+
+            }
+        });
+
+        repeatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                controllerCallbackListener.onRepeatButtonPressed(isRepeat = !isRepeat);
+                refreshRepeatIconState();
+
             }
         });
     }
@@ -279,15 +304,72 @@ public class PlayerFragment extends Fragment {
         playOrPauseState = playOrPause.PLAY_STATE;
     }
 
+    public void refreshRepeatIconState()
+    {
+        if(isRepeat)
+            setRepeatIconOn();
+        else
+            setRepeatIconOff();
+    }
+
+    public void refreshRecordIconState()
+    {
+        if(isRecord)
+            setRecordIconOn();
+        else
+            setRecordIconOff();
+    }
+
+    public void refreshShuffleIconState()
+    {
+        if(isShuffle)
+            setShuffleIconOn();
+        else
+            setShuffleIconOff();
+    }
+
+    public void setRepeatIconOn()
+    {
+        repeatButton.setImageResource(R.drawable.repeat_on_icon);
+    }
+
+    public void setRepeatIconOff()
+    {
+        repeatButton.setImageResource(R.drawable.repeat_off_icon);
+
+    }
+
+    public void setShuffleIconOn()
+    {
+        shuffleButton.setImageResource(R.drawable.shuffle_on_icon);
+    }
+
+    public void setShuffleIconOff()
+    {
+        shuffleButton.setImageResource(R.drawable.shuffle_off_icon);
+
+    }
+
+    public void setRecordIconOff()
+    {
+        recordButton.setImageResource(R.drawable.record_off_word_icon);
+    }
+
+    public void setRecordIconOn()
+    {
+        recordButton.setImageResource(R.drawable.record_word_icon);
+
+    }
+
     private void restoreSettings()
     {
-
         Log.d("Restore player"," settings in player fragment");
         SharedPreferences settings = getContext().getSharedPreferences(
                 getString(R.string.SETTING_PREFERENCES), 0);
         isShuffle = settings.getBoolean(
                 getString(R.string.SETTING_IS_SHUFFLE),false);
 
+        isRepeat = settings.getBoolean(getString(R.string.SETTING_IS_REPEAT),false);
 //        currentPlaylistTitle = settings.getString(
 //                getString(R.string.SETTING_LAST_PLAYLIST_TITLE),"No Playlist");
 //
@@ -297,9 +379,6 @@ public class PlayerFragment extends Fragment {
 //        currentStationURL = settings.getString(
 //                getString(R.string.SETTING_LAST_STATION_URL),"");
         //updateDisplayTitles();
-
-
-
 
     }
 
@@ -312,6 +391,8 @@ public class PlayerFragment extends Fragment {
 //        editor.putString(getString(R.string.SETTING_LAST_PLAYLIST_TITLE), currentPlaylistTitle);
 //        editor.putString(getString(R.string.SETTING_LAST_STATION_TITLE), currentStationTitle);
 //        editor.putString(getString(R.string.SETTING_LAST_STATION_URL), currentStationURL);
+        editor.putBoolean(getString(R.string.SETTING_IS_REPEAT),isRepeat);
+
         editor.putBoolean(getString(R.string.SETTING_IS_SHUFFLE),isShuffle);
         editor.commit();
         Log.d("Destoryed player ","Fragment, saving settings");

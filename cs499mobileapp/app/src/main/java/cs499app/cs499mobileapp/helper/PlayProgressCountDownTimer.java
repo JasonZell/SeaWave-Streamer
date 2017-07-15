@@ -31,7 +31,7 @@ public class PlayProgressCountDownTimer {
         tickIntervalMillis = 15;
         //updateIntervalMillis = 50;
         isPaused = false;
-        pB.setMax((int)(totalCountDownMillis/tickIntervalMillis));
+        pB.setMax((int)((totalCountDownMillis)/tickIntervalMillis));
 
     }
 
@@ -89,13 +89,13 @@ public class PlayProgressCountDownTimer {
 
     public void getNewCountDownTimer()
     {
-        long totalTimeMillis = leftOverMillis;
+        long totalTimeMillis = leftOverMillis+1000;
 
         cd = new CountDownTimer(totalTimeMillis,tickIntervalMillis) {
             @Override
             public void onTick(long lefttime) {
                 //pB.setProgress(((int)(lefttime/tickIntervalMillis)-1));
-                pB.setProgress((int)(leftOverMillis/tickIntervalMillis)-1);
+                pB.setProgress(((int)((leftOverMillis/tickIntervalMillis)-tickIntervalMillis)));
                 //Log.i("timer:", String.valueOf(lefttime));
                 pB.invalidate();
                 leftOverMillis -= tickIntervalMillis;

@@ -638,6 +638,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onRepeatButtonPressed(boolean repeatState) {
+        Toast.makeText(this, "Repeat"+repeatState, Toast.LENGTH_SHORT).show();
+
+
+    }
+
     public void resetMediaPlayer()
     {
         playerTabFragmentRef.resetMediaPlayer();
