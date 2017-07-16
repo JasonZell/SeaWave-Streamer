@@ -38,9 +38,18 @@
     <string name="SETTING_USE_PLAY_PROGRESS">SHARED_PREFERENCES_SETTING_USE_PLAY_PROGRESS_BAR</string>
     <string name="SETTING_USE_WIFI_ONLY">SHARED_PREFERENCES_SETTING_USE_WIFI_ONLY</string>
     <string name="SETTING_MAX_PLAY_PROGRESS_SECONDS">SHARED_PREFERENCES_SETTING_MAX_PLAY_PROGRESS_SECONDS</string>
+    <string name="SETTING_MAX_FILE_SIZE">SHARED_PREFERENCES_SETTING_MAX_FILE_SIZE</string>
+
     <string name="ROOT_DIRECTORY_NAME">XStreamer</string>
     <string name="SAVE_DIRECTORY_NAME">XstreamerAudios</string>
 
 
     <string name="WIFI_WARNING_TEXT">WIFI ONLY MODE, CHANGE SETTINGS TO USE MOBILE DATA</string>
+
+
+    <string-array name="file_size_unit_array">
+        <item>KiloBytes</item>
+        <item>MegaBytes</item>
+    </string-array>
+
 </resources>

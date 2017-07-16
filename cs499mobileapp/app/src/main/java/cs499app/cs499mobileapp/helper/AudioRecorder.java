@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.icu.util.Output;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.Handler;
 import android.renderscript.ScriptGroup;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -27,6 +28,7 @@ import java.util.TimeZone;
 import cs499app.cs499mobileapp.MainActivity;
 import cs499app.cs499mobileapp.Manifest;
 import cs499app.cs499mobileapp.R;
+import cs499app.cs499mobileapp.view.PlayerFragment;
 
 import static cs499app.cs499mobileapp.service.MusicService.getEncodedURL;
 
@@ -39,8 +41,9 @@ public class AudioRecorder {
     private OutputStream outstream;
     private InputStream inStream;
     private CircularSeekBar seekbar;
+    private PlayerFragment playerFragmentRef;
     private int maxFileSizeInBytes;
-    AsyncTask<Void, Void, Void> recordAudioTask;
+    AsyncTask<Void, Integer, Void> recordAudioTask;
 
     public AudioRecorder(Context context, Activity activity, CircularSeekBar seekbar) {
         this.seekbar = seekbar;
@@ -108,7 +111,9 @@ public class AudioRecorder {
     public void startRecording(final String playlistName, final String stationName, final String stationUrl)
     {
 
-        recordAudioTask = new AsyncTask<Void, Void, Void>() {
+        seekbar.setMax(maxFileSizeInBytes);
+        seekbar.setProgress(0);
+        recordAudioTask = new AsyncTask<Void, Integer, Void>() {
 
              @Override
              protected Void doInBackground(Void... voids) {
@@ -132,9 +137,15 @@ public class AudioRecorder {
                       outstream = new FileOutputStream(outputSource);
 
                      while ((buffer = inStream.read()) != -1 && !isCancelled()) {
-                         //Log.d("AudioRecording", "bytesRead=" + bytesRead);
                          outstream.write(buffer);
                          bytesRead++;
+                         if(bytesRead % 1000 == 0)
+                         {
+                             Log.d("AudioRecording", "bytesRead=" + bytesRead);
+                             publishProgress(bytesRead);
+                         }
+                         if(bytesRead >= maxFileSizeInBytes)
+                             inStream.close();
                      }
                  }
                   catch (FileNotFoundException e1) {
@@ -155,10 +166,27 @@ public class AudioRecorder {
 
              @Override
              protected void onPostExecute(Void aVoid) {
-                 //seekbar.setProgress(0);
+
+
+                 Handler handler = new Handler();
+                 handler.postDelayed(new Runnable() {
+                     public void run() {
+                         // yourMethod();
+                     }
+                 }, 5000);
+                 seekbar.setProgress(0);
+                 playerFragmentRef.setRecordIconOff();
+
+                 Log.d("post Execute"," from recording job");
+
 
 
              }
+
+            @Override
+            protected void onProgressUpdate(Integer... values) {
+                seekbar.setProgress(values[0]);
+            }
 
             @Override
             protected void onCancelled(Void aVoid) {
@@ -166,7 +194,7 @@ public class AudioRecorder {
                 seekbar.setProgress(0);
 
                 try {
-                    inStream.close();
+                    //inStream.close();
                     outstream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -194,5 +222,9 @@ public class AudioRecorder {
 
     public void setSeekbar(CircularSeekBar seekbar) {
         this.seekbar = seekbar;
+    }
+
+    public void setPlayerFragmentRef(PlayerFragment playerFragmentRef) {
+        this.playerFragmentRef = playerFragmentRef;
     }
 }

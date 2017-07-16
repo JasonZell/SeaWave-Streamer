@@ -2,34 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <group >
+    <group android:id="@+id/menu_top">
         <item android:id="@+id/wifi_only_toggle_item"
             android:title="Use WIFI Only"
-            app:actionLayout="@layout/wifi_only_toggle_item_layout"/>
+            app:actionLayout="@layout/wifi_only_toggle_item_layout"
+            />
 
         <item android:id="@+id/playback_timer_toggle_item"
             android:title="Use Playback Timer"
             app:actionLayout="@layout/play_progress_toggle_item_layout"/>
     </group>
 
-    <!--<item android:title="Communicate">-->
-        <!--<menu>-->
-            <!--<item-->
-                <!--android:id="@+id/nav_share"-->
-                <!--android:title="Share" />-->
-            <!--<item-->
-                <!--android:id="@+id/nav_send"-->
-                <!--android:title="Send" />-->
-        <!--</menu>-->
-    <!--</item>-->
-
-    <group>
+    <group
+        android:id="@+id/menu_bottom">
 
         <item android:title="Set Playback Timer"
             android:id="@+id/playback_timer_setter">
         </item>
         <item android:title="Set Recording File Size"
-            android:id="@+id/max_file_size_item">
+            android:id="@+id/max_file_size_item"
+            app:actionLayout="@layout/navigation_set_filesize_item_layout">
         </item>
     </group>
 

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -70,6 +71,7 @@ public class PlayerFragment extends Fragment {
     private CircularSeekBar seekBar;
     private PlayProgressCountDownTimer playProgressTimer;
     private AudioRecorder recorderRef;
+    private int maxFileSizeInBytes;
 
 
 
@@ -108,27 +110,24 @@ public class PlayerFragment extends Fragment {
 
 
         final int max = 30;
-        int progress = 20;
         seekBar = (CircularSeekBar) rootView.findViewById(R.id.circular_seek_bar);
         seekBar.setIsTouchEnabled(false);
-        seekBar.setMax(max);
-        seekBar.setProgress(progress);
-
-        seekBar.setOnSeekBarChangeListener(new OnCircularSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(CircularSeekBar circularSeekBar, int progress, boolean fromUser) {
-//                AppCompatTextView text = (AppCompatTextView) circularSeekBar.findViewById(R.id.controller_station_name);
-//                text.setText("Progress:" +progress);
-            }
-            @Override
-            public void onStopTrackingTouch(CircularSeekBar seekBar) {
-            }
-            @Override
-            public void onStartTrackingTouch(CircularSeekBar seekBar) {
-            }
-        });
+//        seekBar.setOnSeekBarChangeListener(new OnCircularSeekBarChangeListener() {
+//            @Override
+//            public void onProgressChanged(CircularSeekBar circularSeekBar, int progress, boolean fromUser) {
+////                AppCompatTextView text = (AppCompatTextView) circularSeekBar.findViewById(R.id.controller_station_name);
+////                text.setText("Progress:" +progress);
+//            }
+//            @Override
+//            public void onStopTrackingTouch(CircularSeekBar seekBar) {
+//            }
+//            @Override
+//            public void onStartTrackingTouch(CircularSeekBar seekBar) {
+//            }
+//        });
 
         recorderRef.setSeekbar(seekBar);
+        recorderRef.setMaxFileSizeInBytes(maxFileSizeInBytes);
 //
 //        //fitting image inside circular seekbar
 //
@@ -205,6 +204,7 @@ public class PlayerFragment extends Fragment {
         public void onShuffleButtonPressed(boolean shuffleState);
         public void onRecordButtonPressed(boolean recordState);
         public void onRepeatButtonPressed(boolean repeatState);
+        public void onMaxFileSizeChange(int maxSize);
 
     }
 
@@ -385,6 +385,8 @@ public class PlayerFragment extends Fragment {
         isWifiOnly = settings.getBoolean(getString(R.string.SETTING_USE_WIFI_ONLY),false);
         maxPlayDurationInSeconds =
                 settings.getInt(getString(R.string.SETTING_MAX_PLAY_PROGRESS_SECONDS),60);
+        maxFileSizeInBytes =
+                settings.getInt(getString(R.string.SETTING_MAX_FILE_SIZE),500000);
 //        currentPlaylistTitle = settings.getString(
 //                getString(R.string.SETTING_LAST_PLAYLIST_TITLE),"No Playlist");
 //
@@ -403,14 +405,12 @@ public class PlayerFragment extends Fragment {
         SharedPreferences settings = getContext().getSharedPreferences(
                 getString(R.string.SETTING_PREFERENCES), 0);
         SharedPreferences.Editor editor = settings.edit();
-//        editor.putString(getString(R.string.SETTING_LAST_PLAYLIST_TITLE), currentPlaylistTitle);
-//        editor.putString(getString(R.string.SETTING_LAST_STATION_TITLE), currentStationTitle);
-//        editor.putString(getString(R.string.SETTING_LAST_STATION_URL), currentStationURL);
         editor.putBoolean(getString(R.string.SETTING_IS_REPEAT),isRepeat);
         editor.putBoolean(getString(R.string.SETTING_IS_SHUFFLE),isShuffle);
         editor.putBoolean(getString(R.string.SETTING_USE_PLAY_PROGRESS),usePlayProgressTimer);
         editor.putBoolean(getString(R.string.SETTING_USE_WIFI_ONLY),isWifiOnly);
         editor.putInt(getString(R.string.SETTING_MAX_PLAY_PROGRESS_SECONDS),maxPlayDurationInSeconds);
+        editor.putInt(getString(R.string.SETTING_MAX_FILE_SIZE),maxFileSizeInBytes);
 
         editor.commit();
         Log.d("Destoryed player ","Fragment, saving settings");
@@ -520,5 +520,23 @@ public class PlayerFragment extends Fragment {
         pickerFragment.show(getFragmentManager(), "timePicker");
         pickerFragment.setPlayProgressCountDownTimer(playProgressTimer);
 
+    }
+
+    public void showFileSizeDialog()
+    {
+        FileSizeInputDialogFragment fileSizeDialog = new FileSizeInputDialogFragment();
+        fileSizeDialog.setPlayerFragmentRef(this);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        fileSizeDialog.show(ft, "dialog");
+    }
+
+    public void setMaxFileSizeInBytes(int maxFileSizeInBytes) {
+        controllerCallbackListener.onMaxFileSizeChange(maxFileSizeInBytes);
+        recorderRef.setMaxFileSizeInBytes(maxFileSizeInBytes);
+        this.maxFileSizeInBytes = maxFileSizeInBytes;
+    }
+
+    public int getMaxFileSizeInBytes() {
+        return maxFileSizeInBytes;
     }
 }

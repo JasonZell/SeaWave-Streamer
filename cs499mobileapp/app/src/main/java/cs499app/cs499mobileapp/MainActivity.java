@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -28,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -40,6 +42,7 @@ import cs499app.cs499mobileapp.model.StationRecord;
 import cs499app.cs499mobileapp.service.MusicService;
 import cs499app.cs499mobileapp.view.ContainerFragment;
 import cs499app.cs499mobileapp.view.ContextMenuDialogFragment;
+import cs499app.cs499mobileapp.view.FileSizeInputDialogFragment;
 import cs499app.cs499mobileapp.view.PlayerFragment;
 import cs499app.cs499mobileapp.view.StationDialogFragment;
 import cs499app.cs499mobileapp.view.StationListFragment;
@@ -69,8 +72,10 @@ public class MainActivity extends AppCompatActivity
     private boolean usePlayProgressTimer;
     private boolean useWifiOnly;
     private AudioRecorder audioRecorder;
+    private Menu navigationMenuRef;
     private Switch playProgressSwitch;
     private Switch wifiOnlySwitch;
+    private int maxFileSize; //retrieve by settings only.
    // private ConnectivityManager connectiveManager;
 
 
@@ -183,6 +188,7 @@ public class MainActivity extends AppCompatActivity
 
         //initialize audioRecorder
         audioRecorder = new AudioRecorder(this.getApplicationContext(),MainActivity.this,null);
+        audioRecorder.setPlayerFragmentRef(playerTabFragmentRef);
         playerTabFragmentRef.setRecorderRef(audioRecorder);
         //Start Music Service
         Intent startServiceIntent = new Intent(MainActivity.this, MusicService.class);
@@ -203,9 +209,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         //playbackToggle
-        Menu navMenu = navigationView.getMenu();
-        playProgressSwitch = navMenu.findItem(R.id.playback_timer_toggle_item).getActionView().findViewById(R.id.play_progress_toggle);
+        navigationMenuRef = navigationView.getMenu();
+        playProgressSwitch = navigationMenuRef.findItem(R.id.playback_timer_toggle_item).getActionView().findViewById(R.id.play_progress_toggle);
         playProgressSwitch.setChecked(usePlayProgressTimer);
         playProgressSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -226,7 +233,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        wifiOnlySwitch = navMenu.findItem(R.id.wifi_only_toggle_item).getActionView().findViewById(R.id.wifi_only_toggle_switch);
+        wifiOnlySwitch = navigationMenuRef.findItem(R.id.wifi_only_toggle_item).getActionView().findViewById(R.id.wifi_only_toggle_switch);
         wifiOnlySwitch.setChecked(useWifiOnly);
         wifiOnlySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -258,6 +265,9 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
+        // setup drawer items
+        changeMaxFileSizeDisplay(maxFileSize);
 
     }
 
@@ -297,6 +307,13 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.playback_timer_setter)
         {
             playerTabFragmentRef.showTimePickerDialog();
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else if(id == R.id.max_file_size_item)
+        {
+            playerTabFragmentRef.showFileSizeDialog();
+
+            drawer.closeDrawer(GravityCompat.START);
         }
         //drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -726,6 +743,29 @@ public class MainActivity extends AppCompatActivity
         playerTabFragmentRef.getPlayQueue().setRepeat(repeatState);
     }
 
+    @Override
+    public void onMaxFileSizeChange(int maxSize) {
+        changeMaxFileSizeDisplay(maxSize);
+    }
+
+    public void changeMaxFileSizeDisplay(int maxSize)
+    {
+        TextView  view = navigationMenuRef.findItem(R.id.max_file_size_item)
+                .getActionView().findViewById(R.id.navigation_setfilesize_item_textview);
+        String displayText = "";
+        if(maxSize < 1000000)
+        {
+            maxSize /= 1000;
+            displayText = maxSize+" KB";
+        }
+        else
+        {
+            maxSize /= 1000000;
+            displayText = maxSize +" MB";
+        }
+        view.setText(displayText);
+    }
+
     public void resetMediaPlayer()
     {
         playerTabFragmentRef.resetMediaPlayer();
@@ -766,6 +806,8 @@ public class MainActivity extends AppCompatActivity
 
         useWifiOnly = settings.getBoolean(
                 getString(R.string.SETTING_USE_WIFI_ONLY),false);
+
+        maxFileSize = settings.getInt(getString(R.string.SETTING_MAX_FILE_SIZE),500000);
 
 //        currentPlaylistTitle = settings.getString(
 //                getString(R.string.SETTING_LAST_PLAYLIST_TITLE),"No Playlist");
