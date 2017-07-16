@@ -17,7 +17,8 @@
         android:id="@+id/menu_bottom">
 
         <item android:title="Set Playback Timer"
-            android:id="@+id/playback_timer_setter">
+            android:id="@+id/playback_timer_setter"
+            app:actionLayout="@layout/navigation_set_playduration_item_layout">
         </item>
         <item android:title="Set Recording File Size"
             android:id="@+id/max_file_size_item"

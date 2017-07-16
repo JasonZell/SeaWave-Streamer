@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity
     private Switch playProgressSwitch;
     private Switch wifiOnlySwitch;
     private int maxFileSize; //retrieve by settings only.
+    private int maxPlayDurationInSeconds;
    // private ConnectivityManager connectiveManager;
 
 
@@ -268,6 +269,7 @@ public class MainActivity extends AppCompatActivity
 
         // setup drawer items
         changeMaxFileSizeDisplay(maxFileSize);
+        changeMaxPlayDurationDisplay(maxPlayDurationInSeconds);
 
     }
 
@@ -307,13 +309,13 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.playback_timer_setter)
         {
             playerTabFragmentRef.showTimePickerDialog();
-            drawer.closeDrawer(GravityCompat.START);
+            //drawer.closeDrawer(GravityCompat.START);
         }
         else if(id == R.id.max_file_size_item)
         {
             playerTabFragmentRef.showFileSizeDialog();
 
-            drawer.closeDrawer(GravityCompat.START);
+           // drawer.closeDrawer(GravityCompat.START);
         }
         //drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -504,6 +506,7 @@ public class MainActivity extends AppCompatActivity
                     libRecord.exportDatabase(getApplicationContext(),this);
 
                 } else {
+
                     Toast.makeText(this, "Write External Permission Required To Export Database!", Toast.LENGTH_SHORT).show();
                 }
                 return;
@@ -685,7 +688,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onShuffleButtonPressed(boolean shuffleState) {
-        Toast.makeText(this, "Callback: shuffle: "+ shuffleState, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Callback: shuffle: "+ shuffleState, Toast.LENGTH_SHORT).show();
         playerTabFragmentRef.setShuffle(shuffleState);
     }
 
@@ -724,7 +727,7 @@ public class MainActivity extends AppCompatActivity
     public void onRecordButtonPressed(boolean recordState) {
         if(recordState == true)
         {
-            Toast.makeText(this, "START RECORDING", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "START RECORDING", Toast.LENGTH_SHORT).show();
             audioRecorder.startRecording(
                     playerTabFragmentRef.getCurrentPlaylistTitle(),
                     playerTabFragmentRef.getCurrentStationTitle(),
@@ -732,20 +735,56 @@ public class MainActivity extends AppCompatActivity
         }
         else
         {
-            Toast.makeText(this, "STOP RECORDING", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "STOP RECORDING", Toast.LENGTH_SHORT).show();
             audioRecorder.stopRecording();
         }
     }
 
     @Override
     public void onRepeatButtonPressed(boolean repeatState) {
-        Toast.makeText(this, "Repeat "+repeatState, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Repeat "+repeatState, Toast.LENGTH_SHORT).show();
         playerTabFragmentRef.getPlayQueue().setRepeat(repeatState);
     }
 
     @Override
     public void onMaxFileSizeChange(int maxSize) {
         changeMaxFileSizeDisplay(maxSize);
+    }
+
+    @Override
+    public void onMaxPlayDurationInSecondChanged(int seconds) {
+        changeMaxPlayDurationDisplay(seconds);
+
+    }
+    public void changeMaxPlayDurationDisplay(int seconds)
+    {
+        maxPlayDurationInSeconds = seconds;
+        TextView  view = navigationMenuRef.findItem(R.id.playback_timer_setter)
+                .getActionView().findViewById(R.id.navigation_setplayduration_item_textview);
+        String displayText = "";
+
+        if(maxPlayDurationInSeconds < 3600) //less than an hour
+        {
+            int minutes = (maxPlayDurationInSeconds) / 60;
+            displayText = minutes+"";
+            displayText += minutes  > 1 ?" Minutes" : " Minute";
+
+        }
+        else
+        {
+            int hours = maxPlayDurationInSeconds / 3600;
+            int minutes = (maxPlayDurationInSeconds % 3600) / 60;
+
+            displayText = hours+ "";
+            displayText += hours > 1 ? " Hours " : " Hour ";
+            displayText += minutes+"";
+            displayText += minutes  > 1 ?" Minutes" : " Minute";
+            view.setText(displayText);
+        }
+
+
+
+        view.setText(displayText);
     }
 
     public void changeMaxFileSizeDisplay(int maxSize)
@@ -808,6 +847,8 @@ public class MainActivity extends AppCompatActivity
                 getString(R.string.SETTING_USE_WIFI_ONLY),false);
 
         maxFileSize = settings.getInt(getString(R.string.SETTING_MAX_FILE_SIZE),500000);
+        maxPlayDurationInSeconds = settings.getInt(
+                getString(R.string.SETTING_MAX_PLAY_PROGRESS_SECONDS),60);
 
 //        currentPlaylistTitle = settings.getString(
 //                getString(R.string.SETTING_LAST_PLAYLIST_TITLE),"No Playlist");

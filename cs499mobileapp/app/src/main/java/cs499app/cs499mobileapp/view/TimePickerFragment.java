@@ -18,6 +18,7 @@ public  class TimePickerFragment extends DialogFragment
 
     int maxDurationInSeconds;
     PlayProgressCountDownTimer timer;
+    PlayerFragment playerFragmentRef;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -41,11 +42,16 @@ public  class TimePickerFragment extends DialogFragment
         totalSecond += minute*60;
         maxDurationInSeconds = totalSecond;
         timer.setMaxTimeMillis(maxDurationInSeconds*1000);
-        Toast.makeText(this.getContext(), "Max Seconds set:"+maxDurationInSeconds, Toast.LENGTH_SHORT).show();
+        playerFragmentRef.setMaxPlayDurationInSeconds(maxDurationInSeconds);
+        //Toast.makeText(this.getContext(), "Max Seconds set:"+maxDurationInSeconds, Toast.LENGTH_SHORT).show();
     }
 
     public void setPlayProgressCountDownTimer(PlayProgressCountDownTimer t)
     {
         timer = t;
+    }
+
+    public void setPlayerFragmentRef(PlayerFragment playerFragmentRef) {
+        this.playerFragmentRef = playerFragmentRef;
     }
 }

@@ -158,7 +158,24 @@ public class AudioRecorder {
                  } catch (Exception e) {
                      e.printStackTrace();
                  } finally {
-
+                     if (inStream != null) {
+                         try {
+                             inStream.close();
+                         }
+                         catch(IOException ioex) {
+                             ioex.printStackTrace();
+                         }
+                     }
+                     //Close output
+                     if (outstream != null) {
+                         try {
+                             outstream.close();
+                             Log.d("Close outstream","");
+                         }
+                         catch(IOException ioex) {
+                             ioex.printStackTrace();
+                         }
+                     }
                  }
 
                  return null;

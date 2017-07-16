@@ -19,7 +19,8 @@
             android:layout_weight="95"
             android:gravity="center"
             android:text="LIBRARY"
-            android:textSize="40sp"/>
+            android:textSize="40sp"
+            android:typeface="serif"/>
 
         <View
             android:layout_width="fill_parent"

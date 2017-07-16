@@ -205,6 +205,7 @@ public class PlayerFragment extends Fragment {
         public void onRecordButtonPressed(boolean recordState);
         public void onRepeatButtonPressed(boolean repeatState);
         public void onMaxFileSizeChange(int maxSize);
+        public void onMaxPlayDurationInSecondChanged(int seconds);
 
     }
 
@@ -513,12 +514,14 @@ public class PlayerFragment extends Fragment {
     {
         TimePickerFragment pickerFragment = new TimePickerFragment();
 
+        pickerFragment.setPlayProgressCountDownTimer(playProgressTimer);
+        pickerFragment.setPlayerFragmentRef(this);
+
         Bundle args = new Bundle();
         args.putInt(getString(R.string.SETTING_MAX_PLAY_PROGRESS_SECONDS), maxPlayDurationInSeconds);
-
         pickerFragment.setArguments(args);
         pickerFragment.show(getFragmentManager(), "timePicker");
-        pickerFragment.setPlayProgressCountDownTimer(playProgressTimer);
+
 
     }
 
@@ -538,5 +541,10 @@ public class PlayerFragment extends Fragment {
 
     public int getMaxFileSizeInBytes() {
         return maxFileSizeInBytes;
+    }
+
+    public void setMaxPlayDurationInSeconds(int maxPlayDurationInSeconds) {
+        controllerCallbackListener.onMaxPlayDurationInSecondChanged(maxPlayDurationInSeconds);
+        this.maxPlayDurationInSeconds = maxPlayDurationInSeconds;
     }
 }
