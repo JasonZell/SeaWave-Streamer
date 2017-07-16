@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -65,11 +66,10 @@ public class PlayerFragment extends Fragment {
     private FloatingActionButton recordButton;
     private playOrPause playOrPauseState;
     private ProgressBar playProgressBar;
-    private int maxPlayDurationInSeconds;
+    private int maxPlayDurationInSeconds; // value set by settings only
     private CircularSeekBar seekBar;
     private PlayProgressCountDownTimer playProgressTimer;
     private AudioRecorder recorderRef;
-
 
 
 
@@ -88,8 +88,8 @@ public class PlayerFragment extends Fragment {
         playQueue = new PlayQueue();
 
 
-        //DEBUG ONLY
-        maxPlayDurationInSeconds = 10;
+        // DEBUG ONLY
+        //maxPlayDurationInSeconds = 10;
         //usePlayProgressTimer = true;
 
         restoreSettings();
@@ -383,6 +383,8 @@ public class PlayerFragment extends Fragment {
                 getString(R.string.SETTING_USE_PLAY_PROGRESS),false);
 
         isWifiOnly = settings.getBoolean(getString(R.string.SETTING_USE_WIFI_ONLY),false);
+        maxPlayDurationInSeconds =
+                settings.getInt(getString(R.string.SETTING_MAX_PLAY_PROGRESS_SECONDS),60);
 //        currentPlaylistTitle = settings.getString(
 //                getString(R.string.SETTING_LAST_PLAYLIST_TITLE),"No Playlist");
 //
@@ -408,6 +410,7 @@ public class PlayerFragment extends Fragment {
         editor.putBoolean(getString(R.string.SETTING_IS_SHUFFLE),isShuffle);
         editor.putBoolean(getString(R.string.SETTING_USE_PLAY_PROGRESS),usePlayProgressTimer);
         editor.putBoolean(getString(R.string.SETTING_USE_WIFI_ONLY),isWifiOnly);
+        editor.putInt(getString(R.string.SETTING_MAX_PLAY_PROGRESS_SECONDS),maxPlayDurationInSeconds);
 
         editor.commit();
         Log.d("Destoryed player ","Fragment, saving settings");
@@ -504,5 +507,18 @@ public class PlayerFragment extends Fragment {
         NetworkInfo activeNetwork = connectiveManager.getActiveNetworkInfo();
         boolean isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
         return isWiFi;
+    }
+
+    public void showTimePickerDialog()
+    {
+        TimePickerFragment pickerFragment = new TimePickerFragment();
+
+        Bundle args = new Bundle();
+        args.putInt(getString(R.string.SETTING_MAX_PLAY_PROGRESS_SECONDS), maxPlayDurationInSeconds);
+
+        pickerFragment.setArguments(args);
+        pickerFragment.show(getFragmentManager(), "timePicker");
+        pickerFragment.setPlayProgressCountDownTimer(playProgressTimer);
+
     }
 }

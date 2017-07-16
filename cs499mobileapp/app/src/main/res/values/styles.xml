@@ -6,7 +6,7 @@
         <item name="android:statusBarColor">#00a9ff</item>
         <item name="colorPrimary">#00a9ff</item>
         <item name="colorPrimaryDark">#00a9ff</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/DeepSkyBlue</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
@@ -42,6 +43,7 @@ import cs499app.cs499mobileapp.view.ContextMenuDialogFragment;
 import cs499app.cs499mobileapp.view.PlayerFragment;
 import cs499app.cs499mobileapp.view.StationDialogFragment;
 import cs499app.cs499mobileapp.view.StationListFragment;
+import cs499app.cs499mobileapp.view.TimePickerFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -274,24 +276,8 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_add_playlist) {
-            return true;
-        } else if(id == R.id.action_add_station)
-        {
-            return true;
-
-        } else if(id == R.id.action_import_list)
-        {
-            return true;
-
-        }else if(id == R.id.action_export_list)
-        {
-            return true;
-        }
-        else if(id == R.id.action_export_database)
-        {
+        if (id == R.id.action_export_database) {
             libRecord.exportDatabase(getApplicationContext(),this);
-
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -308,9 +294,10 @@ public class MainActivity extends AppCompatActivity
         } else if(id == R.id.wifi_only_toggle_item) {
             wifiOnlySwitch.setChecked(useWifiOnly = !useWifiOnly);
         }
-
-
-
+        else if (id == R.id.playback_timer_setter)
+        {
+            playerTabFragmentRef.showTimePickerDialog();
+        }
         //drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -815,4 +802,6 @@ public class MainActivity extends AppCompatActivity
     public void setUseWifiOnly(boolean useWifiOnly) {
         this.useWifiOnly = useWifiOnly;
     }
+
+
 }

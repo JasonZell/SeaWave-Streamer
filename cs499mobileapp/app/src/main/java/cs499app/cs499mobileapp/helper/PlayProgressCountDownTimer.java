@@ -42,6 +42,20 @@ public class PlayProgressCountDownTimer {
     public void setMaxTimeMillis(long totalCountDownMillis)
     {
         this.totalCountDownMillis = totalCountDownMillis;
+        pB.setMax((int)((totalCountDownMillis)/tickIntervalMillis));
+        if(isEnabled) {
+            //if timer is still going from previous run
+            if (cd != null)
+                cd.cancel();
+            if (isPaused == true) {
+                isPaused = false;
+            } else {
+                leftOverMillis = totalCountDownMillis; //reset time
+            }
+            getNewCountDownTimer();
+            //cd.start();
+        }
+
     }
 
     public void start()

@@ -10,17 +10,27 @@
         <item android:id="@+id/playback_timer_toggle_item"
             android:title="Use Playback Timer"
             app:actionLayout="@layout/play_progress_toggle_item_layout"/>
-
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:title="Send" />
-        </menu>
-    </item>
+    <!--<item android:title="Communicate">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/nav_share"-->
+                <!--android:title="Share" />-->
+            <!--<item-->
+                <!--android:id="@+id/nav_send"-->
+                <!--android:title="Send" />-->
+        <!--</menu>-->
+    <!--</item>-->
+
+    <group>
+
+        <item android:title="Set Playback Timer"
+            android:id="@+id/playback_timer_setter">
+        </item>
+        <item android:title="Set Recording File Size"
+            android:id="@+id/max_file_size_item">
+        </item>
+    </group>
+
 </menu>
