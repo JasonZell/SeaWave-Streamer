@@ -42,12 +42,12 @@ public class StationListAdapter extends ArrayAdapter<StationRecord>{
 
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.playlist_listview_items,parent,false);
+        View view = layoutInflater.inflate(R.layout.stationlist_listview_items,parent,false);
 
-        TextView stationListnumber = view.findViewById(R.id.playlist_listview_listnumber);
+        TextView stationListnumber = view.findViewById(R.id.statiolist_listview_listnumber);
         stationListnumber.setText(String.valueOf(position+1));
 
-        TextView playlistNameView = view.findViewById(R.id.playlist_listview_textview);
+        TextView playlistNameView = view.findViewById(R.id.stationlist_listview_textview);
         playlistNameView.setText(playlistDataArray.get(position).getStationTitle());
         playlistNameView.setHorizontallyScrolling(true);
         playlistNameView.setSelected(true);

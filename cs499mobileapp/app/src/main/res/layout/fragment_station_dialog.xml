@@ -3,16 +3,20 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
+    android:gravity="bottom"
     android:minWidth="300dp"
-    android:padding="10dp">
+    android:padding="10dp"
+    >
 
     <TextView
         android:id="@+id/station_dialog_fragment_title"
         android:text="dialogTitle"
-        android:gravity="center"
+        android:gravity="center_horizontal|top"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_gravity="top"
+        android:layout_marginBottom="15dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,13 +26,16 @@
             android:text="TITLE:"
             android:inputType="textMultiLine"
             android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            android:layout_width="0dp"
+            android:layout_weight="20"
+            android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/dialog_stationtitle_edittext"
             android:minLines="1"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="80"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             />
     </LinearLayout>
 
@@ -36,37 +43,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_gravity="bottom"
         >
         <TextView
             android:text="URL:"
             android:maxLines="1"
             android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            android:layout_width="0dp"
+            android:layout_weight="20"
+            android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/dialog_stationurl_edittext"
             android:inputType="textMultiLine"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="80"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="bottom">
 
         <Button
             android:id="@+id/dialog_station_confirm_button"
             android:layout_width="0dp"
             android:layout_weight="50"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:text="confirmButton"/>
         <Button
             android:id="@+id/dialog_station_cancel_button"
             android:layout_width="0dp"
             android:layout_weight="50"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:text="Cancel"/>
     </LinearLayout>
 

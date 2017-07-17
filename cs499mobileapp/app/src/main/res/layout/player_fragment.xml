@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="cs499app.cs499mobileapp.view.PlayerFragment">
+    tools:context="cs499app.cs499mobileapp.view.PlayerFragment"
+    android:background="@drawable/player_background">
 
     <RelativeLayout
         android:id="@+id/seekbar_layout"
@@ -14,6 +15,7 @@
         android:layout_height="0dp"
         android:layout_weight="70"
         android:padding="15dp"
+
         >
 
 

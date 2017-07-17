@@ -6,7 +6,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cs499app.cs499mobileapp.view.LibraryFragment">
+    tools:context="cs499app.cs499mobileapp.view.LibraryFragment"
+    android:background="@drawable/library_background">
 
     <LinearLayout
         android:layout_width="match_parent"

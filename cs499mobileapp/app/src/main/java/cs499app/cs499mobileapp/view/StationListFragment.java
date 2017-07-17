@@ -94,7 +94,7 @@ public class StationListFragment extends android.support.v4.app.DialogFragment{
         titleHeaderView.setText(libRecord.getPlaylistRecords()
                 .get(parentPlaylistViewID).getPlaylistName());
         stationlistListview = rootview.findViewById(R.id.stationlist_listview);
-        stationlistAdapter = new StationListAdapter(this.getContext(),R.layout.playlist_listview_items,
+        stationlistAdapter = new StationListAdapter(this.getContext(),R.layout.stationlist_listview_items,
                 libRecord.getStationListRecordsMap().get(parentPlaylistID));//stationRecordList);
 
         stationlistListview.setAdapter(stationlistAdapter);

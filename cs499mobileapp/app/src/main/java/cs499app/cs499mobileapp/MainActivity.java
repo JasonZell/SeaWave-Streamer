@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity
                     else {
                         useWifiOnly = true;
                         playerTabFragmentRef.setWifiOnly(true);
-                        Toast.makeText(MainActivity.this, "WIFISwitchON", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "WIFISwitchON", Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity
                     useWifiOnly = false;
                     playerTabFragmentRef.setWifiOnly(false);
 
-                    Toast.makeText(MainActivity.this, "WIFISwitchOFF", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "WIFISwitchOFF", Toast.LENGTH_SHORT).show();
                 }
             }
         });

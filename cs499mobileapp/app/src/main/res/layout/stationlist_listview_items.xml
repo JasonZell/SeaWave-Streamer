@@ -10,20 +10,29 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:descendantFocusability="blocksDescendants"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp">
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+        <!--<ImageView-->
+            <!--android:id="@+id/playlist_listview_image"-->
+            <!--android:adjustViewBounds="true"-->
+            <!--android:layout_weight="20"-->
+            <!--android:src="@drawable/radio_demo"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent">-->
+        <!--</ImageView>-->
 
         <TextView
-            android:id="@+id/playlist_listview_listnumber"
+            android:id="@+id/statiolist_listview_listnumber"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="10"
             android:textSize="@dimen/number_size"
             android:textAlignment="center"
-            android:gravity="center"/>
+            android:gravity="center"
+            />
 
         <TextView
-            android:id="@+id/playlist_listview_textview"
+            android:id="@+id/stationlist_listview_textview"
             android:maxLines="1"
             android:textSize="@dimen/text_size"
             android:gravity="center_vertical|left"
@@ -36,8 +45,16 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:layout_marginLeft="10dp"
-            android:typeface="serif"/>
+            android:typeface="normal"/>
 
+        <!--<ImageButton-->
+            <!--android:id="@+id/station_list_play_button"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:src="@drawable/play_arrow"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="10"-->
+            <!--/>-->
     </LinearLayout>
 
 </LinearLayout>
