@@ -1,0 +1,39 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">#00a9ff</item>
+        <item name="colorPrimary">#00a9ff</item>
+        <item name="colorPrimaryDark">#00a9ff</item>
+        <item name="colorAccent">@color/DeepSkyBlue</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="CustomToolbarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:background">#00a9ff</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="android:textColorSecondary">@color/white</item>
+
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/white</item>
+    </style>
+
+    <style name="SettingSwitchStyle" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/DeepSkyBlue</item>
+        <item name="colorSwitchThumbNormal">@color/LightGray</item>
+        <item name="android:colorForeground">@color/gray</item>
+    </style>
+    <!--<style name="MenuIndicatorStyle" parent="Widget.AppCompat.ActionButton.Overflow">-->
+        <!--<item name="color">@android:color/white</item>-->
+    <!--</style>-->
+</resources>

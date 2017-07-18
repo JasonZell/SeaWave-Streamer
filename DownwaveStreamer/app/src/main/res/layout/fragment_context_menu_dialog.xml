@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minHeight="200dp"
+    android:minWidth="300dp"
+>
+
+
+        <TextView
+            android:id="@+id/context_menu_modify_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Modify"
+            android:textSize="20sp"
+            android:layout_margin="5dp"
+            android:minHeight="99dp"
+            android:background="@drawable/border"
+
+            />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="@color/DeepSkyBlue"/>
+
+        <TextView
+            android:id="@+id/context_menu_delete_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:minHeight="99dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/border"/>
+
+
+
+
+
+
+</LinearLayout>
