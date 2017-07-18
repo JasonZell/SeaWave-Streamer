@@ -14,9 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="70"
-        android:padding="15dp"
-
-        >
+        android:padding="15dp">
 
 
         <android.support.v7.widget.LinearLayoutCompat
@@ -112,6 +110,7 @@
                 android:layout_weight="50"
                 android:text="No Station Selected"
                 android:textStyle="bold"
+                android:textSize="20sp"
                 android:gravity="center_horizontal|fill_vertical"/>
 
             <android.support.v7.widget.AppCompatTextView
@@ -145,7 +144,6 @@
             android:paddingRight="5dp"
             android:paddingBottom="5dp">
 
-
                 <android.support.v7.widget.AppCompatImageButton
                     android:id="@+id/controller_skipprev_button"
                     style="?android:borderlessButtonStyle"
@@ -167,13 +165,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="30"/>
-
-
-
         </android.support.v7.widget.LinearLayoutCompat>
 
-
     </android.support.v7.widget.LinearLayoutCompat>
-
 
     </android.support.v7.widget.LinearLayoutCompat>

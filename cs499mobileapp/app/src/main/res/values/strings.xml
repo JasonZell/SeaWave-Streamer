@@ -21,7 +21,7 @@
     <string name="action_add_station">add_station</string>
     <string name="action_import_list">import_list</string>
     <string name="action_export_list">export_list</string>
-    <string name="action_export_database">export_database</string>
+    <string name="action_export_database">Export Database</string>
     <string name="LibraryFragmentTag">LIBRARY_FRAGMENT_TAG</string>
     <string name="StationListFragmentTag">STATION_LIST_FRAGMENT_TAG</string>
     <string name="PlayListViewPos">PLAYLIST_LISTVIEW_POSITION</string>

@@ -622,8 +622,6 @@ public class MainActivity extends AppCompatActivity
             List<StationRecord> srl = libRecord.getStationListRecordsMap()
                     .get(curPlaylistID);
             StationRecord record = srl.get(prevStationIndex);
-
-
             Intent intent = new Intent(getString(R.string.MUSIC_ACTION_PLAY_URL));
             intent.putExtra(getString(R.string.MUSIC_URL_TO_PLAY), record.getStationURL());
             sendBroadcast(intent, getString(R.string.BROADCAST_PRIVATE));
@@ -634,11 +632,7 @@ public class MainActivity extends AppCompatActivity
             playerTabFragmentRef.setCurrentStationURL(record.getStationURL());
             playerTabFragmentRef.setStateToPlay();
             playerTabFragmentRef.updateDisplayTitles();
-
             playerTabFragmentRef.getPlayProgressTimer().start();
-
-
-
         }
         return returnVal;
     }
