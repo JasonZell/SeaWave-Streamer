@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -43,6 +44,7 @@ import cs499app.cs499mobileapp.service.MusicService;
 import cs499app.cs499mobileapp.view.ContainerFragment;
 import cs499app.cs499mobileapp.view.ContextMenuDialogFragment;
 import cs499app.cs499mobileapp.view.FileSizeInputDialogFragment;
+import cs499app.cs499mobileapp.view.ImportExportDialogFragment;
 import cs499app.cs499mobileapp.view.PlayerFragment;
 import cs499app.cs499mobileapp.view.StationDialogFragment;
 import cs499app.cs499mobileapp.view.StationListFragment;
@@ -196,6 +198,7 @@ public class MainActivity extends AppCompatActivity
         startServiceIntent.setAction("MUSIC_ACTION_CREATE");
         startService(startServiceIntent);
 
+
     }
 
     public void setupNavigationDrawerViews()
@@ -317,6 +320,18 @@ public class MainActivity extends AppCompatActivity
 
            // drawer.closeDrawer(GravityCompat.START);
         }
+//        else if(id == R.id.navigation_import_item)
+//        {
+//            ImportExportDialogFragment frag = ImportExportDialogFragment.newInstance(0);
+//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            frag.show(ft, "importFrag");
+//        }
+//        else if(id== R.id.navigation_export_item)
+//        {
+//            ImportExportDialogFragment frag = ImportExportDialogFragment.newInstance(1);
+//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            frag.show(ft, "exportFrag");
+//        }
         //drawer.closeDrawer(GravityCompat.START);
         return true;
     }

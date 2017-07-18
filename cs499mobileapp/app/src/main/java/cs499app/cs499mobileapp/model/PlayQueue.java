@@ -106,7 +106,11 @@ public class PlayQueue {
     public void incrementStationEntry()
     {
         int newSize = stationQueue.size();
-        shuffleQueue.add(newSize);
+
+        Log.d("Adding station","stationQueueSize"+stationQueue.size());
+        Log.d("Shuffle","Queue size:"+shuffleQueue.size());
+        shuffleQueue.add(newSize-1); // add index number of last element.
+
         Collections.shuffle(shuffleQueue);
     }
 

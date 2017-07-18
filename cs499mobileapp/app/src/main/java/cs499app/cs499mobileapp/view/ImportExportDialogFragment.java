@@ -3,52 +3,37 @@ package cs499app.cs499mobileapp.view;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import cs499app.cs499mobileapp.R;
+import cs499app.cs499mobileapp.helper.FileOperationMode;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ImportExportDialogFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ImportExportDialogFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ImportExportDialogFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
+public class ImportExportDialogFragment extends DialogFragment {
+
+    private static final String OP_TYPE = "OPERATION_TYPE";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int Param;
 
-    private OnFragmentInteractionListener mListener;
+    private FileOperationMode mode;
+
 
     public ImportExportDialogFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ImportExportDialogFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
-    public static ImportExportDialogFragment newInstance(String param1, String param2) {
+    public static ImportExportDialogFragment newInstance(int OperationType) {
         ImportExportDialogFragment fragment = new ImportExportDialogFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(OP_TYPE, OperationType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,8 +42,7 @@ public class ImportExportDialogFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            Param = getArguments().getInt(OP_TYPE);
         }
     }
 
@@ -66,45 +50,16 @@ public class ImportExportDialogFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_import_export_dialog, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+        View view = null;
+        if(Param == 0) {
+            view = inflater.inflate(R.layout.fragment_import_dialog_layout, container, false);
         }
+        else
+            view = inflater.inflate(R.layout.fragment_export_dialog_layout, container, false);
+
+        return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

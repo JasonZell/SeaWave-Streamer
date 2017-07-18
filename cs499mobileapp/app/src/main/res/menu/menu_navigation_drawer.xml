@@ -14,7 +14,7 @@
     </group>
 
     <group
-        android:id="@+id/menu_bottom">
+        android:id="@+id/menu_mid">
 
         <item android:title="Set Playback Timer"
             android:id="@+id/playback_timer_setter"
@@ -25,5 +25,16 @@
             app:actionLayout="@layout/navigation_set_filesize_item_layout">
         </item>
     </group>
+
+    <!--<group-->
+        <!--android:id="@+id/menu_bottom">-->
+
+        <!--<item android:title="Import "-->
+            <!--android:id="@+id/navigation_import_item">-->
+        <!--</item>-->
+        <!--<item android:title="Export"-->
+            <!--android:id="@+id/navigation_export_item">-->
+        <!--</item>-->
+    <!--</group>-->
 
 </menu>
