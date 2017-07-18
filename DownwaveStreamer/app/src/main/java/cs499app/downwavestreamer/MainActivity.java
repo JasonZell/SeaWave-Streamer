@@ -15,6 +15,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -39,6 +40,7 @@ import cs499app.downwavestreamer.model.StationRecord;
 import cs499app.downwavestreamer.service.MusicService;
 import cs499app.downwavestreamer.view.ContainerFragment;
 import cs499app.downwavestreamer.view.ContextMenuDialogFragment;
+import cs499app.downwavestreamer.view.ImportExportDialogFragment;
 import cs499app.downwavestreamer.view.PlayerFragment;
 import cs499app.downwavestreamer.view.StationDialogFragment;
 import cs499app.downwavestreamer.view.StationListFragment;
@@ -164,7 +166,7 @@ public class MainActivity extends AppCompatActivity
 //             @Override
 //             protected Void doInBackground(Void... voids) {
 //
-//                 libRecord.importlPlaylistRecordList();
+//                 libRecord.importPlaylistRecordList();
 //                 Log.i("loadDataTask","loading done");
 //                 return null;
 //             }
@@ -225,7 +227,7 @@ public class MainActivity extends AppCompatActivity
                     playerTabFragmentRef.getPlayProgressTimer().stop();
                     playerTabFragmentRef.setUsePlayProgressTimer(false);
 
-                    Toast.makeText(MainActivity.this, "SwitchOFF", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(MainActivity.this, "SwitchOFF", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -313,18 +315,22 @@ public class MainActivity extends AppCompatActivity
 
            // drawer.closeDrawer(GravityCompat.START);
         }
-//        else if(id == R.id.navigation_import_item)
-//        {
-//            ImportExportDialogFragment frag = ImportExportDialogFragment.newInstance(0);
-//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//            frag.show(ft, "importFrag");
-//        }
-//        else if(id== R.id.navigation_export_item)
-//        {
-//            ImportExportDialogFragment frag = ImportExportDialogFragment.newInstance(1);
-//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//            frag.show(ft, "exportFrag");
-//        }
+        else if(id == R.id.navigation_import_item)
+        {
+            ImportExportDialogFragment frag = ImportExportDialogFragment.newInstance(0);
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            frag.show(ft, "importFrag");
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else if(id== R.id.navigation_export_item)
+        {
+            String jsonString = libRecord.backupRecordToJSON();
+            Log.i("JSON:",jsonString);
+            ImportExportDialogFragment frag = ImportExportDialogFragment.newInstance(1);
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            frag.show(ft, "exportFrag");
+            drawer.closeDrawer(GravityCompat.START);
+        }
         //drawer.closeDrawer(GravityCompat.START);
         return true;
     }

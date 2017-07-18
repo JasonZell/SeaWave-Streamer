@@ -26,15 +26,15 @@
         </item>
     </group>
 
-    <!--<group-->
-        <!--android:id="@+id/menu_bottom">-->
+    <group
+        android:id="@+id/menu_bottom">
 
-        <!--<item android:title="Import "-->
-            <!--android:id="@+id/navigation_import_item">-->
-        <!--</item>-->
-        <!--<item android:title="Export"-->
-            <!--android:id="@+id/navigation_export_item">-->
-        <!--</item>-->
-    <!--</group>-->
+        <item android:title="Import "
+            android:id="@+id/navigation_import_item">
+        </item>
+        <item android:title="Export"
+            android:id="@+id/navigation_export_item">
+        </item>
+    </group>
 
 </menu>

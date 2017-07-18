@@ -69,7 +69,7 @@ public class LibraryFragment extends Fragment{
                     Log.e("loadPlaylistLibrary","libRecord is null");
                     libRecord = new LibraryRecord(getContext());
                 }
-                libRecord.importlPlaylistRecordList();
+                libRecord.importPlaylistRecordList();
                 Log.i("loadDataTask","loading done");
                 return null;
             }

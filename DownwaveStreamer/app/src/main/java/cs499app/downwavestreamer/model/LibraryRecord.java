@@ -13,12 +13,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,7 +39,7 @@ public class LibraryRecord implements LibraryRecordInterface{
     Context context;
     DBHelper dbhelper;
     SQLiteDatabase database;
-
+    Gson gson;
     List<PlaylistRecord> playlistRecords;
     HashMap<Long,List<StationRecord>> stationListRecordsMap;
 
@@ -58,6 +62,7 @@ public class LibraryRecord implements LibraryRecordInterface{
         stationListRecordsMap = new HashMap<>();
         playlistRecords = new ArrayList<>();
         DB_FILEPATH = context.getDatabasePath(DBHelper.getDbName());
+        gson = new Gson();
     }
 
     public void openReadableDatabase()
@@ -81,6 +86,13 @@ public class LibraryRecord implements LibraryRecordInterface{
     public PlaylistRecord insertPlaylistRecord(PlaylistRecord pr)
     {
         openWritableDatabase();
+        insertPlaylistRecordQuery(pr);
+        dbhelper.close();
+        return pr;
+    }
+
+    public void insertPlaylistRecordQuery(PlaylistRecord pr)
+    {
         ContentValues values = new ContentValues();
         values.put(RecordSchema.PlaylistEntry.COLUMN_NAME_TITLE, pr.getPlaylistName());
         long result = database.insert(RecordSchema.PlaylistEntry.TABLE_NAME,null,values);
@@ -90,17 +102,19 @@ public class LibraryRecord implements LibraryRecordInterface{
         {
             pr.set_ID(result);
         }
-
-        dbhelper.close();
-        return pr;
     }
-
-
 
     // insert one station record 
     public StationRecord insertStationRecord(StationRecord sr)
     {
         openWritableDatabase();
+        insertStationRecordQuery(sr);
+        dbhelper.close();
+        return sr;
+    }
+
+    public void insertStationRecordQuery(StationRecord sr)
+    {
         ContentValues values = new ContentValues();
         values.put(RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTID, sr.getPlaylistID());
         values.put(RecordSchema.StationEntry.COLUMN_NAME_STATIONTITLE, sr.getStationTitle());
@@ -113,13 +127,11 @@ public class LibraryRecord implements LibraryRecordInterface{
         {
             sr.set_ID(result);
         }
-        dbhelper.close();
-        return sr;
     }
 
 
     //import all playlist titles to library record
-    public List<PlaylistRecord> importlPlaylistRecordList(){
+    public List<PlaylistRecord> importPlaylistRecordList(){
 
         openReadableDatabase();
         List<PlaylistRecord> pr;
@@ -153,7 +165,13 @@ public class LibraryRecord implements LibraryRecordInterface{
 
         openReadableDatabase();
         List<StationRecord> sr = null;
+        importStationRecordQuery(sr,playlistID);
+        dbhelper.close();
+        return sr;
+    }
 
+    public List<StationRecord> importStationRecordQuery(List<StationRecord> sr,Long playlistID)
+    {
         if(stationListRecordsMap == null) //should happen only during initialization of this class
         {
             Log.e("StationListRM","IS NULL, creating..");
@@ -172,7 +190,13 @@ public class LibraryRecord implements LibraryRecordInterface{
             sr.clear();
         }
 
+        getStationRecord(sr,playlistID);
+        stationListRecordsMap.put(playlistID,sr);
+        return sr;
+    }
 
+    public void getStationRecord(List<StationRecord> sr, long playlistID)
+    {
         String selection = RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTID + " = ?";
         String[] selectionArgs = {String.valueOf(playlistID)};
         Cursor cursor = database.query(RecordSchema.StationEntry.TABLE_NAME,stationProjection,
@@ -191,9 +215,6 @@ public class LibraryRecord implements LibraryRecordInterface{
                 sr.add(sRecord);
             }
         }
-        stationListRecordsMap.put(playlistID,sr);
-        dbhelper.close();
-        return sr;
     }
 
 
@@ -362,5 +383,55 @@ public class LibraryRecord implements LibraryRecordInterface{
                 Toast.makeText(context, "Error! Database export failed", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public String backupRecordToJSON() {
+
+        //Collection playlistDMArray;
+        List<JsonPlaylistDataModel> playlistDMArray;
+        List<JsonStationDataModel>  stationDMArray;
+        //Collection stationDMArray;
+        List<StationRecord> sr = null;
+
+        JsonStationDataModel sDM = null;
+        int stationSize = 0;
+        long playlistID;
+        String JSONString = null;
+
+        openReadableDatabase();
+
+        int playlistSize = playlistRecords.size();
+        playlistDMArray = new ArrayList<>();
+        for(int i = 0; i < playlistSize;++i)
+        {
+            playlistID =  playlistRecords.get(i).get_ID();
+            sr = importStationRecordQuery(sr,playlistID);
+
+            stationDMArray = new ArrayList<>();
+
+            if(sr != null) {
+                Log.i("NOTNULLSR","INBACKUPRECORDJSON");
+                for (int j = 0; j < sr.size(); ++j)  // for each stations in playlist
+                {
+                    stationDMArray.add(new JsonStationDataModel(
+                            sr.get(j).getStationTitle(),
+                            sr.get(j).getStationURL()));
+                }
+            }
+
+            playlistDMArray.add(new JsonPlaylistDataModel(
+                    playlistRecords.get(i).getPlaylistName(),
+                    stationDMArray));
+        }
+
+        JSONString = gson.toJson(playlistDMArray);
+        dbhelper.close();
+        return JSONString;
+    }
+
+    @Override
+    public void restoreRecordFromJSON(String JSONString, boolean appendRecord) {
+
     }
 }

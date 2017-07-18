@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface LibraryRecordInterface {
 
-    public List<PlaylistRecord> importlPlaylistRecordList();
+    public List<PlaylistRecord> importPlaylistRecordList();
     public List<StationRecord> importStationRecordList(Long playlistID);
     public StationRecord insertStationRecord(StationRecord sr);
     public PlaylistRecord insertPlaylistRecord(PlaylistRecord pr);
@@ -16,5 +16,7 @@ public interface LibraryRecordInterface {
     public void updatePlaylistRecord(PlaylistRecord sr);
     public void deleteStationRecord(StationRecord sr);
     public void deletePlaylistRecord(PlaylistRecord sr);
+    public String backupRecordToJSON();
+    public void restoreRecordFromJSON(String JSONString,boolean appendRecord);
 
 }

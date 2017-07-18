@@ -119,7 +119,7 @@ public class PlaylistDialogFragment extends AppCompatDialogFragment {
 
     public void refreshLibraryRecordUpdateView()
     {
-        libRecord.importlPlaylistRecordList();
+        libRecord.importPlaylistRecordList();
         playlistAdapter.notifyDataSetChanged();
     }
 
