@@ -6,6 +6,7 @@ a library system which provides easy organization of playlists and stationlists.
 
 
 Questions / Answers
+
 Q. How do i add new playlist?
 A. at the initial player screeen, swipe left will take you to the library. click on the button with the plus sign at the bottom
    to create a playlist.
