@@ -50,12 +50,15 @@ public class MainActivity extends AppCompatActivity
         StationListFragment.StationListCallbackListener,
         PlayerFragment.MediaControllerCallbackListener,
         ContextMenuDialogFragment.ContextMenuCallbackListener,
-        StationDialogFragment.StationDialogCallbackListener{
+        StationDialogFragment.StationDialogCallbackListener,
+        ImportExportDialogFragment.ImportExportDialogCallbackListener{
 
     public static final int EXPORT_DB_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     public static final int INITIAL_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
     public static final int CREATE_BASE_DIR_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 3;
     public static final int REQUEST_ACCESS_NETWORK_STATE = 4;
+    public static final int EXPORT_LIBRARY_RECORD_REQUEST_WRITE_EXTERNAL_STORAGE = 5;
+    public static final int IMPORT_LIBRARY_RECORD_REQUEST_WRITE_EXTERNAL_STORAGE = 6;
     public Activity mainActivityReference;
     public static  ConnectivityManager connectiveManager;
 
@@ -317,6 +320,8 @@ public class MainActivity extends AppCompatActivity
         }
         else if(id == R.id.navigation_import_item)
         {
+            //must notify dataset change for playlist,
+            // no need to notify statiolist as it will populate only when clicked.
             ImportExportDialogFragment frag = ImportExportDialogFragment.newInstance(0);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             frag.show(ft, "importFrag");
@@ -324,8 +329,6 @@ public class MainActivity extends AppCompatActivity
         }
         else if(id== R.id.navigation_export_item)
         {
-            String jsonString = libRecord.backupRecordToJSON();
-            Log.i("JSON:",jsonString);
             ImportExportDialogFragment frag = ImportExportDialogFragment.newInstance(1);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             frag.show(ft, "exportFrag");
@@ -547,6 +550,35 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(this, "Access Network State Required To use WIFI Only Mode!", Toast.LENGTH_SHORT).show();
                 }
                 return;
+            }
+
+            case EXPORT_LIBRARY_RECORD_REQUEST_WRITE_EXTERNAL_STORAGE:{
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Toast.makeText(this, "Write External Permission Granted, Please try export again.", Toast.LENGTH_SHORT).show();
+
+                }
+                else
+                {
+                    Toast.makeText(this, "Write External Permission Required To Export Library!", Toast.LENGTH_SHORT).show();
+                }
+                return;
+
+            }
+            case IMPORT_LIBRARY_RECORD_REQUEST_WRITE_EXTERNAL_STORAGE:{
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Toast.makeText(this, "Write External Permission Granted, Please try import again", Toast.LENGTH_SHORT).show();
+
+                }
+                else
+                {
+                    Toast.makeText(this, "Read External Permission Required To Export Library!", Toast.LENGTH_SHORT).show();
+                }
+                return;
+
             }
             // other 'case' lines to check for other
             // permissions this app might request
@@ -894,5 +926,18 @@ public class MainActivity extends AppCompatActivity
         this.useWifiOnly = useWifiOnly;
     }
 
+    @Override
+    public void onImportCalled(String fileName) {
 
+        libRecord.importLibraryRecord(getApplicationContext(),this,fileName);
+        containerTabFragmentRef.getLibFragment().notifyPlaylistAdapterOnDataSetChange();
+    }
+
+    @Override
+    public void onExportCalled(String fileName) {
+        libRecord.exportLibraryRecord(getApplicationContext(),this,fileName);
+        String jsonString = libRecord.backupRecordToJSON();
+        Log.i("JSON:",jsonString);
+
+    }
 }

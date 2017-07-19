@@ -50,7 +50,6 @@ public class StationListAdapter extends ArrayAdapter<StationRecord>{
         playlistNameView.setSelected(true);
         //playlistNameView.setMovementMethod(new ScrollingMovementMethod());
 
-
         return view;
     }
 

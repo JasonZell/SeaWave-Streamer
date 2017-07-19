@@ -169,6 +169,10 @@ public class LibraryFragment extends Fragment{
     }
 
 
+    public void notifyPlaylistAdapterOnDataSetChange()
+    {
+        playlistAdapter.notifyDataSetChanged();
+    }
 
 
 }

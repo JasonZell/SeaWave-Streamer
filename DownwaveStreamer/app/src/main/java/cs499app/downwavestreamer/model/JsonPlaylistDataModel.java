@@ -28,7 +28,7 @@ public class JsonPlaylistDataModel {
         this.playlistTitle = playlistName;
     }
 
-    public Collection getDataModels() {
+    public List<JsonStationDataModel> getDataModels() {
         return stationList;
     }
 

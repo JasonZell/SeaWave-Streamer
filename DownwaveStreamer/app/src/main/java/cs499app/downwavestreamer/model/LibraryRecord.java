@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.icu.text.AlphabeticIndex;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -14,12 +15,15 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -356,14 +360,14 @@ public class LibraryRecord implements LibraryRecordInterface{
                 File dbFile = new File(inFileName);
                 FileInputStream fis = new FileInputStream(dbFile);
 
-                File f = new File(Environment.getExternalStorageDirectory(), context.getString(R.string.ROOT_DIRECTORY_NAME));
+                File f = new File(Environment.getExternalStorageDirectory(), context.getString(R.string.ROOT_DIRECTORY_NAME)+"/Database");
                 if (!f.exists()) {
                     f.mkdirs();
                 }
 
                 String outFileName = Environment.getExternalStorageDirectory()+"/"
                         + context.getString(R.string.ROOT_DIRECTORY_NAME)
-                        + "/" + context.getString(R.string.app_name_no_space) + ".db";
+                        + "/Database/" + context.getString(R.string.app_name_no_space) + ".db";
 
                 OutputStream output = new FileOutputStream(outFileName);
 
@@ -433,5 +437,143 @@ public class LibraryRecord implements LibraryRecordInterface{
     @Override
     public void restoreRecordFromJSON(String JSONString, boolean appendRecord) {
 
+        openWritableDatabase();
+
+        if(appendRecord == false) // OVERRIDE EVERYTHING
+        {
+            database.execSQL("delete from "+ RecordSchema.PlaylistEntry.TABLE_NAME);
+            database.execSQL("delete from "+ RecordSchema.StationEntry.TABLE_NAME);
+            playlistRecords.clear();
+            stationListRecordsMap.clear();
+        }
+        Type playlistmodelType = new TypeToken<List<JsonPlaylistDataModel>>() {}.getType();
+        List<JsonPlaylistDataModel> jpDM = gson.fromJson(JSONString,playlistmodelType);
+
+        for(int i = 0; i < jpDM.size();++i)
+        {
+            PlaylistRecord pr = new PlaylistRecord();
+            pr.setPlaylistName(jpDM.get(i).getPlaylistName());
+            insertPlaylistRecord(pr);
+            playlistRecords.add(pr);
+
+            List<JsonStationDataModel> jsonStationDM = jpDM.get(i).getDataModels();
+            int stationSize = jsonStationDM.size();
+            List<StationRecord> srl= new ArrayList<>();
+
+            for(int sIndex = 0; sIndex < stationSize; ++sIndex)
+            {
+                StationRecord sr = new StationRecord(pr.get_ID(),
+                        jsonStationDM.get(sIndex).getStationName(),
+                        jsonStationDM.get(sIndex).getStationURL());
+
+                insertStationRecord(sr);
+                srl.add(sr);
+            }
+            stationListRecordsMap.put(pr.get_ID(),srl);
+        }
+
+        dbhelper.close();
     }
+
+
+    public void importLibraryRecord(Context context, AppCompatActivity activity, String importFileName)
+    {
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MainActivity.IMPORT_LIBRARY_RECORD_REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
+        else {
+
+            File f = new File(Environment.getExternalStorageDirectory(), context.getString(R.string.ROOT_DIRECTORY_NAME)
+                    +"/Library/"+importFileName+".json");
+
+            if (!f.exists()) {
+                Toast.makeText(context, "File Does Not Exists!", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                Toast.makeText(context, "File Exists!", Toast.LENGTH_SHORT).show();
+                int length = (int) f.length();
+
+                byte[] bytes = new byte[length];
+
+                FileInputStream in = null;
+                try {
+                    in = new FileInputStream(f);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    in.read(bytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                String contents = new String(bytes);
+                //restoreRecordFromJSON(contents,true);
+                Log.i("IMPORTJSON:",contents);
+
+                restoreRecordFromJSON(contents,false);
+
+            }
+
+        }
+    }
+
+    public void exportLibraryRecord(Context context, AppCompatActivity activity, String exportFilename)
+    {
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MainActivity.EXPORT_LIBRARY_RECORD_REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
+        else {
+
+            try {
+               // File dbFile = new File(exportFilename);
+                //FileInputStream fis = new FileInputStream(dbFile);
+
+                File f = new File(Environment.getExternalStorageDirectory(), context.getString(R.string.ROOT_DIRECTORY_NAME)+"/Library");
+                if (!f.exists()) {
+                    f.mkdirs();
+                }
+
+                String outFileName = Environment.getExternalStorageDirectory()+"/"
+                        + context.getString(R.string.ROOT_DIRECTORY_NAME)
+                        + "/Library/" + exportFilename + ".json";
+
+                OutputStream output = new FileOutputStream(outFileName);
+                output.write(backupRecordToJSON().getBytes());
+//                byte[] buffer = new byte[1024];
+//                int length;
+//                while ((length = fis.read(buffer)) > 0) {
+//                    output.write(buffer, 0, length);
+//                }
+
+                //Close the streams
+                output.flush();
+                output.close();
+              //  fis.close();
+                Toast.makeText(context, "Library exported Successfully", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(context, "Error! Library export failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
 }
