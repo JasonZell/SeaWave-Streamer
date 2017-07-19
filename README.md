@@ -2,7 +2,7 @@ The SeaWave Streamer is an app that let you play stream URL of an internet radio
 a library system which provides easy organization of playlists and stationlists. 
 
 
-
+Check out the screenshots of app at http://seawaveapp.site
 
 
 Questions / Answers
