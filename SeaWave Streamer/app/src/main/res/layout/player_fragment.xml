@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:CircularSeekBar="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="cs499app.seawavestreamer.view.PlayerFragment"
+    android:background="@drawable/player_background">
+
+    <RelativeLayout
+        android:id="@+id/seekbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="70"
+        android:padding="15dp">
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:id="@+id/imageview_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:layout_marginLeft="27dp"
+            android:layout_marginRight="27dp"
+            >
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/controller_station_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Station Selected"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:textSize="25sp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"/>
+
+            <android.support.v7.widget.AppCompatTextView
+
+                android:id="@+id/controller_playlist_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Playlist Selected"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+
+
+
+        </android.support.v7.widget.LinearLayoutCompat>
+
+        <cs499app.seawavestreamer.helper.CircularSeekBar
+            android:id="@+id/circular_seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            CircularSeekBar:circle_stroke_width="6dp"
+            CircularSeekBar:circle_color="@android:color/transparent"
+            CircularSeekBar:circle_progress_color="@color/DeepSkyBlue"
+            CircularSeekBar:max="100"
+
+            CircularSeekBar:pointer_alpha_ontouch="100"
+            CircularSeekBar:pointer_color="#0174DF"
+            CircularSeekBar:pointer_halo_color="@color/CornflowerBlue"
+            CircularSeekBar:pointer_radius="0dp"
+            CircularSeekBar:pointer_halo_width="0dp"
+            >
+
+        </cs499app.seawavestreamer.helper.CircularSeekBar>
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/controller_layouts"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="30"
+        android:orientation="vertical">
+
+        <!--<ProgressBar-->
+            <!--android:id="@+id/controller_progress_bar"-->
+            <!--style="?android:progressBarStyleHorizontal"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="20"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:paddingRight="10dp"-->
+            <!--android:progressBackgroundTint="@color/LightGray"-->
+            <!--android:progressTint="@color/DeepSkyBlue"/>-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"></LinearLayout>-->
+        <LinearLayout
+            android:id="@+id/controller_title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="40"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+            <ImageButton
+                android:src="@drawable/repeat_off_icon"
+                style="?android:borderlessButtonStyle"
+
+                android:id="@+id/controller_repeat_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="15"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="70"
+                android:orientation="vertical">
+            <!--<android.support.v7.widget.AppCompatTextView-->
+                <!--android:id="@+id/controller_station_name"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="50"-->
+                <!--android:text="No Station Selected"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textSize="20sp"-->
+                <!--android:gravity="center_horizontal|fill_vertical"/>-->
+
+            <!--<android.support.v7.widget.AppCompatTextView-->
+                <!--android:id="@+id/controller_playlist_name"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="50"-->
+                <!--android:text="No Playlist Selected"-->
+                <!--android:gravity="center_vertical|center_horizontal"/>-->
+            </LinearLayout>
+
+            <ImageButton
+                android:src="@drawable/shuffle_off_icon"
+                style="?android:borderlessButtonStyle"
+                android:id="@+id/controller_shuffle_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="15"/>
+
+
+        </LinearLayout>
+
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:id="@+id/controller_control_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="40"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp">
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/controller_skipprev_button"
+                    style="?android:borderlessButtonStyle"
+                    android:src="@drawable/skip_prev_icon"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="30"/>
+                <android.support.v7.widget.AppCompatImageButton
+                    style="?android:borderlessButtonStyle"
+                    android:id="@+id/controller_playpause_button"
+                    android:src="@drawable/play_arrow"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="50" />
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/controller_skipnext_button"
+                    style="?android:borderlessButtonStyle"
+                    android:src="@drawable/skip_next"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="30"/>
+        </android.support.v7.widget.LinearLayoutCompat>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    </android.support.v7.widget.LinearLayoutCompat>

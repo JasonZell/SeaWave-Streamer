@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">SeaWave Streamer</string>
+    <string name="app_name_no_space">SeaWave_Streamer</string>
+    <string name="MUSIC_ACTION_PLAY_URL">MUSIC_ACTION_PLAY_WITH_URL</string>
+    <string name="MUSIC_ACTION_CREATE">MUSIC_ACTION_CREATE</string>
+    <string name="MUSIC_ACTION_PLAY">MUSIC_ACTION_PLAY</string>
+    <string name="MUSIC_ACTION_STOP">MUSIC_ACTION_STOP</string>
+    <string name="MUSIC_ACTION_RESET">MUSIC_ACTION_RESET</string>
+    <string name="MUSIC_ACTION_PAUSE">MUSIC_ACTION_PAUSE</string>
+    <string name="MUSIC_PLAY_PAUSE_TOGGLE">MUSIC_PLAY_PAUSE_TOGGLE</string>
+    <string name="MUSIC_CALLBACK_PLAYING">MUSIC_CALLBACK_PREPARED_AND_PLAYING</string>
+    <string name="MUSIC_URL_TO_PLAY">STATION_URL_TO_PLAY</string>
+    <string name="BROADCAST_PRIVATE">AndroidApp.IN_APP_BROADCAST</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="TAB_ONE">PLAYER_TAB</string>
+    <string name="TAB_TWO">LIBRARY_TAB</string>
+
+    <string name="action_add_playlist">add_playlist</string>
+    <string name="action_add_station">add_station</string>
+    <string name="action_import_list">import_list</string>
+    <string name="action_export_list">export_list</string>
+    <string name="action_export_database">Export Database</string>
+    <string name="LibraryFragmentTag">LIBRARY_FRAGMENT_TAG</string>
+    <string name="StationListFragmentTag">STATION_LIST_FRAGMENT_TAG</string>
+    <string name="PlayListViewPos">PLAYLIST_LISTVIEW_POSITION</string>
+    <string name="StationListViewPos">STATION_LISTVIEW_POSITION</string>
+    <string name="ParentPlaylistID">PARENT_PLAYLIST_ID</string>
+
+    <string name="DATABASE_NAME">RecordSchema.db</string>
+    <string name="SETTING_PREFERENCES">SHARED_PREFERENCES_SETTINGS</string>
+    <string name="SETTING_LAST_STATION_TITLE">SHARED_PREFERENCES_SETTINGS_LAST_STATION_TITLE</string>
+    <string name="SETTING_LAST_PLAYLIST_TITLE">SHARED_PREFERENCES_SETTINGS_LAST_PLAYLIST_TITLE</string>
+    <string name="SETTING_LAST_STATION_URL">SHARED_PREFERENCES_SETTINGS_LAST_STATION_URL</string>
+    <string name="SETTING_IS_SHUFFLE">SHARED_PREFERENCES_SETTINGS_IS_SHUFFLE</string>
+    <string name="SETTING_IS_REPEAT"> SHARED_PREFERENCES_SETTINGS_IS_REPEAT</string>
+    <string name="SETTING_USE_PLAY_PROGRESS">SHARED_PREFERENCES_SETTING_USE_PLAY_PROGRESS_BAR</string>
+    <string name="SETTING_USE_WIFI_ONLY">SHARED_PREFERENCES_SETTING_USE_WIFI_ONLY</string>
+    <string name="SETTING_MAX_PLAY_PROGRESS_SECONDS">SHARED_PREFERENCES_SETTING_MAX_PLAY_PROGRESS_SECONDS</string>
+    <string name="SETTING_MAX_FILE_SIZE">SHARED_PREFERENCES_SETTING_MAX_FILE_SIZE</string>
+
+    <string name="ROOT_DIRECTORY_NAME">SeaWaveStreamer</string>
+    <string name="SAVE_DIRECTORY_NAME">Audios</string>
+
+
+    <string name="WIFI_WARNING_TEXT">WIFI ONLY MODE, CHANGE SETTINGS TO USE MOBILE DATA</string>
+
+    <string-array name="file_size_unit_array">
+        <item>KiloBytes</item>
+        <item>MegaBytes</item>
+    </string-array>
+    
+</resources>

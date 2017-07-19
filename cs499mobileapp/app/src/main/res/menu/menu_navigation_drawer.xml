@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:id="@+id/menu_top">
+        <item android:id="@+id/wifi_only_toggle_item"
+            android:title="Use WIFI Only"
+            app:actionLayout="@layout/wifi_only_toggle_item_layout"
+            />
+
+        <item android:id="@+id/playback_timer_toggle_item"
+            android:title="Use Playback Timer"
+            app:actionLayout="@layout/play_progress_toggle_item_layout"/>
+    </group>
+
+    <group
+        android:id="@+id/menu_mid">
+
+        <item android:title="Set Playback Timer"
+            android:id="@+id/playback_timer_setter"
+            app:actionLayout="@layout/navigation_set_playduration_item_layout">
+        </item>
+        <item android:title="Set Recording File Size"
+            android:id="@+id/max_file_size_item"
+            app:actionLayout="@layout/navigation_set_filesize_item_layout">
+        </item>
+    </group>
+
+
+    <group
+        android:id="@+id/menu_bottom">
+
+        <item android:title="Import "
+            android:id="@+id/navigation_import_item">
+        </item>
+        <item android:title="Export"
+            android:id="@+id/navigation_export_item">
+        </item>
+    </group>
+
+</menu>

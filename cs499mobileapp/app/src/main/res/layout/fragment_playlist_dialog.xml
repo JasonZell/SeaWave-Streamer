@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:minWidth="300dp"
+    android:padding="10dp"
+    >
+    <TextView
+        android:id="@+id/playlist_dialog_fragment_title"
+        android:text="dialogTitle"
+        android:gravity="center_horizontal|top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_gravity="top"
+        android:layout_marginBottom="15dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:text="TITLE:"
+            android:maxLines="1"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="20"
+            android:layout_height="match_parent" />
+        <EditText
+            android:id="@+id/dialog_playlist_title_edittext"
+            android:inputType="textMultiLine"
+            android:layout_width="0dp"
+            android:layout_weight="80"
+            android:layout_height="match_parent"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom">
+
+        <Button
+            android:id="@+id/dialog_playlist_confirm_button"
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="confirmButton"
+            />
+        <Button
+            android:id="@+id/dialog_playlist_cancelbutton"
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="Cancel"/>
+    </LinearLayout>
+
+
+</LinearLayout>
