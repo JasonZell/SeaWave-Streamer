@@ -1,0 +1,9 @@
+<shape android:useLevel="true"
+    android:innerRadiusRatio="2.3"
+    android:shape="ring"
+    android:thickness="3.8sp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <gradient android:startColor="@color/fuchsia"
+              android:endColor="@color/AliceBlue"></gradient>
+</shape>
