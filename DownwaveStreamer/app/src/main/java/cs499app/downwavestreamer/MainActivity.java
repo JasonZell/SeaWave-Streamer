@@ -1,5 +1,17 @@
 package cs499app.downwavestreamer;
 
+import cs499app.downwavestreamer.helper.AudioRecorder;
+import cs499app.downwavestreamer.model.LibraryRecord;
+import cs499app.downwavestreamer.model.StationRecord;
+import cs499app.downwavestreamer.service.MusicService;
+import cs499app.downwavestreamer.view.ContainerFragment;
+import cs499app.downwavestreamer.view.ContextMenuDialogFragment;
+import cs499app.downwavestreamer.view.ImportExportDialogFragment;
+import cs499app.downwavestreamer.view.PlayerFragment;
+import cs499app.downwavestreamer.view.StationDialogFragment;
+import cs499app.downwavestreamer.view.StationListFragment;
+
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -34,16 +46,6 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.List;
 
-import cs499app.downwavestreamer.helper.AudioRecorder;
-import cs499app.downwavestreamer.model.LibraryRecord;
-import cs499app.downwavestreamer.model.StationRecord;
-import cs499app.downwavestreamer.service.MusicService;
-import cs499app.downwavestreamer.view.ContainerFragment;
-import cs499app.downwavestreamer.view.ContextMenuDialogFragment;
-import cs499app.downwavestreamer.view.ImportExportDialogFragment;
-import cs499app.downwavestreamer.view.PlayerFragment;
-import cs499app.downwavestreamer.view.StationDialogFragment;
-import cs499app.downwavestreamer.view.StationListFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,

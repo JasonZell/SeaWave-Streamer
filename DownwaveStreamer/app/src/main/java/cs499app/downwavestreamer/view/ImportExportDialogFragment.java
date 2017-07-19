@@ -1,4 +1,7 @@
 package cs499app.downwavestreamer.view;
+import cs499app.downwavestreamer.R;
+import cs499app.downwavestreamer.helper.FileOperationMode;
+
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -15,8 +18,7 @@ import android.widget.Toast;
 
 import java.io.File;
 
-import cs499app.downwavestreamer.R;
-import cs499app.downwavestreamer.helper.FileOperationMode;
+
 
 
 

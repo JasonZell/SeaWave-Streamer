@@ -1,13 +1,16 @@
 package cs499app.cs499mobileapp.model;
-
+import cs499app.cs499mobileapp.MainActivity;
+import cs499app.cs499mobileapp.Manifest;
+import cs499app.cs499mobileapp.R;
+import cs499app.cs499mobileapp.helper.DBHelper;
+import cs499app.cs499mobileapp.helper.FileUtils;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.icu.text.AlphabeticIndex;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -15,20 +18,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import cs499app.cs499mobileapp.MainActivity;
-import cs499app.cs499mobileapp.Manifest;
-import cs499app.cs499mobileapp.R;
-import cs499app.cs499mobileapp.helper.DBHelper;
-import cs499app.cs499mobileapp.helper.FileUtils;
+
 
 public class LibraryRecord implements LibraryRecordInterface{
 
@@ -37,7 +43,7 @@ public class LibraryRecord implements LibraryRecordInterface{
     Context context;
     DBHelper dbhelper;
     SQLiteDatabase database;
-
+    Gson gson;
     List<PlaylistRecord> playlistRecords;
     HashMap<Long,List<StationRecord>> stationListRecordsMap;
 
@@ -60,6 +66,7 @@ public class LibraryRecord implements LibraryRecordInterface{
         stationListRecordsMap = new HashMap<>();
         playlistRecords = new ArrayList<>();
         DB_FILEPATH = context.getDatabasePath(DBHelper.getDbName());
+        gson = new Gson();
     }
 
     public void openReadableDatabase()
@@ -83,6 +90,13 @@ public class LibraryRecord implements LibraryRecordInterface{
     public PlaylistRecord insertPlaylistRecord(PlaylistRecord pr)
     {
         openWritableDatabase();
+        insertPlaylistRecordQuery(pr);
+        dbhelper.close();
+        return pr;
+    }
+
+    public void insertPlaylistRecordQuery(PlaylistRecord pr)
+    {
         ContentValues values = new ContentValues();
         values.put(RecordSchema.PlaylistEntry.COLUMN_NAME_TITLE, pr.getPlaylistName());
         long result = database.insert(RecordSchema.PlaylistEntry.TABLE_NAME,null,values);
@@ -92,17 +106,19 @@ public class LibraryRecord implements LibraryRecordInterface{
         {
             pr.set_ID(result);
         }
-
-        dbhelper.close();
-        return pr;
     }
 
-
-
-    // insert one station record 
+    // insert one station record
     public StationRecord insertStationRecord(StationRecord sr)
     {
         openWritableDatabase();
+        insertStationRecordQuery(sr);
+        dbhelper.close();
+        return sr;
+    }
+
+    public void insertStationRecordQuery(StationRecord sr)
+    {
         ContentValues values = new ContentValues();
         values.put(RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTID, sr.getPlaylistID());
         values.put(RecordSchema.StationEntry.COLUMN_NAME_STATIONTITLE, sr.getStationTitle());
@@ -115,13 +131,11 @@ public class LibraryRecord implements LibraryRecordInterface{
         {
             sr.set_ID(result);
         }
-        dbhelper.close();
-        return sr;
     }
 
 
     //import all playlist titles to library record
-    public List<PlaylistRecord> importlPlaylistRecordList(){
+    public List<PlaylistRecord> importPlaylistRecordList(){
 
         openReadableDatabase();
         List<PlaylistRecord> pr;
@@ -155,7 +169,13 @@ public class LibraryRecord implements LibraryRecordInterface{
 
         openReadableDatabase();
         List<StationRecord> sr = null;
+        importStationRecordQuery(sr,playlistID);
+        dbhelper.close();
+        return sr;
+    }
 
+    public List<StationRecord> importStationRecordQuery(List<StationRecord> sr,Long playlistID)
+    {
         if(stationListRecordsMap == null) //should happen only during initialization of this class
         {
             Log.e("StationListRM","IS NULL, creating..");
@@ -174,7 +194,13 @@ public class LibraryRecord implements LibraryRecordInterface{
             sr.clear();
         }
 
+        getStationRecord(sr,playlistID);
+        stationListRecordsMap.put(playlistID,sr);
+        return sr;
+    }
 
+    public void getStationRecord(List<StationRecord> sr, long playlistID)
+    {
         String selection = RecordSchema.StationEntry.COLUMN_NAME_PLAYLISTID + " = ?";
         String[] selectionArgs = {String.valueOf(playlistID)};
         Cursor cursor = database.query(RecordSchema.StationEntry.TABLE_NAME,stationProjection,
@@ -193,9 +219,6 @@ public class LibraryRecord implements LibraryRecordInterface{
                 sr.add(sRecord);
             }
         }
-        stationListRecordsMap.put(playlistID,sr);
-        dbhelper.close();
-        return sr;
     }
 
 
@@ -337,14 +360,14 @@ public class LibraryRecord implements LibraryRecordInterface{
                 File dbFile = new File(inFileName);
                 FileInputStream fis = new FileInputStream(dbFile);
 
-                File f = new File(Environment.getExternalStorageDirectory(), context.getString(R.string.ROOT_DIRECTORY_NAME));
+                File f = new File(Environment.getExternalStorageDirectory(), context.getString(R.string.ROOT_DIRECTORY_NAME)+"/Database");
                 if (!f.exists()) {
                     f.mkdirs();
                 }
 
                 String outFileName = Environment.getExternalStorageDirectory()+"/"
                         + context.getString(R.string.ROOT_DIRECTORY_NAME)
-                        + "/" + context.getString(R.string.app_name_no_space) + ".db";
+                        + "/Database/" + context.getString(R.string.app_name_no_space) + ".db";
 
                 OutputStream output = new FileOutputStream(outFileName);
 
@@ -365,4 +388,192 @@ public class LibraryRecord implements LibraryRecordInterface{
             }
         }
     }
+
+    @Override
+    public String backupRecordToJSON() {
+
+        //Collection playlistDMArray;
+        List<JsonPlaylistDataModel> playlistDMArray;
+        List<JsonStationDataModel>  stationDMArray;
+        //Collection stationDMArray;
+        List<StationRecord> sr = null;
+
+        JsonStationDataModel sDM = null;
+        int stationSize = 0;
+        long playlistID;
+        String JSONString = null;
+
+        openReadableDatabase();
+
+        int playlistSize = playlistRecords.size();
+        playlistDMArray = new ArrayList<>();
+        for(int i = 0; i < playlistSize;++i)
+        {
+            playlistID =  playlistRecords.get(i).get_ID();
+            sr = importStationRecordQuery(sr,playlistID);
+
+            stationDMArray = new ArrayList<>();
+
+            if(sr != null) {
+                Log.i("NOTNULLSR","INBACKUPRECORDJSON");
+                for (int j = 0; j < sr.size(); ++j)  // for each stations in playlist
+                {
+                    stationDMArray.add(new JsonStationDataModel(
+                            sr.get(j).getStationTitle(),
+                            sr.get(j).getStationURL()));
+                }
+            }
+
+            playlistDMArray.add(new JsonPlaylistDataModel(
+                    playlistRecords.get(i).getPlaylistName(),
+                    stationDMArray));
+        }
+
+        JSONString = gson.toJson(playlistDMArray);
+        dbhelper.close();
+        return JSONString;
+    }
+
+    @Override
+    public void restoreRecordFromJSON(String JSONString, boolean appendRecord) {
+
+        openWritableDatabase();
+
+        if(appendRecord == false) // OVERRIDE EVERYTHING
+        {
+            database.execSQL("delete from "+ RecordSchema.PlaylistEntry.TABLE_NAME);
+            database.execSQL("delete from "+ RecordSchema.StationEntry.TABLE_NAME);
+            playlistRecords.clear();
+            stationListRecordsMap.clear();
+        }
+        Type playlistmodelType = new TypeToken<List<JsonPlaylistDataModel>>() {}.getType();
+        List<JsonPlaylistDataModel> jpDM = gson.fromJson(JSONString,playlistmodelType);
+
+        for(int i = 0; i < jpDM.size();++i)
+        {
+            PlaylistRecord pr = new PlaylistRecord();
+            pr.setPlaylistName(jpDM.get(i).getPlaylistName());
+            insertPlaylistRecord(pr);
+            playlistRecords.add(pr);
+
+            List<JsonStationDataModel> jsonStationDM = jpDM.get(i).getDataModels();
+            int stationSize = jsonStationDM.size();
+            List<StationRecord> srl= new ArrayList<>();
+
+            for(int sIndex = 0; sIndex < stationSize; ++sIndex)
+            {
+                StationRecord sr = new StationRecord(pr.get_ID(),
+                        jsonStationDM.get(sIndex).getStationName(),
+                        jsonStationDM.get(sIndex).getStationURL());
+
+                insertStationRecord(sr);
+                srl.add(sr);
+            }
+            stationListRecordsMap.put(pr.get_ID(),srl);
+        }
+
+        dbhelper.close();
+    }
+
+
+    public void importLibraryRecord(Context context, AppCompatActivity activity, String importFileName)
+    {
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MainActivity.IMPORT_LIBRARY_RECORD_REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
+        else {
+
+            File f = new File(Environment.getExternalStorageDirectory(), context.getString(R.string.ROOT_DIRECTORY_NAME)
+                    +"/Library/"+importFileName+".json");
+
+            if (!f.exists()) {
+                Toast.makeText(context, "File Does Not Exists!", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+               // Toast.makeText(context, "File Exists!", Toast.LENGTH_SHORT).show();
+                int length = (int) f.length();
+
+                byte[] bytes = new byte[length];
+
+                FileInputStream in = null;
+                try {
+                    in = new FileInputStream(f);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    in.read(bytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                String contents = new String(bytes);
+                //restoreRecordFromJSON(contents,true);
+                Log.i("IMPORTJSON:",contents);
+
+                restoreRecordFromJSON(contents,false);
+
+            }
+
+        }
+    }
+
+    public void exportLibraryRecord(Context context, AppCompatActivity activity, String exportFilename)
+    {
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MainActivity.EXPORT_LIBRARY_RECORD_REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
+        else {
+
+            try {
+                // File dbFile = new File(exportFilename);
+                //FileInputStream fis = new FileInputStream(dbFile);
+
+                File f = new File(Environment.getExternalStorageDirectory(), context.getString(R.string.ROOT_DIRECTORY_NAME)+"/Library");
+                if (!f.exists()) {
+                    f.mkdirs();
+                }
+
+                String outFileName = Environment.getExternalStorageDirectory()+"/"
+                        + context.getString(R.string.ROOT_DIRECTORY_NAME)
+                        + "/Library/" + exportFilename + ".json";
+
+                OutputStream output = new FileOutputStream(outFileName);
+                output.write(backupRecordToJSON().getBytes());
+//                byte[] buffer = new byte[1024];
+//                int length;
+//                while ((length = fis.read(buffer)) > 0) {
+//                    output.write(buffer, 0, length);
+//                }
+
+                //Close the streams
+                output.flush();
+                output.close();
+                //  fis.close();
+                Toast.makeText(context, "Library exported Successfully", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(context, "Error! Library export failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
 }

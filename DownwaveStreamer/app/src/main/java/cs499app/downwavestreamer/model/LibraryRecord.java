@@ -1,5 +1,9 @@
 package cs499app.downwavestreamer.model;
-
+import cs499app.downwavestreamer.MainActivity;
+import cs499app.downwavestreamer.Manifest;
+import cs499app.downwavestreamer.R;
+import cs499app.downwavestreamer.helper.DBHelper;
+import cs499app.downwavestreamer.helper.FileUtils;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -30,11 +34,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import cs499app.downwavestreamer.MainActivity;
-import cs499app.downwavestreamer.Manifest;
-import cs499app.downwavestreamer.R;
-import cs499app.downwavestreamer.helper.DBHelper;
-import cs499app.downwavestreamer.helper.FileUtils;
+
 
 public class LibraryRecord implements LibraryRecordInterface{
 
@@ -496,7 +496,7 @@ public class LibraryRecord implements LibraryRecordInterface{
             }
             else
             {
-                Toast.makeText(context, "File Exists!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "File Exists!", Toast.LENGTH_SHORT).show();
                 int length = (int) f.length();
 
                 byte[] bytes = new byte[length];

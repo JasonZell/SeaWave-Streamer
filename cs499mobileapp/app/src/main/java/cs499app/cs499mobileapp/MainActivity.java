@@ -1,5 +1,20 @@
 package cs499app.cs499mobileapp;
 
+import cs499app.cs499mobileapp.helper.AudioRecorder;
+import cs499app.cs499mobileapp.helper.CircularSeekBar;
+import cs499app.cs499mobileapp.model.LibraryRecord;
+import cs499app.cs499mobileapp.model.StationRecord;
+import cs499app.cs499mobileapp.service.MusicService;
+import cs499app.cs499mobileapp.view.ContainerFragment;
+import cs499app.cs499mobileapp.view.ContextMenuDialogFragment;
+import cs499app.cs499mobileapp.view.FileSizeInputDialogFragment;
+import cs499app.cs499mobileapp.view.ImportExportDialogFragment;
+import cs499app.cs499mobileapp.view.PlayerFragment;
+import cs499app.cs499mobileapp.view.StationDialogFragment;
+import cs499app.cs499mobileapp.view.StationListFragment;
+import cs499app.cs499mobileapp.view.TimePickerFragment;
+
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -9,12 +24,10 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -36,31 +49,21 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.List;
 
-import cs499app.cs499mobileapp.helper.AudioRecorder;
-import cs499app.cs499mobileapp.helper.CircularSeekBar;
-import cs499app.cs499mobileapp.model.LibraryRecord;
-import cs499app.cs499mobileapp.model.StationRecord;
-import cs499app.cs499mobileapp.service.MusicService;
-import cs499app.cs499mobileapp.view.ContainerFragment;
-import cs499app.cs499mobileapp.view.ContextMenuDialogFragment;
-import cs499app.cs499mobileapp.view.FileSizeInputDialogFragment;
-import cs499app.cs499mobileapp.view.ImportExportDialogFragment;
-import cs499app.cs499mobileapp.view.PlayerFragment;
-import cs499app.cs499mobileapp.view.StationDialogFragment;
-import cs499app.cs499mobileapp.view.StationListFragment;
-import cs499app.cs499mobileapp.view.TimePickerFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         StationListFragment.StationListCallbackListener,
         PlayerFragment.MediaControllerCallbackListener,
         ContextMenuDialogFragment.ContextMenuCallbackListener,
-        StationDialogFragment.StationDialogCallbackListener{
+        StationDialogFragment.StationDialogCallbackListener,
+        ImportExportDialogFragment.ImportExportDialogCallbackListener{
 
     public static final int EXPORT_DB_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     public static final int INITIAL_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
     public static final int CREATE_BASE_DIR_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 3;
     public static final int REQUEST_ACCESS_NETWORK_STATE = 4;
+    public static final int EXPORT_LIBRARY_RECORD_REQUEST_WRITE_EXTERNAL_STORAGE = 5;
+    public static final int IMPORT_LIBRARY_RECORD_REQUEST_WRITE_EXTERNAL_STORAGE = 6;
     public Activity mainActivityReference;
     public static  ConnectivityManager connectiveManager;
 
@@ -79,7 +82,7 @@ public class MainActivity extends AppCompatActivity
     private Switch wifiOnlySwitch;
     private int maxFileSize; //retrieve by settings only.
     private int maxPlayDurationInSeconds;
-   // private ConnectivityManager connectiveManager;
+    // private ConnectivityManager connectiveManager;
 
 
 
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity
 
         toolbar = (Toolbar) findViewById(R.id.customized_toolbar);
         setSupportActionBar(toolbar);
-       // this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         connectiveManager = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
 //
@@ -171,7 +174,7 @@ public class MainActivity extends AppCompatActivity
 //             @Override
 //             protected Void doInBackground(Void... voids) {
 //
-//                 libRecord.importlPlaylistRecordList();
+//                 libRecord.importPlaylistRecordList();
 //                 Log.i("loadDataTask","loading done");
 //                 return null;
 //             }
@@ -232,7 +235,7 @@ public class MainActivity extends AppCompatActivity
                     playerTabFragmentRef.getPlayProgressTimer().stop();
                     playerTabFragmentRef.setUsePlayProgressTimer(false);
 
-                    Toast.makeText(MainActivity.this, "SwitchOFF", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(MainActivity.this, "SwitchOFF", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -318,20 +321,24 @@ public class MainActivity extends AppCompatActivity
         {
             playerTabFragmentRef.showFileSizeDialog();
 
-           // drawer.closeDrawer(GravityCompat.START);
+            // drawer.closeDrawer(GravityCompat.START);
         }
-//        else if(id == R.id.navigation_import_item)
-//        {
-//            ImportExportDialogFragment frag = ImportExportDialogFragment.newInstance(0);
-//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//            frag.show(ft, "importFrag");
-//        }
-//        else if(id== R.id.navigation_export_item)
-//        {
-//            ImportExportDialogFragment frag = ImportExportDialogFragment.newInstance(1);
-//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//            frag.show(ft, "exportFrag");
-//        }
+        else if(id == R.id.navigation_import_item)
+        {
+            //must notify dataset change for playlist,
+            // no need to notify statiolist as it will populate only when clicked.
+            ImportExportDialogFragment frag = ImportExportDialogFragment.newInstance(0);
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            frag.show(ft, "importFrag");
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else if(id== R.id.navigation_export_item)
+        {
+            ImportExportDialogFragment frag = ImportExportDialogFragment.newInstance(1);
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            frag.show(ft, "exportFrag");
+            drawer.closeDrawer(GravityCompat.START);
+        }
         //drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -549,6 +556,35 @@ public class MainActivity extends AppCompatActivity
                 }
                 return;
             }
+
+            case EXPORT_LIBRARY_RECORD_REQUEST_WRITE_EXTERNAL_STORAGE:{
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Toast.makeText(this, "Write External Permission Granted, Please try export again.", Toast.LENGTH_SHORT).show();
+
+                }
+                else
+                {
+                    Toast.makeText(this, "Write External Permission Required To Export Library!", Toast.LENGTH_SHORT).show();
+                }
+                return;
+
+            }
+            case IMPORT_LIBRARY_RECORD_REQUEST_WRITE_EXTERNAL_STORAGE:{
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Toast.makeText(this, "Write External Permission Granted, Please try import again", Toast.LENGTH_SHORT).show();
+
+                }
+                else
+                {
+                    Toast.makeText(this, "Read External Permission Required To Export Library!", Toast.LENGTH_SHORT).show();
+                }
+                return;
+
+            }
             // other 'case' lines to check for other
             // permissions this app might request
         }
@@ -609,7 +645,7 @@ public class MainActivity extends AppCompatActivity
     //return true if there is previous station to go to, otherwise, return false;
     @Override
     public boolean onSkipPrevButtonPressed() {
-       // Toast.makeText(this, "Skip Prev Button event Catch in Activity", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, "Skip Prev Button event Catch in Activity", Toast.LENGTH_SHORT).show();
         boolean returnVal = false;
         int prevStationIndex = playerTabFragmentRef.getPlayQueue().getPrevStation();
         Log.d("curPlaylistIndex",playerTabFragmentRef.getPlayQueue().getCurrentPlayListID()+"");
@@ -895,5 +931,18 @@ public class MainActivity extends AppCompatActivity
         this.useWifiOnly = useWifiOnly;
     }
 
+    @Override
+    public void onImportCalled(String fileName) {
 
+        libRecord.importLibraryRecord(getApplicationContext(),this,fileName);
+        containerTabFragmentRef.getLibFragment().notifyPlaylistAdapterOnDataSetChange();
+    }
+
+    @Override
+    public void onExportCalled(String fileName) {
+        libRecord.exportLibraryRecord(getApplicationContext(),this,fileName);
+        String jsonString = libRecord.backupRecordToJSON();
+        Log.i("JSON:",jsonString);
+
+    }
 }

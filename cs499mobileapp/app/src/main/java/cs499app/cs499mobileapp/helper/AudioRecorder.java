@@ -194,8 +194,7 @@ public class AudioRecorder {
                  seekbar.setProgress(0);
                  playerFragmentRef.setRecordIconOff();
 
-                 Log.d("post Execute"," from recording job");
-
+                 Log.d("post Execute", " from recording job");
 
 
              }

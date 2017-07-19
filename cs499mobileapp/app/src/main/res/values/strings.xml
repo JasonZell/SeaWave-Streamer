@@ -41,7 +41,7 @@
     <string name="SETTING_MAX_FILE_SIZE">SHARED_PREFERENCES_SETTING_MAX_FILE_SIZE</string>
 
     <string name="ROOT_DIRECTORY_NAME">DownWaveXtreamer</string>
-    <string name="SAVE_DIRECTORY_NAME">DownWaveXtreamerAudios</string>
+    <string name="SAVE_DIRECTORY_NAME">Audios</string>
 
 
     <string name="WIFI_WARNING_TEXT">WIFI ONLY MODE, CHANGE SETTINGS TO USE MOBILE DATA</string>
@@ -51,7 +51,5 @@
         <item>MegaBytes</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

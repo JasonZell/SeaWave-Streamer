@@ -28,6 +28,7 @@ public class ContainerFragment extends android.support.v4.app.Fragment{
     ViewPager viewPager;
     TabLayout tabLayout;
     LibraryRecord libRecord;
+    LibraryFragment libFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class ContainerFragment extends android.support.v4.app.Fragment{
 //        tabLayout.getTabAt(1).setIcon(R.drawable.library_icon_selector);
 
 
-        LibraryFragment libFragment = new LibraryFragment();
+        libFragment = new LibraryFragment();
         libFragment.setLibRecord(libRecord);
 
 //        Bundle args = new Bundle();
@@ -70,5 +71,9 @@ public class ContainerFragment extends android.support.v4.app.Fragment{
 
     public void setLibRecord(LibraryRecord libRecord) {
         this.libRecord = libRecord;
+    }
+
+    public LibraryFragment getLibFragment() {
+        return libFragment;
     }
 }
