@@ -12,7 +12,7 @@ import cs499app.seawavestreamer.view.PlayerFragment;
 public class PlayProgressCountDownTimer {
 
     CountDownTimer cd;
-    ProgressBar pB;
+    CircularSeekBar pB;
     PlayerFragment fragment;
     long totalCountDownMillis;
     long leftOverMillis;
@@ -21,7 +21,7 @@ public class PlayProgressCountDownTimer {
     boolean isEnabled;
 
 
-    public PlayProgressCountDownTimer(PlayerFragment fragment, ProgressBar pB, long totalCountDownMillis, boolean isEnabled) {
+    public PlayProgressCountDownTimer(PlayerFragment fragment, CircularSeekBar pB, long totalCountDownMillis, boolean isEnabled) {
         this.fragment = fragment;
         this.pB = pB;
         this.totalCountDownMillis = totalCountDownMillis;
@@ -105,7 +105,7 @@ public class PlayProgressCountDownTimer {
 
     private void getNewCountDownTimer()
     {
-        long totalTimeMillis = leftOverMillis+1000; //padding
+        long totalTimeMillis = leftOverMillis; //padding
 
         cd = new CountDownTimer(totalTimeMillis,tickIntervalMillis) {
             @Override

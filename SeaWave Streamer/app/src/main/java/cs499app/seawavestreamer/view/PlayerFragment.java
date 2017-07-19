@@ -58,7 +58,7 @@ public class PlayerFragment extends Fragment {
     private ImageButton shuffleButton;
     private ImageButton repeatButton;
     private playOrPause playOrPauseState;
-    private ProgressBar playProgressBar;
+   // private ProgressBar playProgressBar;
     private int maxPlayDurationInSeconds; // value set by settings only
     private CircularSeekBar seekBar;
     private PlayProgressCountDownTimer playProgressTimer;
@@ -77,7 +77,8 @@ public class PlayerFragment extends Fragment {
         rootView = inflater.inflate(R.layout.player_fragment, container, false);
         playlistTitleView = rootView.findViewById(R.id.controller_playlist_name);
         stationTitleView = rootView.findViewById(R.id.controller_station_name);
-        playProgressBar = rootView.findViewById(R.id.controller_progress_bar);
+        seekBar = (CircularSeekBar) rootView.findViewById(R.id.circular_seek_bar);
+        //playProgressBar = rootView.findViewById(R.id.controller_progress_bar);
         playQueue = new PlayQueue();
 
 
@@ -100,9 +101,7 @@ public class PlayerFragment extends Fragment {
         resetMediaPlayer();
 
 
-        final int max = 30;
-        seekBar = (CircularSeekBar) rootView.findViewById(R.id.circular_seek_bar);
-        seekBar.setIsTouchEnabled(false);
+
 //        seekBar.setOnSeekBarChangeListener(new OnCircularSeekBarChangeListener() {
 //            @Override
 //            public void onProgressChanged(CircularSeekBar circularSeekBar, int progress, boolean fromUser) {
@@ -407,13 +406,19 @@ public class PlayerFragment extends Fragment {
     }
     public void setupProgressBar()
     {
-        playProgressBar.setMax(maxPlayDurationInSeconds);
+        seekBar.setIsTouchEnabled(false);
+        seekBar.setMax(maxPlayDurationInSeconds);
+        //playProgressBar.setMax(maxPlayDurationInSeconds);
     }
 
     public void setupProgressTimer()
     {
+//    {
+//        playProgressTimer = new PlayProgressCountDownTimer(
+//                this,playProgressBar,maxPlayDurationInSeconds*1000,usePlayProgressTimer);
+
         playProgressTimer = new PlayProgressCountDownTimer(
-                this,playProgressBar,maxPlayDurationInSeconds*1000,usePlayProgressTimer);
+                this,seekBar,maxPlayDurationInSeconds*1000,usePlayProgressTimer);
     }
 
     public CircularSeekBar getSeekBar() {
